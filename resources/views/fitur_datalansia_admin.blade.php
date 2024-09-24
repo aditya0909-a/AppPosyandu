@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Info Peserta - Posyandu</title>
+  <title>Dashboard Posyandu</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+  </style>
 </head>
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-md p-4">
+  <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
     <div class="container mx-auto flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="hidden lg:flex space-x-6 items-center">
-        <a href="#" class="text-gray-700 hover:text-blue-500">Dashboard</a>
-        <a href="#" class="text-gray-700 hover:text-blue-500">Peserta</a>
-        <a href="#" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</a>
-      </div>
+      <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
     </div>
   </nav>
 

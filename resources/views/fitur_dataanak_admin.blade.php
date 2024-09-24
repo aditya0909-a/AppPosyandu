@@ -3,27 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Info Peserta - Posyandu</title>
+  <title>Dashboard Posyandu</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+  </style>
 </head>
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-md p-4">
+  <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
     <div class="container mx-auto flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="hidden lg:flex space-x-6 items-center">
-        <a href="#" class="text-gray-700 hover:text-blue-500">Dashboard</a>
-        <a href="#" class="text-gray-700 hover:text-blue-500">Peserta</a>
-        <a href="#" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</a>
-      </div>
+      <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
     </div>
   </nav>
 
   <!-- Search Bar & Tambah Peserta Button -->
-  <div class="container mx-auto my-4 flex justify-between">
-    <input type="text" id="search" placeholder="Cari peserta..." class="w-3/4 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <button id="add-peserta-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">+ Tambah Peserta</button>
+  <div class="container mx-auto my-4 flex justify-between p-3 sm:p-3">
+    <input type="text" id="search" placeholder="Cari peserta..." class="w-3/4 p-3 sm:p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <button id="search-peserta-btn" class="bg-blue-500 text-white px-4 py-4 rounded-md hover:bg-blue-600 p-3 sm:p-3">Cari</button>
   </div>
 
   <!-- Form Tambah Peserta (Modal) -->
@@ -68,15 +67,15 @@
   </div>
 
   <!-- List Peserta -->
-  <section class="container mx-auto px-4">
+  <section class="container mx-auto px-4 p-6 sm:p-8">
     <div id="list-peserta" class="space-y-4">
       <!-- Peserta akan dirender di sini -->
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4 mt-10">
-    <div class="container mx-auto text-center">
+  <footer class="bg-gray-800 text-white py-4 mt-10 p-6 sm:p-8">
+    <div class="container mx-auto text-center ">
       <p>&copy; 2024 E-Posyandu. All rights reserved.</p>
     </div>
   </footer>

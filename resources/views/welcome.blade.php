@@ -9,8 +9,8 @@
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-lg p-4">
-    <div class="container mx-auto flex justify-between items-center">
+  <nav class="bg-white shadow-lg p-6 sm:p-8">
+    <div class="container mx-auto flex justify-between items-center p-6 sm:p-8">
       <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
       <!-- Mobile menu button -->
       <div class="lg:hidden">
@@ -39,7 +39,7 @@
 
   <!-- Hero Section -->
   <section class="bg-blue-500 text-white py-20">
-    <div class="container mx-auto text-center">
+    <div class="container mx-auto text-center p-6 sm:p-8">
       <h1 class="text-4xl font-bold mb-4">Welcome to Posyandu App</h1>
       <p class="text-lg mb-6">Posyandu digital yang mempermudah pelayanan kesehatan ibu dan anak.</p>
       <a href="/login" class="bg-white text-blue-500 px-6 py-3 rounded font-semibold hover:bg-gray-100">Get Started</a>
@@ -48,7 +48,7 @@
 
   <!-- Features Section -->
   <section id="features" class="py-20">
-    <div class="container mx-auto text-center">
+    <div class="container mx-auto text-center p-6 sm:p-8">
       <h2 class="text-3xl font-bold mb-6">Features</h2>
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-lg">
@@ -68,7 +68,7 @@
   </section>
 
   <!-- About Us Section -->
-  <section id="about" class="bg-gray-100 py-20">
+  <section id="about" class="bg-gray-100 py-20 p-6 sm:p-8">
     <div class="container mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">About Us</h2>
       <p class="text-lg">Kami berkomitmen untuk meningkatkan kesehatan ibu dan anak di Indonesia melalui aplikasi yang mudah diakses oleh masyarakat umum.</p>
@@ -76,7 +76,7 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="py-20">
+  <section id="contact" class="py-20 p-6 sm:p-8">
     <div class="container mx-auto text-center">
       <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
       <p class="text-lg">Hubungi kami di email: <a href="mailto:info@posyanduapp.com" class="text-blue-500 hover:underline">info@posyanduapp.com</a></p>
@@ -84,7 +84,7 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4">
+  <footer class="bg-gray-800 text-white py-4 p-6 sm:p-8">
     <div class="container mx-auto text-center">
       <p>&copy; 2024 Posyandu App. All rights reserved.</p>
     </div>

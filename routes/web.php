@@ -41,6 +41,22 @@ Route::get('/fitur_kelolaakun_admin', function () {
     return view('fitur_kelolaakun_admin');
 });
 
+Route::get('/fiturposyanduanak_kader', function () {
+    return view('fiturposyanduanak_kader');
+});
+
+Route::get('/fiturposyandulansia_kader', function () {
+    return view('fiturposyandulansia_kader');
+});
+
+Route::get('/fiturimunisasi_kader', function () {
+    return view('fiturimunisasi_kader');
+});
+
+Route::get('/fiturpenjadwalan_kader', function () {
+    return view('fiturpenjadwalan_kader');
+});
+
 Route::get('/logout', function () {
     return view('login');
 });

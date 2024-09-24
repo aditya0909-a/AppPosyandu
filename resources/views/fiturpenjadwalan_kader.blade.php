@@ -15,39 +15,13 @@
   <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
     <div class="container mx-auto flex justify-between items-center">
       <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+      <div class="text-blue-500 font-sans">Akun Kader</div> <!-- Keterangan akun "Kader" muncul di mobile -->
     </div>
   </nav>
 
   <!-- Search Bar -->
-  <div class="container mx-auto my-4 flex justify-between items-center">
+  <div class="container mx-auto my-4 flex justify-between items-center p-4 sm:p-8">
     <input type="text" id="search" placeholder="Cari jadwal..." class="w-3/4 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <button id="add-schedule-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">+ Tambah Jadwal</button>
-  </div>
-
-  <!-- Form Tambah Jadwal (Modal) -->
-  <div id="add-schedule-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-      <h2 class="text-xl font-bold text-blue-500 mb-4">Tambah Jadwal Baru</h2>
-      <form id="schedule-form">
-        <div class="mb-4">
-          <label for="title" class="block text-sm font-medium text-gray-700">Nama Jadwal</label>
-          <input type="text" id="title" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama jadwal">
-        </div>
-        <div class="mb-4">
-          <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-          <input type="text" id="description" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan deskripsi">
-        </div>
-        <div class="mb-4">
-          <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
-          <input type="datetime-local" id="date" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" id="cancel-btn" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</button>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Simpan</button>
-        </div>
-      </form>
-    </div>
   </div>
 
   <!-- List Penjadwalan -->
@@ -132,34 +106,6 @@
       });
     }
 
-    // Initial Render
-    renderList(jadwal);
-
-    // Show Form
-    addScheduleBtn.addEventListener('click', () => {
-      addScheduleForm.classList.remove('hidden');
-    });
-
-    // Cancel Form
-    cancelBtn.addEventListener('click', () => {
-      addScheduleForm.classList.add('hidden');
-    });
-
-    // Submit Form
-    scheduleForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newJadwal = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        date: new Date(document.getElementById('date').value).toLocaleString(),
-        status: 'Pending'
-      };
-      jadwal.push(newJadwal);
-      renderList(jadwal);
-      addScheduleForm.classList.add('hidden');
-      scheduleForm.reset();
-    });
-  </script>
 
 </body>
 </html>

@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Posyandu App</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Posyandu Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
-
-  <!-- Container -->
-  <div class="min-h-screen flex items-center justify-center">
-    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-      <!-- Logo -->
-      <div class="text-center mb-6">
-        <h1 class="text-3xl font-bold text-blue-500">Posyandu</h1>
-        <p class="text-gray-600">Masuk ke akun Anda</p>
-      </div>
+    <div class="min-h-screen flex items-center justify-center p-4 sm:p-8">
+        <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg w-full max-w-md">
+            <!-- Logo -->
+            <div class="text-center mb-6">
+                <h1 class="text-2xl sm:text-3xl font-bold text-blue-500">Posyandu</h1>
+                <p class="text-gray-600">Masuk ke akun Anda</p>
+            </div>
 
       <!-- Login Form -->
       <form action="#" method="POST" class="space-y-4">
