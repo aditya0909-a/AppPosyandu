@@ -35,6 +35,7 @@
           <a href="#" class="text-sm text-blue-500 hover:underline">Lupa password?</a>
         </div>
         <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
+        <a href="/dashboard" class="bg-white text-blue-500 px-6 py-3 rounded font-semibold hover:bg-gray-100">Get Started</a>
       </form>
 
       <!-- Divider -->

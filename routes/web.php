@@ -21,4 +21,28 @@ Route::get('/login', function () {
     return view('login');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard_admin');
+});
+
+Route::get('/fitur_dataanak_admin', function () {
+    return view('fitur_dataanak_admin');
+});
+
+Route::get('/fitur_datalansia_admin', function () {
+    return view('fitur_datalansia_admin');
+});
+
+Route::get('/fitur_penjadwalan_admin', function () {
+    return view('fitur_penjadwalan_admin');
+});
+
+Route::get('/fitur_kelolaakun_admin', function () {
+    return view('fitur_kelolaakun_admin');
+});
+
+Route::get('/logout', function () {
+    return view('login');
+});
+
 Route::post('/register', [registercontroller::class, 'register']);
