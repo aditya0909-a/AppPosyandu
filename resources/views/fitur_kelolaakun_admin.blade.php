@@ -14,13 +14,19 @@
   <!-- Container -->
   <div class="max-w-4xl mx-auto p-6">
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
-      <div class="container mx-auto flex justify-between items-center">
-        <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-        <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
-      </div>
-    </nav>
+<!-- Navbar -->
+<nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+  <div class="container mx-auto flex items-center">
+    <!-- Back Button -->
+    <button onclick="history.back()" class="text-blue-500 focus:outline-none mr-4">
+      &larr; Back
+    </button>
+    <!-- Title -->
+    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+  </div>
+</nav>
+
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
