@@ -24,7 +24,7 @@
 
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold">Peserta Posyandu Lansia</h1>
+      <h1 class="text-2xl font-bold">Peserta Posyandu Balita</h1>
       <button @click="showAddModal = true" class="bg-blue-500 text-white px-2 py-1 rounded">Tambah Peserta</button>
     </div>
 

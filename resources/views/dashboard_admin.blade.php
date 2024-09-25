@@ -23,10 +23,10 @@
   <section class="container mx-auto py-10 px-4 p-6 sm:p-8">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <!-- Data Anak -->
-      <a href="/fitur_dataanak_admin" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+      <!-- Data Balita -->
+      <a href="/fitur_databalita_admin" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
         <div class="text-4xl mb-4">👶</div>
-        <h2 class="text-xl font-bold">Data Anak</h2>
+        <h2 class="text-xl font-bold">Data Balita</h2>
       </a>
 
       <!-- Data Lansia -->

@@ -3,109 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Posyandu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
-  </style>
+  <title>Aplikasi Posyandu - Jadwal Kegiatan</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.0.0/dist/cdn.min.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
+<style>
+  body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+</style>
+<body class="bg-gray-100" x-data="appData()">
+  <!-- Container -->
+  <div class="max-w-4xl mx-auto p-6">
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="text-blue-500 font-sans">Akun Kader</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+        <div class="text-blue-500 font-sans">Akun Admin</div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Jadwal Kegiatan Posyandu</h1>
     </div>
-  </nav>
 
-  <!-- Search Bar -->
-  <div class="container mx-auto my-4 flex justify-between items-center p-4 sm:p-8">
-    <input type="text" id="search" placeholder="Cari jadwal..." class="w-3/4 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+    <!-- Search Bar -->
+    <div class="flex items-center mb-4">
+      <input type="text" placeholder="Cari kegiatan..." class="w-full p-2 border rounded" x-model="searchTerm">
+      <button @click="searchJadwal" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+    </div>
+
+    <!-- Jadwal List -->
+    <template x-for="jadwal in filteredJadwal" :key="jadwal.id">
+      <div class="bg-white shadow-md rounded p-4 mb-4">
+        <div class="flex items-center space-x-4">
+          <!-- Icon Kalender -->
+          <div>
+            <img src="https://via.placeholder.com/50" alt="Kalender" class="w-12 h-12 rounded-full">
+          </div>
+          <!-- Jadwal Info -->
+          <div class="flex-1">
+            <h2 class="text-lg font-bold" x-text="jadwal.namaKegiatan"></h2>
+            <p><strong>Tanggal:</strong> <span x-text="jadwal.tanggalKegiatan"></span></p>
+            <p><strong>Lokasi:</strong> <span x-text="jadwal.lokasi"></span></p>
+          </div>
+        </div>
+      </div>
+    </template>
+
   </div>
 
-  <!-- List Penjadwalan -->
-  <section class="container mx-auto px-4">
-    <div id="list-jadwal" class="space-y-4">
-
-      <!-- Card Jadwal -->
-      <div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-blue-500">Jadwal Imunisasi</h2>
-          <p class="text-gray-600">Vaksinasi imunisasi untuk balita</p>
-          <p class="text-gray-500"><span class="inline-block">🗓️ Kamis, 27 Sep 2024 - 10:00 AM</span></p>
-        </div>
-        <div class="flex space-x-2 items-center">
-          <span class="bg-green-500 text-white px-3 py-1 rounded-full">Pending</span>
-          <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
-        </div>
-      </div>
-
-      <!-- Card Jadwal -->
-      <div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-blue-500">Jadwal Posyandu Lansia</h2>
-          <p class="text-gray-600">Pemeriksaan kesehatan untuk lansia</p>
-          <p class="text-gray-500"><span class="inline-block">🗓️ Jumat, 28 Sep 2024 - 09:00 AM</span></p>
-        </div>
-        <div class="flex space-x-2 items-center">
-          <span class="bg-green-500 text-white px-3 py-1 rounded-full">Pending</span>
-          <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4 mt-10">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2024 E-Posyandu. All rights reserved.</p>
-    </div>
-  </footer>
-
+  <!-- Alpine.js Logic -->
   <script>
-    const addScheduleBtn = document.getElementById('add-schedule-btn');
-    const addScheduleForm = document.getElementById('add-schedule-form');
-    const cancelBtn = document.getElementById('cancel-btn');
-    const scheduleForm = document.getElementById('schedule-form');
-    const listJadwal = document.getElementById('list-jadwal');
-
-    // Sample Data
-    let jadwal = [
-      {
-        title: 'Jadwal Imunisasi',
-        description: 'Vaksinasi imunisasi untuk balita',
-        date: 'Kamis, 27 Sep 2024 - 10:00 AM',
-        status: 'Pending'
-      },
-      {
-        title: 'Jadwal Posyandu Lansia',
-        description: 'Pemeriksaan kesehatan untuk lansia',
-        date: 'Jumat, 28 Sep 2024 - 09:00 AM',
-        status: 'Pending'
-      }
-    ];
-
-    // Function for Rendering List
-    function renderList(data) {
-      listJadwal.innerHTML = '';
-      data.forEach(item => {
-        const card = `<div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-          <div>
-            <h2 class="text-lg font-bold text-blue-500">${item.title}</h2>
-            <p class="text-gray-600">${item.description}</p>
-            <p class="text-gray-500"><span class="inline-block">🗓️ ${item.date}</span></p>
-          </div>
-          <div class="flex space-x-2 items-center">
-            <span class="bg-green-500 text-white px-3 py-1 rounded-full">${item.status}</span>
-            <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
-          </div>
-        </div>`;
-        listJadwal.innerHTML += card;
-      });
+    function appData() {
+      return {
+        searchTerm: '',
+        jadwalList: [
+          {
+            id: '0001',
+            namaKegiatan: 'Posyandu Balita',
+            tanggalKegiatan: '2024-10-10',
+            lokasi: 'Posyandu A'
+          },
+          {
+            id: '0002',
+            namaKegiatan: 'Pemeriksaan Ibu Hamil',
+            tanggalKegiatan: '2024-10-15',
+            lokasi: 'Posyandu B'
+          }
+        ],
+        get filteredJadwal() {
+          return this.jadwalList.filter(jadwal => 
+            jadwal.namaKegiatan.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+            jadwal.tanggalKegiatan.includes(this.searchTerm) ||
+            jadwal.lokasi.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        },
+        searchJadwal() {
+          // Fungsi search otomatis menggunakan computed property 'filteredJadwal'
+        }
+      };
     }
-
-
+  </script>
 </body>
 </html>

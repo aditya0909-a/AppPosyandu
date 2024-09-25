@@ -23,10 +23,10 @@
   <section class="container mx-auto py-10 px-4">
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
-      <!-- Posyandu Anak -->
-      <a href="/fiturposyanduanak_kader" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+      <!-- Posyandu Balita -->
+      <a href="/fiturposyandubalita_kader" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
         <div class="text-4xl mb-4">👶</div>
-        <h2 class="text-xl font-bold">Posyandu Anak</h2>
+        <h2 class="text-xl font-bold">Posyandu Balita</h2>
       </a>
 
       <!-- Posyandu Lansia -->

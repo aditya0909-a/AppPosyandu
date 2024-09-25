@@ -3,157 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Posyandu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
-  </style>
+  <title>Kelola Akun Pengguna - Admin</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.0.0/dist/cdn.min.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
+<style>
+  body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+</style>
+<body class="bg-gray-100" x-data="appData()">
+  <!-- Container -->
+  <div class="max-w-4xl mx-auto p-6">
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+        <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Kelola Akun Pengguna</h1>
+      <button @click="showAddModal = true" class="bg-blue-500 text-white px-2 py-1 rounded">Tambah Akun</button>
     </div>
-  </nav>
 
-  <!-- Search Bar & Tambah Peserta Button -->
-  <div class="container mx-auto my-4 flex justify-between">
-    <input type="text" id="search" placeholder="Cari peserta..." class="w-3/4 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <button id="add-peserta-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">+ Tambah Peserta</button>
-  </div>
+    <!-- Search Bar -->
+    <div class="flex items-center mb-4">
+      <input type="text" placeholder="Cari pengguna..." class="w-full p-2 border rounded" x-model="searchTerm">
+      <button @click="searchUser" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+    </div>
 
-  <!-- Form Tambah Peserta (Modal) -->
-  <div id="add-peserta-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-      <h2 class="text-xl font-bold text-blue-500 mb-4">Tambah Peserta Baru</h2>
-      <form id="peserta-form">
-        <div class="mb-4">
-          <label for="name" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-          <input type="text" id="name" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan lengkap">
-        </div>
-        <div class="mb-4">
-          <label for="id" class="block text-sm font-medium text-gray-700">Id Pengguna</label>
-          <input type="text" id="id" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan id pengguna">
-        </div>
-        <div class="mb-4">
-          <label for="type" class="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" id="type" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan password">
-        </div>
-        <div class="flex justify-end space-x-2">
-            <button type="button" id="cancel-btn" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</button>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Simpan</button>
+    <!-- Daftar Pengguna -->
+    <template x-for="user in filteredUsers" :key="user.id">
+      <div class="bg-white shadow-md rounded p-4 mb-4">
+        <div class="flex items-center space-x-4">
+          <!-- Avatar Placeholder -->
+          <div>
+            <img src="https://via.placeholder.com/50" alt="Avatar" class="w-12 h-12 rounded-full">
           </div>
-      </form>
+          <!-- Info Pengguna -->
+          <div class="flex-1">
+            <h2 class="text-lg font-bold" x-text="user.nama"></h2>
+            <p><strong>Id :</strong> <span x-text="user.id_pengguna"></span></p>
+            <p><strong>Role :</strong> <span x-text="user.role"></span></p>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Modal Tambah Pengguna -->
+    <div x-show="showAddModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+        <h2 class="text-xl mb-4">Tambah Akun Pengguna</h2>
+        <div class="mb-2">
+          <label class="block mb-1">Nama</label>
+          <input type="text" x-model="newUser.nama" class="w-full p-2 border rounded">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">Id Pengguna</label>
+          <input type="email" x-model="newUser.id_pengguna" class="w-full p-2 border rounded">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">Role</label>
+          <select x-model="newUser.role" class="w-full p-2 border rounded">
+            <option value="Admin">Admin</option>
+            <option value="Petugas">Petugas</option>
+            <option value="Pengguna">Pengguna</option>
+          </select>
+        </div>
+        <div class="flex justify-end">
+          <button @click="showAddModal = false" class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
+          <button @click="addUser" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- List Peserta -->
-  <section class="container mx-auto px-4">
-    <div id="list-peserta" class="space-y-4">
-      <!-- Peserta akan dirender di sini -->
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4 mt-10">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2024 E-Posyandu. All rights reserved.</p>
-    </div>
-  </footer>
-
+  <!-- Alpine.js Logic -->
   <script>
-    const addPesertaBtn = document.getElementById('add-peserta-btn');
-    const addPesertaForm = document.getElementById('add-peserta-form');
-    const cancelBtn = document.getElementById('cancel-btn');
-    const pesertaForm = document.getElementById('peserta-form');
-    const listPeserta = document.getElementById('list-peserta');
-    const searchInput = document.getElementById('search');
-
-    // Sample Data Peserta
-    let peserta = [
-      {
-        name: 'KAMAL',
-        status: 'AKTIF',
-        id: '0003175481981',
-        type: 'Peserta (Pekerja Mandiri)',
-        birth: '13-04-1952',
-        faskes: 'Puskesmas Kuta I',
-        kelas: 'Kelas 3'
-      },
-      {
-        name: 'M ADITYA PANGESTU',
-        status: 'AKTIF',
-        id: '0003175481992',
-        type: 'Anak (Pekerja Mandiri)',
-        birth: '09-07-2001',
-        faskes: 'Puskesmas Kuta II',
-        kelas: 'Kelas 3'
-      }
-    ];
-
-    // Function for Rendering List
-    function renderList(data) {
-      listPeserta.innerHTML = '';
-      data.forEach(item => {
-        const card = `<div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-          <div class="flex items-center">
-            <img src="https://via.placeholder.com/50" alt="Avatar" class="rounded-full mr-4">
-            <div>
-              <h2 class="text-lg font-bold text-blue-500">${item.name} <span class="text-green-500">(${item.status})</span></h2>
-              <p class="text-gray-600">${item.id} | ${item.type}</p>
-              <p class="text-gray-500"><span class="inline-block">📅 Lahir: ${item.birth}</span> | <span class="inline-block">🏥 Faskes 1: ${item.faskes}</span></p>
-            </div>
-          </div>
-          <span class="bg-blue-500 text-white px-3 py-1 rounded-full">${item.kelas}</span>
-        </div>`;
-        listPeserta.innerHTML += card;
-      });
-    }
-
-    // Initial Render
-    renderList(peserta);
-
-    // Filter List
-    searchInput.addEventListener('input', (e) => {
-      const searchText = e.target.value.toLowerCase();
-      const filteredPeserta = peserta.filter(p => 
-        p.name.toLowerCase().includes(searchText) ||
-        p.id.includes(searchText)
-      );
-      renderList(filteredPeserta);
-    });
-
-    // Show Form
-    addPesertaBtn.addEventListener('click', () => {
-      addPesertaForm.classList.remove('hidden');
-    });
-
-    // Cancel Form
-    cancelBtn.addEventListener('click', () => {
-      addPesertaForm.classList.add('hidden');
-    });
-
-    // Submit Form
-    pesertaForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newPeserta = {
-        name: document.getElementById('name').value,
-        status: 'AKTIF', // Status default
-        id: document.getElementById('id').value,
-        type: document.getElementById('type').value,
-        birth: document.getElementById('birth').value,
-        faskes: document.getElementById('faskes').value,
-        kelas: 'Kelas 3' // Default kelas
+    function appData() {
+      return {
+        showAddModal: false,
+        searchTerm: '',
+        usersList: [
+          {
+            id: '0001',
+            nama: 'Ayu Susanti',
+            id_pengguna: 'ayususanti09071990',
+            role: 'Admin'
+          },
+          {
+            id: '0002',
+            nama: 'Budi Santoso',
+            id_pengguna: 'budisantoso09081992',
+            role: 'Petugas'
+          }
+        ],
+        newUser: {
+          nama: '',
+          id_pengguna: '',
+          role: 'Pengguna' // Default role is 'Pengguna'
+        },
+        get filteredUsers() {
+          return this.usersList.filter(user => 
+            user.nama.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+            user.id_pengguna.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            user.role.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        },
+        searchUser() {
+          // Pencarian otomatis bekerja melalui computed property 'filteredUsers'
+        },
+        addUser() {
+          if (this.newUser.nama && this.newUser.id_pengguna && this.newUser.role) {
+            this.usersList.push({ ...this.newUser, id: Date.now().toString() });
+            this.newUser = { nama: '', email: '', role: 'Pengguna' };
+            this.showAddModal = false;
+          }
+        }
       };
-      peserta.push(newPeserta);
-      renderList(peserta);
-      addPesertaForm.classList.add('hidden');
-      pesertaForm.reset();
-    });
+    }
   </script>
-
 </body>
 </html>

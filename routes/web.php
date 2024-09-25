@@ -25,8 +25,8 @@ Route::get('/dashboard', function () {
     return view('dashboard_admin');
 });
 
-Route::get('/fitur_dataanak_admin', function () {
-    return view('fitur_dataanak_admin');
+Route::get('/fitur_databalita_admin', function () {
+    return view('fitur_databalita_admin');
 });
 
 Route::get('/fitur_datalansia_admin', function () {
@@ -41,8 +41,8 @@ Route::get('/fitur_kelolaakun_admin', function () {
     return view('fitur_kelolaakun_admin');
 });
 
-Route::get('/fiturposyanduanak_kader', function () {
-    return view('fiturposyanduanak_kader');
+Route::get('/fiturposyandubalita_kader', function () {
+    return view('fiturposyandubalita_kader');
 });
 
 Route::get('/fiturposyandulansia_kader', function () {

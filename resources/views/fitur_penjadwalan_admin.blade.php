@@ -3,163 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Posyandu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
-  </style>
+  <title>Aplikasi Posyandu - Jadwal Kegiatan</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.0.0/dist/cdn.min.js" defer></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100">
+<style>
+  body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+</style>
+<body class="bg-gray-100" x-data="appData()">
+  <!-- Container -->
+  <div class="max-w-4xl mx-auto p-6">
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
-    <div class="container mx-auto flex justify-between items-center">
-      <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
-      <div class="text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
-    </div>
-  </nav>
-
-  <!-- Search Bar -->
-  <div class="container mx-auto my-4 flex justify-between items-center">
-    <input type="text" id="search" placeholder="Cari jadwal..." class="w-3/4 p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-    <button id="add-schedule-btn" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">+ Tambah Jadwal</button>
-  </div>
-
-  <!-- Form Tambah Jadwal (Modal) -->
-  <div id="add-schedule-form" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-      <h2 class="text-xl font-bold text-blue-500 mb-4">Tambah Jadwal Baru</h2>
-      <form id="schedule-form">
-        <div class="mb-4">
-          <label for="title" class="block text-sm font-medium text-gray-700">Nama Jadwal</label>
-          <input type="text" id="title" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan nama jadwal">
-        </div>
-        <div class="mb-4">
-          <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-          <input type="text" id="description" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Masukkan deskripsi">
-        </div>
-        <div class="mb-4">
-          <label for="date" class="block text-sm font-medium text-gray-700">Tanggal</label>
-          <input type="datetime-local" id="date" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-        </div>
-        <div class="flex justify-end space-x-2">
-          <button type="button" id="cancel-btn" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600">Batal</button>
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- List Penjadwalan -->
-  <section class="container mx-auto px-4">
-    <div id="list-jadwal" class="space-y-4">
-
-      <!-- Card Jadwal -->
-      <div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-blue-500">Jadwal Imunisasi</h2>
-          <p class="text-gray-600">Vaksinasi imunisasi untuk balita</p>
-          <p class="text-gray-500"><span class="inline-block">🗓️ Kamis, 27 Sep 2024 - 10:00 AM</span></p>
-        </div>
-        <div class="flex space-x-2 items-center">
-          <span class="bg-green-500 text-white px-3 py-1 rounded-full">Pending</span>
-          <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
-        </div>
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+      <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+        <div class="text-blue-500 font-sans">Akun Admin</div>
       </div>
+    </nav>
 
-      <!-- Card Jadwal -->
-      <div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-lg font-bold text-blue-500">Jadwal Posyandu Lansia</h2>
-          <p class="text-gray-600">Pemeriksaan kesehatan untuk lansia</p>
-          <p class="text-gray-500"><span class="inline-block">🗓️ Jumat, 28 Sep 2024 - 09:00 AM</span></p>
-        </div>
-        <div class="flex space-x-2 items-center">
-          <span class="bg-green-500 text-white px-3 py-1 rounded-full">Pending</span>
-          <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
-        </div>
-      </div>
-
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold">Jadwal Kegiatan Posyandu</h1>
+      <button @click="showAddModal = true" class="bg-blue-500 text-white px-2 py-1 rounded">Tambah Jadwal</button>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4 mt-10">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2024 E-Posyandu. All rights reserved.</p>
+    <!-- Search Bar -->
+    <div class="flex items-center mb-4">
+      <input type="text" placeholder="Cari kegiatan..." class="w-full p-2 border rounded" x-model="searchTerm">
+      <button @click="searchJadwal" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Search</button>
     </div>
-  </footer>
 
-  <script>
-    const addScheduleBtn = document.getElementById('add-schedule-btn');
-    const addScheduleForm = document.getElementById('add-schedule-form');
-    const cancelBtn = document.getElementById('cancel-btn');
-    const scheduleForm = document.getElementById('schedule-form');
-    const listJadwal = document.getElementById('list-jadwal');
-
-    // Sample Data
-    let jadwal = [
-      {
-        title: 'Jadwal Imunisasi',
-        description: 'Vaksinasi imunisasi untuk balita',
-        date: 'Kamis, 27 Sep 2024 - 10:00 AM',
-        status: 'Pending'
-      },
-      {
-        title: 'Jadwal Posyandu Lansia',
-        description: 'Pemeriksaan kesehatan untuk lansia',
-        date: 'Jumat, 28 Sep 2024 - 09:00 AM',
-        status: 'Pending'
-      }
-    ];
-
-    // Function for Rendering List
-    function renderList(data) {
-      listJadwal.innerHTML = '';
-      data.forEach(item => {
-        const card = `<div class="bg-white shadow-lg rounded-lg p-4 flex items-center justify-between">
+    <!-- Jadwal List -->
+    <template x-for="jadwal in filteredJadwal" :key="jadwal.id">
+      <div class="bg-white shadow-md rounded p-4 mb-4">
+        <div class="flex items-center space-x-4">
+          <!-- Icon Kalender -->
           <div>
-            <h2 class="text-lg font-bold text-blue-500">${item.title}</h2>
-            <p class="text-gray-600">${item.description}</p>
-            <p class="text-gray-500"><span class="inline-block">🗓️ ${item.date}</span></p>
+            <img src="https://via.placeholder.com/50" alt="Kalender" class="w-12 h-12 rounded-full">
           </div>
-          <div class="flex space-x-2 items-center">
-            <span class="bg-green-500 text-white px-3 py-1 rounded-full">${item.status}</span>
-            <button class="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">📅</button>
+          <!-- Jadwal Info -->
+          <div class="flex-1">
+            <h2 class="text-lg font-bold" x-text="jadwal.namaKegiatan"></h2>
+            <p><strong>Tanggal:</strong> <span x-text="jadwal.tanggalKegiatan"></span></p>
+            <p><strong>Lokasi:</strong> <span x-text="jadwal.lokasi"></span></p>
           </div>
-        </div>`;
-        listJadwal.innerHTML += card;
-      });
-    }
+        </div>
+      </div>
+    </template>
 
-    // Initial Render
-    renderList(jadwal);
+    <!-- Modal Tambah Jadwal -->
+    <div x-show="showAddModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+      <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+        <h2 class="text-xl mb-4">Tambah Jadwal Kegiatan</h2>
+        <div class="mb-2">
+          <label class="block mb-1">Nama Kegiatan</label>
+          <input type="text" x-model="newJadwal.namaKegiatan" class="w-full p-2 border rounded">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">Tanggal Kegiatan</label>
+          <input type="date" x-model="newJadwal.tanggalKegiatan" class="w-full p-2 border rounded">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">Lokasi</label>
+          <input type="text" x-model="newJadwal.lokasi" class="w-full p-2 border rounded">
+        </div>
+        <div class="flex justify-end">
+          <button @click="showAddModal = false" class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
+          <button @click="addJadwal" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    // Show Form
-    addScheduleBtn.addEventListener('click', () => {
-      addScheduleForm.classList.remove('hidden');
-    });
-
-    // Cancel Form
-    cancelBtn.addEventListener('click', () => {
-      addScheduleForm.classList.add('hidden');
-    });
-
-    // Submit Form
-    scheduleForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const newJadwal = {
-        title: document.getElementById('title').value,
-        description: document.getElementById('description').value,
-        date: new Date(document.getElementById('date').value).toLocaleString(),
-        status: 'Pending'
+  <!-- Alpine.js Logic -->
+  <script>
+    function appData() {
+      return {
+        showAddModal: false,
+        searchTerm: '',
+        jadwalList: [
+          {
+            id: '0001',
+            namaKegiatan: 'Posyandu Balita',
+            tanggalKegiatan: '2024-10-10',
+            lokasi: 'Posyandu A'
+          },
+          {
+            id: '0002',
+            namaKegiatan: 'Pemeriksaan Ibu Hamil',
+            tanggalKegiatan: '2024-10-15',
+            lokasi: 'Posyandu B'
+          }
+        ],
+        newJadwal: {
+          namaKegiatan: '',
+          tanggalKegiatan: '',
+          lokasi: ''
+        },
+        get filteredJadwal() {
+          return this.jadwalList.filter(jadwal => 
+            jadwal.namaKegiatan.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+            jadwal.tanggalKegiatan.includes(this.searchTerm) ||
+            jadwal.lokasi.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        },
+        searchJadwal() {
+          // Fungsi search otomatis menggunakan computed property 'filteredJadwal'
+        },
+        addJadwal() {
+          if (this.newJadwal.namaKegiatan && this.newJadwal.tanggalKegiatan && this.newJadwal.lokasi) {
+            this.jadwalList.push({ ...this.newJadwal, id: Date.now().toString() });
+            this.newJadwal = { namaKegiatan: '', tanggalKegiatan: '', lokasi: '' };
+            this.showAddModal = false;
+          }
+        }
       };
-      jadwal.push(newJadwal);
-      renderList(jadwal);
-      addScheduleForm.classList.add('hidden');
-      scheduleForm.reset();
-    });
+    }
   </script>
-
 </body>
 </html>
