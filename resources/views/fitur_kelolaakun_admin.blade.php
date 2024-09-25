@@ -22,7 +22,7 @@
       &larr; Back
     </button>
     <!-- Title -->
-    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
     <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
   </div>
 </nav>
@@ -52,6 +52,7 @@
           <div class="flex-1">
             <h2 class="text-lg font-bold" x-text="user.nama"></h2>
             <p><strong>Id :</strong> <span x-text="user.id_pengguna"></span></p>
+            <p><strong>Password :</strong> <span x-password="user.password"></span></p>
             <p><strong>Role :</strong> <span x-text="user.role"></span></p>
           </div>
         </div>
@@ -68,14 +69,18 @@
         </div>
         <div class="mb-2">
           <label class="block mb-1">Id Pengguna</label>
-          <input type="email" x-model="newUser.id_pengguna" class="w-full p-2 border rounded">
+          <input type="text" x-model="newUser.id_pengguna" class="w-full p-2 border rounded">
+        </div>
+        <div class="mb-2">
+          <label class="block mb-1">Password</label>
+          <input type="password" x-model="newUser.password" class="w-full p-2 border rounded">
         </div>
         <div class="mb-2">
           <label class="block mb-1">Role</label>
           <select x-model="newUser.role" class="w-full p-2 border rounded">
             <option value="Admin">Admin</option>
             <option value="Petugas">Petugas</option>
-            <option value="Pengguna">Pengguna</option>
+            <option value="Peserta">Peserta</option>
           </select>
         </div>
         <div class="flex justify-end">
@@ -97,18 +102,21 @@
             id: '0001',
             nama: 'Ayu Susanti',
             id_pengguna: 'ayususanti09071990',
+            password:'ayu123',
             role: 'Admin'
           },
           {
             id: '0002',
             nama: 'Budi Santoso',
             id_pengguna: 'budisantoso09081992',
+            password:'budi123',
             role: 'Petugas'
           }
         ],
         newUser: {
           nama: '',
           id_pengguna: '',
+          password: '',
           role: 'Pengguna' // Default role is 'Pengguna'
         },
         get filteredUsers() {

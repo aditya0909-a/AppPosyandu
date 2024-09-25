@@ -32,45 +32,40 @@
     <section class="container mx-auto py-10 px-4">
         <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            <!-- Posyandu Balita -->
-            <a href="/fiturposyandubalita_kader"
+            <!-- Data Peserta -->
+            <a href="#"
                 class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
                 <div class="text-4xl mb-4">👶</div>
-                <h2 class="text-xl font-bold">Posyandu Balita</h2>
+                <h2 class="text-xl font-bold">Data Peserta</h2>
             </a>
 
-            <!-- Posyandu Lansia -->
-            <a href="/fiturposyandulansia_kader"
+            <!-- Data Pertumbuhan & Keluhan -->
+            <a href="#"
                 class="block bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-                <div class="text-4xl mb-4">👴</div>
-                <h2 class="text-xl font-bold">Posyandu Lansia</h2>
+                <div class="text-4xl mb-4">🧾</div>
+                <h2 class="text-xl font-bold">Data Pertumbuhan & Keluhan</h2>
             </a>
 
-            <!-- Imunisasi -->
-            <a href="/fiturimunisasi_kader"
+            <!-- Data Imunisasi -->
+            <a href="#"
                 class="block bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
                 <div class="text-4xl mb-4">💉</div>
-                <h2 class="text-xl font-bold">Imunisasi</h2>
+                <h2 class="text-xl font-bold">Data Imunisasi</h2>
             </a>
 
             <!-- Jadwal -->
-            <a href="/fiturpenjadwalan_kader"
+            <a href="#"
                 class="block bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
                 <div class="text-4xl mb-4">📆</div>
                 <h2 class="text-xl font-bold">Jadwal</h2>
             </a>
-
-            <!-- Keluar -->
             <form action="/logout" method="POST">
               @csrf
-                <button class="w-full h-full" type="submit">
-                    <div
-                        class=" bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-                        <div class="text-4xl mb-4">🗝️</div>
-                        <h2 class="text-xl font-bold">Logout</h2>
-                    </div>
-                </button>
-
+                <div
+                    class="block bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl mb-4">🗝️</div>
+                    <h2 class="text-xl font-bold">Logout</h2>
+                </div>
             </form>
         </div>
     </section>

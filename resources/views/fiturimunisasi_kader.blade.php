@@ -20,7 +20,7 @@
       &larr; Back
     </button>
     <!-- Title -->
-    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
     <div class="ml-auto text-blue-500 font-sans">Akun Kader</div> <!-- Keterangan akun "Kader" muncul di mobile -->
   </div>
 </nav>
@@ -37,7 +37,7 @@
     </div>
    <!-- Dashboard Grid -->
    <section class="container mx-auto py-10 px-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Pendaftaran -->
       <a href="/fiturimunisasi_pendaftaran_kader" class="block bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">

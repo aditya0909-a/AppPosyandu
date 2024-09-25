@@ -1,17 +1,22 @@
 {
-    "name": "E Posyandu",
-    "short_name": "EP",
+    "name": "Posyandu",
+    "short_name": "Posyandu",
     "start_url": "/index.php",
     "background_color": "#6777ef",
-    "description": "Aplikasi Posyandu Mobile",
+    "description": "Posyandu App",
     "display": "fullscreen",
     "theme_color": "#6777ef",
     "icons": [
         {
-            "src": "logo.PNG",
+            "src": "logo.jpg",
+            "type": "jpg/png",
+            "sizes": "192x192"
+          },
+          {
+            "src": "logo.jpg",
+            "type": "jpg/png",
             "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "any maskable"
-        }
-    ]
-}
+            "purpose": "maskable"
+          }
+        ]
+      }

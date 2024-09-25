@@ -6,11 +6,14 @@
   <title>Posyandu App Landing Page</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<style>
+  body { padding-top: 70px; } /* Pastikan konten tidak tertutup navbar */
+</style>
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-lg p-6 sm:p-8">
-    <div class="container mx-auto flex justify-between items-center p-6 sm:p-8">
+  <nav class="bg-white bg-opacity-90 shadow-md p-1 fixed top-0 left-0 right-0 z-10">
+    <div class="container mx-auto flex justify-between items-center p-4 sm:p-4">
       <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
       <!-- Mobile menu button -->
       <div class="lg:hidden">

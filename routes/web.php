@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\registercontroller;
 use Illuminate\Support\Facades\Route;
 
@@ -25,9 +27,30 @@ Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard_admin');
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard/pesertaBalita', function () {
+        return view('dashboard_peserta_balita');
+    });
+    
+    Route::get('/dashboard/pesertaLansia', function () {
+        return view('dashboard_peserta_lansia');
+    });
+
+    Route::get('/dashboard/kader', function () {
+        return view('dashboard_kader');
+    });
+
+    Route::get('/dashboard/admin', function () {
+        return view('dashboard_admin');
+    });
+    
+    Route::post('/logout', [LoginController::class, 'logout']);
 });
+
+
+
 
 Route::get('/fitur_databalita_admin', function () {
     return view('fitur_databalita_admin');
@@ -65,4 +88,4 @@ Route::get('/logout', function () {
     return view('login');
 });
 
-Route::post('/register', [registercontroller::class, 'register']);
+// Route::post('/register', [registercontroller::class, 'register']);

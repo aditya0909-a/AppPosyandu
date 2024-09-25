@@ -15,14 +15,14 @@
 <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
   <div class="container mx-auto flex items-center">
     <!-- Title -->
-    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
     <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
   </div>
 </nav>
 
   <!-- Dashboard Grid -->
   <section class="container mx-auto py-10 px-4 p-6 sm:p-8">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Data Balita -->
       <a href="/fitur_databalita_admin" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">

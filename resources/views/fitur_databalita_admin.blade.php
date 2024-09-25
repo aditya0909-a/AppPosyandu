@@ -22,7 +22,7 @@
       &larr; Back
     </button>
     <!-- Title -->
-    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
     <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
   </div>
 </nav>

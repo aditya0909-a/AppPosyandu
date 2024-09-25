@@ -21,7 +21,7 @@
       &larr; Back
     </button>
     <!-- Title -->
-    <a href="#" class="text-2xl font-bold text-blue-500">E-Posyandu</a>
+    <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
     <div class="ml-auto text-blue-500 font-sans">Akun Kader</div> <!-- Keterangan akun "Kader" muncul di mobile -->
   </div>
 </nav>
@@ -39,11 +39,13 @@
   
    <!-- Dashboard Grid -->
   <section class="container mx-auto py-10 px-4">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Pendaftaran -->
       <a href="/fiturposyandulasia_pendaftaran_kader" class="block bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
-        <div class="text-4xl mb-4">📓</div>
+        <div class="text-4xl mb-4 flex justify-center items-center">
+          <img src="/logo.jpg" class=w-10>
+        </div>
         <h2 class="text-xl font-bold">Pendaftaran</h2>
       </a>
 

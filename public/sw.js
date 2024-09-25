@@ -1,56 +1,33 @@
-const preLoad = function () {
-    return caches.open("offline").then(function (cache) {
-        // caching index and important routes
-        return cache.addAll(filesToCache);
-    });
-};
+const cacheName = "bin2dec-v1"
+const preCache = ["/", "/style.css", "/script.js"]
 
-self.addEventListener("install", function (event) {
-    event.waitUntil(preLoad());
-});
+self.addEventListener("install", (e) => {
+  console.log("service worker installed")
 
-const filesToCache = [
-    '/',
-    '/offline.html'
-];
+  e.waitUntil(
+    (async () => {
+      const cache = await caches.open(cacheName)
+      cache.addAll(preCache)
+    })(),
+  )
+})
 
-const checkResponse = function (request) {
-    return new Promise(function (fulfill, reject) {
-        fetch(request).then(function (response) {
-            if (response.status !== 404) {
-                fulfill(response);
-            } else {
-                reject();
-            }
-        }, reject);
-    });
-};
+self.addEventListener("fetch", (e) => {
+  e.respondWith(
+    (async () => {
+      const cache = await caches.open(cacheName)
+      const resCache = await cache.match(e.request)
 
-const addToCache = function (request) {
-    return caches.open("offline").then(function (cache) {
-        return fetch(request).then(function (response) {
-            return cache.put(request, response);
-        });
-    });
-};
+      if (resCache) return resCache
 
-const returnFromCache = function (request) {
-    return caches.open("offline").then(function (cache) {
-        return cache.match(request).then(function (matching) {
-            if (!matching || matching.status === 404) {
-                return cache.match("offline.html");
-            } else {
-                return matching;
-            }
-        });
-    });
-};
+      try {
+        const res = await fetch(e.request)
 
-self.addEventListener("fetch", function (event) {
-    event.respondWith(checkResponse(event.request).catch(function () {
-        return returnFromCache(event.request);
-    }));
-    if(!event.request.url.startsWith('http')){
-        event.waitUntil(addToCache(event.request));
-    }
-});
+        cache.put(e.request, res.clone())
+        return res
+      } catch (error) {
+        console.log(error)
+      }
+    })(),
+  )
+})
