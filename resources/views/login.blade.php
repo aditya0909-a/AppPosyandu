@@ -4,13 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- PWA  -->
-    <meta name="theme-color" content="#6777ef" />
-    <link rel="apple-touch-icon" href="{{ asset('logo.jpg') }}">
-    <link rel="manifest" href="{{ asset('/manifest.json') }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Posyandu Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    {{-- Import Library External: TailwindCSS & AlpineJS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-gray-100">
@@ -53,7 +50,6 @@
                 </div>
                 <button type="submit"
                     class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
-              
             </form>
 
             <!-- Divider -->
@@ -63,26 +59,6 @@
         </div>
     </div>
 
-
-    </script>
-    <script src="{{ asset('/sw.js') }}">
-        < /scrip> <
-        script >
-            if ("serviceWorker" in navigator) {
-                // Register a service worker hosted at the root of the
-                // site using the default scope.
-                navigator.serviceWorker.register("/sw.js").then(
-                    (registration) => {
-                        console.log("Service worker registration succeeded:", registration);
-                    },
-                    (error) => {
-                        console.error(`Service worker registration failed: ${error}`);
-                    },
-                );
-            } else {
-                console.error("Service workers are not supported.");
-            }
-    </script>
 </body>
 
 </html>

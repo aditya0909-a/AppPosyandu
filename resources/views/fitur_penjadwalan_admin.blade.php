@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aplikasi Posyandu - Jadwal Kegiatan</title>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.0.0/dist/cdn.min.js" defer></script>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  {{-- Import Library External: TailwindCSS & AlpineJS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <style>
   body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
@@ -18,12 +18,12 @@
 <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
   <div class="container mx-auto flex items-center">
     <!-- Back Button -->
-    <button onclick="history.back()" class="text-blue-500 focus:outline-none mr-4">
+    <button onclick="window.location.href = '/dashboard/admin'" class="text-blue-500 focus:outline-none mr-4">
       &larr; Back
-    </button>
+  </button>
     <!-- Title -->
     <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
-    <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+    <div class="ml-auto text-blue-500 font-sans">Akun Admin</div> <!-- Keterangan akun "Admin" muncul di mobile -->
   </div>
 </nav>
 

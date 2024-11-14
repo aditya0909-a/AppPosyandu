@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Posyandu</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  {{-- Import Library External: TailwindCSS & AlpineJS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
   <style>
     body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
   </style>
@@ -16,7 +17,7 @@
   <div class="container mx-auto flex items-center">
     <!-- Title -->
     <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
-    <div class="ml-auto text-blue-500 font-sans">Akun Kader</div> <!-- Keterangan akun "Kader" muncul di mobile -->
+    <div class="ml-auto text-blue-500 font-sans">Akun Peserta Lansia</div> <!-- Keterangan akun "Peserta" muncul di mobile -->
   </div>
 </nav>
 
@@ -27,27 +28,29 @@
       
       <!-- Data Peserta -->
       <a href="#" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="text-4xl mb-4">👶</div>
+        <img src="{{ asset('icons/grandparents.png') }}" alt="Data Peserta" class="w-12 h-12 mx-auto">
         <h2 class="text-xl font-bold">Data Peserta</h2>
       </a>
 
-      <!-- Data Kesehatan & Keluhan -->
-      <a href="#" class="block bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="text-4xl mb-4">🧾</div>
-        <h2 class="text-xl font-bold">Data Kesehatan & Keluhan</h2>
-      </a>
 
        <!-- Jadwal -->
-       <a href="#" class="block bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="text-4xl mb-4">📆</div>
+       <a href="#" class="block bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+        <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-12 h-12 mx-auto">
         <h2 class="text-xl font-bold">Jadwal</h2>
       </a>
 
-      <!-- Keluar -->
-      <a href="/logout" class="block bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
-        <div class="text-4xl mb-4">🗝️</div>
-        <h2 class="text-xl font-bold">Logout</h2>
-      </a>
+           <!-- Keluar -->
+           <form action="/logout" method="POST">
+            @csrf
+            <button class="w-full h-full" type="submit">
+                <div
+                    class=" bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg shadow-xl p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="{{ asset('icons/logout.png') }}" alt="Keluar" class="w-12 h-12 mx-auto">
+                    <h2 class="text-xl font-bold">Logout</h2>
+                </div>
+            </button>
+
+        </form>
     </div>
   </section>
 

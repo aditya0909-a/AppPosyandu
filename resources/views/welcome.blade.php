@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Posyandu App Landing Page</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  {{-- Import Library External: TailwindCSS & AlpineJS --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <style>
   body { padding-top: 70px; } /* Pastikan konten tidak tertutup navbar */

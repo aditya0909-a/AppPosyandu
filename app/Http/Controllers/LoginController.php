@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class LoginController extends Controller
 {
     public function login(Request $request)
     {
+        // dd($request);
         $credentials = $request->validate([
             'id_user' => 'required',
             'password' => 'required'
@@ -17,18 +18,18 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-            if ($user->role == 'peserta_balita') {
+            if ($user->role == 'pesertabalita') {
                 $request->session()->regenerate();
                 return Redirect::intended('/dashboard/pesertaBalita');
             }
-            if ($user->role == 'peserta_lansia') {
+            if ($user->role == 'pesertalansia') {
                 $request->session()->regenerate();
                 return Redirect::intended('/dashboard/pesertaLansia');
             }
-            if ($user->role == 'kader') {
+            if ($user->role == 'petugas') {
 
                 $request->session()->regenerate();
-                return Redirect::intended('/dashboard/kader');
+                return Redirect::intended('/dashboard/petugas');
             }
             if ($user->role == 'admin') {
 
