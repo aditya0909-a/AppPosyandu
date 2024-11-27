@@ -45,6 +45,12 @@ class Kernel extends HttpKernel
         ],
     ];
 
+    protected $routeMiddleware = [
+        // middleware lainnya...
+        'redirectIfAuthenticated' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+    ];
+    
+
     /**
      * The application's middleware aliases.
      *

@@ -5,204 +5,418 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Posyandu</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  
+  
   <style>
-    body { padding-top: 64px; } /* Pastikan konten tidak tertutup navbar */
+   
+    /* Default Styling */
+body {
+    background-color: #E6F7FF; /* Biru Muda */
+    color: #4A4A4A;
+    padding-left: 16px;
+  padding-right: 16px;
+}
+
+    .navbar, .glass-effect {
+      background-color: rgba(0, 153, 204, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 153, 204, 0.2);
+    }
+    .button-primary {
+      background: linear-gradient(135deg, #0077B5, #0099CC);
+      color: #FFFFFF;
+      
+    }
+
+/* Responsif untuk layar kecil (mobile) */
+@media (max-width: 768px) {
+  body {
+    padding-left: 8px; /* Kurangi padding samping */
+    padding-right: 8px;
+  }
+
+  .container {
+    padding: 8px;
+  }
+
+  /* Navbar */
+  nav {
+    padding: 8px; /* Navbar padding lebih kecil */
+  }
+
+  
+  /* Header */
+  h2, h3 {
+    font-size: 1.25rem; /* Perkecil ukuran font judul */
+  }
+
+  /* Tabel */
+  table {
+    font-size: 0.875rem; /* Perkecil font tabel */
+  }
+
+  th, td {
+    padding: 8px; /* Kurangi padding dalam tabel */
+  }
+
+  /* Tombol */
+  button {
+    padding: 8px 12px; /* Kurangi padding tombol */
+    font-size: 0.875rem; /* Perkecil font tombol */
+  }
+}
+
   </style>
 </head>
-<body class="bg-gray-100">
+<body >
 
  <!-- Navbar -->
- <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+ <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
     <div class="container mx-auto flex items-center">
-        <!-- Back Button -->
-        <button onclick="window.location.href = '/fitur_databalita_admin'" class="text-blue-500 focus:outline-none mr-4">
+        <button onclick="window.location.href = '/fitur_databalita_admin'" class="text-[#0077B5] mr-4">
             &larr; Back
         </button>
-        <!-- Title -->
-        <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
-        <div class="ml-auto text-blue-500 font-sans">Akun Admin</div>
-        <!-- Keterangan akun "Admin" muncul di mobile -->
+        <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
+        <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
     </div>
 </nav>
 
-<body class="bg-gray-100 p-5">
-    <div class="container mx-auto bg-white p-6 rounded-lg shadow-lg" x-data="{ showGrowthChart: false }">
+<body class=" p-5" style="background-color: #E6F7FF; padding-top: 100px;">
+    <div x-data="{ showGrowthChart: false }">
         <!-- Header -->
-        <h2 class="text-2xl font-bold text-center mb-6">Data Peserta Posyandu Balita</h2>
+        <h2 class="text-3xl font-bold text-center mb-2" style="color: #000000;">Data Peserta</h2>
+        <h2 class="text-3xl font-bold text-center mb-4" style="color: #000000;">Posyandu Balita</h2>
 
         <!-- Informasi Dasar Balita -->
         <div class="mb-6">
-            <h3 class="text-xl font-semibold text-gray-700">Informasi Balita</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <p><strong>Nama Balita:</strong> {{ $PesertaPosyanduBalita->nama_peserta_balita}}</p>
-                    <p><strong>TTL Balita:</strong> {{$PesertaPosyanduBalita->TTL_balita}}</p>
-                    <p><strong>NIK Balita:</strong> {{$PesertaPosyanduBalita->NIK_balita}}</p>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg">
-                    <p><strong>Nama Orang Tua:</strong> {{$PesertaPosyanduBalita->nama_orangtua_balita}}</p>
-                    <p><strong>NIK Orang Tua:</strong> {{$PesertaPosyanduBalita->NIK_orangtua_balita}}</p>
-                    <p><strong>Alamat:</strong> {{$PesertaPosyanduBalita->alamat_balita}}</p>
-                    <p><strong>Nomor WhatsApp:</strong> {{$PesertaPosyanduBalita->wa_balita}}</p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <table class="w-full text-left border-collapse text-gray-900 text-lg">
+                    <tbody>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">Nama Balita</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->nama_peserta_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">Tempat Lahir Balita</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->TempatLahir_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">Tanggal Lahir Balita</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->TanggalLahir_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">NIK Balita</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->NIK_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">Nama Orang Tua</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->nama_orangtua_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">NIK Orang Tua</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->NIK_orangtua_balita }}</td>
+                        </tr>
+                        <tr class="border-b border-gray-300">
+                            <th class="py-4 px-6 font-bold bg-gray-100">Alamat</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->alamat_balita }}</td>
+                        </tr>
+                        <tr>
+                            <th class="py-4 px-6 font-bold bg-gray-100">Nomor WhatsApp</th>
+                            <td class="py-4 px-6">{{ $PesertaPosyanduBalita->wa_balita }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+             
+        <div x-data="chartHandler">
+            <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Pertumbuhan</h3>
+            <div class="flex flex-wrap justify-between gap-2 mt-4">
+                <button @click="showChart('tinggiBadan')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                    Tinggi Badan
+                </button>
+                <button @click="showChart('beratBadan')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                    Berat Badan
+                </button>
+                <button @click="showChart('lingkarKepala')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                    Lingkar Kepala
+                </button>
+            </div>
+        
+            <!-- Modal Diagram -->
+            <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
+                class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
+                <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+                    <h3 class="text-xl font-bold mb-4" x-text="chartTitle"></h3>
+                    <button @click="closeChart" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+                        &times;
+                    </button>
+        
+                    <div class="flex justify-between mb-4">
+                        <button @click="prevPage()" class="button-primary px-3 py-1" :disabled="currentPage === 0">
+                            Sebelumnya
+                        </button>
+                        <button @click="nextPage()" class="button-primary px-3 py-1"
+                            :disabled="(currentPage + 1) * itemsPerPage >= maxMonths">
+                            Berikutnya
+                        </button>
+                    </div>
+        
+                    <div id="growthChart" style="width: 100%; height: 300px;"></div>
                 </div>
             </div>
         </div>
         
-        <!-- Tombol untuk Buka Diagram -->
-        <button @click="showGrowthChart = true"
-            class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-            Lihat Diagram Pertumbuhan
-        </button>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        
+        <script>
+            const pesertaId = 1; // Ganti dengan ID peserta yang diinginkan
 
-        <!-- Modal Diagram Pertumbuhan -->
-        <div x-show="showGrowthChart" x-cloak @click.away="showGrowthChart = false"
-            class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition
-            x-init="$watch('showGrowthChart', value => {
-                if (value) {
-                    setTimeout(() => initChart(), 100);
-                }
-            })">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
-                <h3 class="text-xl font-bold mb-4">Diagram Pertumbuhan Balita</h3>
-                <!-- Tombol Tutup -->
-                <button @click="showGrowthChart = false"
-                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                    &times;
-                </button>
+const pesertaId = 1; // Ubah dengan ID peserta yang valid
 
-                <!-- Canvas untuk Grafik -->
-                <canvas id="growthChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Script untuk Menginisialisasi Grafik
-        function initChart() {
-            const ctx = document.getElementById('growthChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['0 bulan', '1 bulan', '2 bulan', '3 bulan', '4 bulan', '5 bulan', '6 bulan'],
-                    datasets: [{
-                            label: 'Berat Badan (kg)',
-                            data: [3.5, 4.2, 5.0, 5.8, 6.5, 7.1, 7.8],
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderWidth: 2,
-                            fill: true
-                        },
-                        {
-                            label: 'Tinggi Badan (cm)',
-                            data: [50, 54, 58, 62, 65, 68, 70],
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderWidth: 2,
-                            fill: true
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        }
-                    },
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Usia'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Pertumbuhan'
-                            }
-                        }
-                    }
-                }
-            });
+fetch(`/chart-data/${pesertaId}`) // URL Laravel
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    </script>
+        return response.json(); // Mengubah response ke JSON
+    })
+    .then((chartData) => {
+        console.log(chartData); // Data berhasil diterima
+        // Gunakan chartData untuk visualisasi
+    })
+    .catch((error) => console.error('Error fetching chart data:', error)); // Handle error
 
-    <!-- Tabel Vaksinasi -->
-    <div class="mb-6">
-        <h3 class="text-xl font-semibold text-gray-700">Tabel Vaksinasi</h3>
-        <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden">
-            <thead class="bg-blue-500 text-white">
-                <tr>
-                    <th class="p-2 text-left">Jenis Vaksin</th>
-                    <th class="p-2 text-left">Tanggal Pemberian</th>
-                    <th class="p-2 text-left">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                <tr class="border-t">
-                    <td class="p-2">BCG</td>
-                    <td class="p-2">01-03-2021</td>
-                    <td class="p-2">Sudah diberikan</td>
-                </tr>
-                <tr class="border-t">
-                    <td class="p-2">Polio</td>
-                    <td class="p-2">05-05-2021</td>
-                    <td class="p-2">Sudah diberikan</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <!-- Tabel Pemberian Obat Cacing -->
-    <div class="mb-6">
-        <h3 class="text-xl font-semibold text-gray-700">Tabel Pemberian Obat Cacing</h3>
-        <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden">
-            <thead class="bg-green-500 text-white">
-                <tr>
-                    <th class="p-2 text-left">Tanggal Pemberian</th>
-                    <th class="p-2 text-left">Dosis</th>
-                    <th class="p-2 text-left">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                <tr class="border-t">
-                    <td class="p-2">10-08-2022</td>
-                    <td class="p-2">1 tablet</td>
-                    <td class="p-2">Sudah diberikan</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    document.addEventListener('DOMContentLoaded', () => {
+    Alpine.store('chartHandler').fetchChartData();
+});
+            
+    document.addEventListener('alpine:init', () => {
+    Alpine.data('chartHandler', () => ({
+        showGrowthChart: false, // State untuk menampilkan modal grafik
+        currentChart: null, // Menyimpan tipe grafik saat ini
+        chartTitle: '', // Judul grafik
+        chartInstance: null, // Instance Highcharts untuk kontrol grafik
+        currentPage: 0, // Halaman data saat ini untuk pagination
+        itemsPerPage: 6, // Jumlah data per halaman
+        chartData: {}, // Data untuk grafik, akan diambil dari server
 
-    <!-- Tabel Pemberian Bantuan Susu -->
-    <div>
-        <h3 class="text-xl font-semibold text-gray-700">Tabel Pemberian Bantuan Susu</h3>
-        <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden">
-            <thead class="bg-purple-500 text-white">
-                <tr>
-                    <th class="p-2 text-left">Tanggal Pemberian</th>
-                    <th class="p-2 text-left">Jumlah</th>
-                    <th class="p-2 text-left">Keterangan</th>
-                </tr>
-            </thead>
-            <tbody class="text-gray-700">
-                <tr class="border-t">
-                    <td class="p-2">15-09-2022</td>
-                    <td class="p-2">2 kotak</td>
-                    <td class="p-2">Sudah diberikan</td>
-                </tr>
-                <tr class="border-t">
-                    <td class="p-2">20-10-2022</td>
-                    <td class="p-2">1 kotak</td>
-                    <td class="p-2">Sudah diberikan</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    </div>
+        // Fungsi untuk menampilkan grafik berdasarkan tipe
+        showChart(type) {
+            console.log(`Chart ${type} dipanggil`);
+            this.currentChart = type;
+            this.chartTitle = this.getChartTitle(type);
+            this.showGrowthChart = true;
+
+            this.$nextTick(() => this.initChart());
+        },
+
+        closeChart() {
+            this.showGrowthChart = false;
+            if (this.chartInstance) {
+                this.chartInstance.destroy(); // Hapus instance Highcharts
+                this.chartInstance = null;
+            }
+        },
+
+        nextPage() {
+            const totalData = this.chartData[this.currentChart]?.data.length || 0;
+            if ((this.currentPage + 1) * this.itemsPerPage < totalData) {
+                this.currentPage++;
+                this.updateChart();
+            }
+        },
+
+        prevPage() {
+            if (this.currentPage > 0) {
+                this.currentPage--;
+                this.updateChart();
+            }
+        },
+
+        async initChart() {
+            const chartEl = document.getElementById('growthChart');
+            const start = this.currentPage * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            const chartConfig = this.chartData[this.currentChart];
+
+            // Pastikan data ada sebelum inisialisasi grafik
+            if (!chartConfig) {
+                console.error('Chart data is not available');
+                return;
+            }
+
+            // Inisialisasi Highcharts
+            this.chartInstance = Highcharts.chart(chartEl, {
+                chart: { type: 'line', height: 300 },
+                title: { text: chartConfig.label },
+                xAxis: {
+                    categories: this.generateLabels(start, end),
+                    title: { text: 'Usia (Bulan)' }
+                },
+                yAxis: {
+                    title: { text: 'Ukuran' }
+                },
+                series: [
+                    {
+                        name: chartConfig.label,
+                        data: chartConfig.data.slice(start, end)
+                    }
+                ]
+            });
+        },
+
+        updateChart() {
+            const start = this.currentPage * this.itemsPerPage;
+            const end = start + this.itemsPerPage;
+            const chartConfig = this.chartData[this.currentChart];
+
+            if (this.chartInstance) {
+                this.chartInstance.xAxis[0].setCategories(this.generateLabels(start, end));
+                this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
+            }
+        },
+
+        generateLabels(start, end) {
+            return Array.from({ length: end - start }, (_, i) => `Bulan ${start + i + 1}`);
+        },
+
+        getChartTitle(type) {
+            switch (type) {
+                case 'tinggiBadan':
+                    return 'Diagram Tinggi Badan';
+                case 'beratBadan':
+                    return 'Diagram Berat Badan';
+                case 'lingkarKepala':
+                    return 'Diagram Lingkar Kepala';
+                default:
+                    return 'Diagram Pertumbuhan';
+            }
+        },
+
+        async fetchChartData() {
+            try {
+                const response = await fetch(`/chart-data/${pesertaId}`);
+                this.chartData = await response.json();
+                console.log('Chart data fetched:', this.chartData);
+            } catch (error) {
+                console.error('Error fetching chart data:', error);
+            }
+        }
+    }));
+});
+        </script>
+        
+        
+          
+
+   <!-- Tabel Imunisasi -->
+<div class="mb-6">
+    <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tabel Imunisasi</h3>
+    <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+        <thead class="bg-[#008eb5] text-white">
+            <tr>
+                <th class="py-3 px-4 text-left font-medium">Jenis Imunisasi</th>
+                <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
+                <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse ($imunisasiData as $item)
+            <tr>
+                <td>{{ $item['jenis_imunisasi'] }}</td>
+                <td>{{ $item['tanggal'] }}</td>
+                <td>{{ $item['keterangan_imunisasi'] }}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<!-- Tabel Pemberian Obat Cacing -->
+<div class="mb-6">
+    <h3 class="text-2xl font-semibold text-gray-800">Tabel Pemberian Obat Cacing</h3>
+    <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+        <thead class="bg-[#008eb5] text-white">
+            <tr>
+                <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
+                <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse ($obatCacingData as $item)
+            <tr>
+                <td>{{ $item['tanggal'] }}</td>
+                <td>{{ $item['keterangan_obat_cacing'] }}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="2">Data tidak ditemukan untuk pemberian obat cacing.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+<!-- Tabel Pemberian Bantuan Susu -->
+<div class="mb-6">
+    <h3 class="text-2xl font-semibold text-gray-800">Tabel Pemberian Bantuan Susu</h3>
+    <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+        <thead class="bg-[#008eb5] text-white">
+            <tr>
+                <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
+                <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse ($susuData as $item)
+            <tr>
+                <td>{{ $item['tanggal'] }}</td>
+                <td>{{ $item['keterangan_susu'] }}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="2">Data tidak ditemukan untuk pemberian bantuan susu.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Tabel Keluhan -->
+<div class="mb-6">
+    <h3 class="text-2xl font-semibold text-gray-800">Tabel Keluhan</h3>
+    <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+        <thead class="bg-[#008eb5] text-white">
+            <tr>
+                <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                <th class="py-3 px-4 text-left font-medium">Keluhan</th>
+                <th class="py-3 px-4 text-left font-medium">Penanganan</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+            @forelse ($keluhanData as $item)
+            <tr>
+                <td>{{ $item['tanggal'] }}</td>
+                <td>{{ $item['keluhan'] }}</td>
+                <td>{{ $item['penanganan'] }}</td>
+            </tr>
+            @empty
+            <tr>
+                <td colspan="2">Data tidak ditemukan untuk pemberian bantuan susu.</td>
+            </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 </body>
 
 </html>

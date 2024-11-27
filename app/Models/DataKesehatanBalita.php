@@ -10,5 +10,11 @@ class DataKesehatanBalita extends Model
     use HasFactory;
 
     protected $table = 'DataKesehatanBalita';
-    protected $fillable = ['tinggi_Balita', 'berat_balita', 'lingkar_kepala_balita', 'imunisasi', 'obat_cacing', 'susu'];
+    protected $fillable = ['peserta_id','bulan_ke', 'tinggi_Balita', 'berat_balita', 'lingkar_kepala_balita', 'imunisasi', 'obat_cacing', 'susu', 'keluhan_balita', 'penanganan_balita'];
+
+    public function peserta()
+    {
+        return $this->belongsTo(PesertaPosyanduBalita::class, 'peserta_id', 'id');
+    }
+
 }

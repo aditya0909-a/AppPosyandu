@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('PesertaPosyanduBalita', function (Blueprint $table) {
             $table->id();
             $table->string('nama_peserta_balita');
-            $table->string('TTL_balita');
+            $table->string('TempatLahir_balita');
+            $table->date('TanggalLahir_balita');
             $table->string('NIK_balita')->unique();
             $table->string('nama_orangtua_balita');
             $table->string('NIK_orangtua_balita');

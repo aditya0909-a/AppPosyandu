@@ -17,6 +17,17 @@ class PPLController extends Controller
         return view('fitur_datalansia_admin', compact('PesertaPosyanduLansias'));
     }
     
+    public function DataPesertaLansia($id)
+    {
+        // Mengambil semua data pengguna dari tabel 'PesertaPosyanduBalita'
+        $PesertaPosyanduLansia = PesertaPosyanduLansia::find($id); // $users adalah koleksi data semua pengguna
+
+        // Mengirimkan data pengguna ke view 'fitur_databalita_admin'
+        return view('DataPesertaPosyanduLansia_admin', [
+            'PesertaPosyanduLansia' => $PesertaPosyanduLansia
+        ]);
+    }
+
     public function register(Request $request)
     {
         // Validasi data input

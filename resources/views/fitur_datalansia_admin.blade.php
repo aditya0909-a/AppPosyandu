@@ -6,6 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Peserta Posyandu Lansia - Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        body {
+            background-color: #E6F7FF;
+            color: #4A4A4A;
+            padding-top: 64px;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 153, 204, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 153, 204, 0.2);
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #0077B5, #0099CC);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .button-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #0077B5;
+            outline: none;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .modal-bg {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <style>
     body {
@@ -15,27 +74,18 @@
     /* Pastikan konten tidak tertutup navbar */
 </style>
 
-<body class="bg-gray-100" x-data="appData()">
+<body x-data="appData()">
     @if (session('success'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-            class="mb-4 rounded-lg border border-green-200 bg-green-100 p-4 fixed top-20 right-4 z-50 max-w-md shadow-lg"
-            role="alert">
-            <div class="flex items-center gap-2">
-                <svg class="h-5 w-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-medium text-green-800">{{ session('success') }}</span>
-                <button @click="show = false"
-                    class="ml-auto rounded-lg p-1.5 text-green-500 hover:bg-green-200 inline-flex h-8 w-8 items-center justify-center">
-                    <span class="sr-only">Close</span>
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
+        class="mb-4 fixed top-20 right-4 z-50 max-w-md shadow-lg glass-effect" role="alert">
+        <div class="flex items-center gap-2">
+            <span class="text-green-800 font-medium">{{ session('success') }}</span>
+            <button @click="show = false" class="ml-auto p-1 text-green-500 hover:bg-green-200">
+                <span class="sr-only">Close</span>
+                &times;
+            </button>
         </div>
+    </div>
     @endif
 
     @if (session('error'))
@@ -61,71 +111,62 @@
     @endif
     <!-- Container -->
     <div class="max-w-4xl mx-auto p-6">
-
-        <!-- Navbar -->
-        <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+        <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <!-- Back Button -->
-                <button onclick="window.location.href = '/dashboard/admin'" class="text-blue-500 focus:outline-none mr-4">
+                <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
-                <!-- Title -->
-                <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
-                <div class="ml-auto text-blue-500 font-sans">Akun Admin</div>
-                <!-- Keterangan akun "Admin" muncul di mobile -->
+                <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
+                <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
             </div>
         </nav>
 
-
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-6 mt-8">
             <h1 class="text-2xl font-bold">Data Peserta Posyandu Lansia</h1>
-            <button @click="showAddModal = true" class="bg-blue-500 text-white px-2 py-1 rounded">Tambah Peserta</button>
+            <button @click="showAddModal = true" class="button-primary">Tambah Peserta</button>
         </div>
 
-       <!-- Search Bar -->
-       <div class="flex items-center mb-4">
-        <input type="text" placeholder="Cari peserta..." class="w-full p-2 border rounded" x-model="searchTerm">
-    </div>
+        <div class="flex items-center mb-4">
+            <input type="text" placeholder="Cari peserta..." class="input-field" x-model="searchTerm">
+        </div>
 
-    <!-- Filtered PesertaPosyanduLansia List -->
-    <template x-for="PesertaPosyanduLansia in filteredPesertaPosyanduLansias" :key="PesertaPosyanduLansia.id">
-        <div class="bg-white shadow-lg rounded-lg p-6 mb-6 hover:shadow-xl transition-shadow duration-300">
-            <div class="flex items-center space-x-6">
-                <div class="flex-1">
-                    <div class="flex justify-between items-start">
-                        <a :href="'/DataPesertaPosyanduLansia_admin'">
-                            <h2 class="text-xl font-bold text-gray-800 mb-1" x-text="PesertaPosyanduLansia.nama_peserta_lansia"></h2>
-                        </a>                      
-                        <button @click="openEditModal(PesertaPosyanduLansia.id, PesertaPosyanduLansia.nama_peserta_balita, PesertaPosyanduLansia.TTL_balita, PesertaPosyanduLansia.NIK_balita)" class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                            Edit
-                        </button>
-                
-                    </div>
-                    <div class="text-sm text-gray-600">TTL : <span x-text="PesertaPosyanduLansia.TTL_lansia"></span></div>
-                    <div class="text-sm text-gray-600">NIK : <span x-text="PesertaPosyanduLansia.NIK_lansia"></span></div>
-                </div>
+         <!-- Filtered PesertaPosyanduLansia List -->
+        <template x-for="PesertaPosyanduLansia in filteredPesertaPosyanduLansias" :key="PesertaPosyanduLansia.id">
+        <div class="card mb-6">
+            <div class="flex justify-between items-center">
+                <a :href="'/DataPesertaPosyanduLansia_admin/' + PesertaPosyanduLansia.id">
+                    <h2 class="text-xl font-bold" x-text="PesertaPosyanduLansia.nama_peserta_lansia"></h2>
+                </a>
+                <button
+                @click="openEditModal(PesertaPosyanduLansia.id, PesertaPosyanduLansia.nama_peserta_lansia, PesertaPosyanduLansia.TTL_lansia, PesertaPosyanduLansia.NIK_lansia, PesertaPosyanduLansia.alamat_lansia, PesertaPosyanduLansia.wa_lansia)"
+                class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit
+                </button>
             </div>
+            <div class="text-sm text-gray-600">TTL: <span x-text="PesertaPosyanduLansia.TTL_lansia"></span></div>
+            <div class="text-sm text-gray-600">NIK: <span x-text="PesertaPosyanduLansia.NIK_lansia"></span></div>
         </div>
-    </template>
+         </template>
+    
 
         <!-- Modal Edit Pengguna -->
         <div x-show="showEditModal"
-            class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+            class="modal-bg fixed inset-0 flex items-center justify-center">
             <form :action="'/pesertaposyandulansia/' + editPesertaPosyanduLansia.id" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
+                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
                     <h2 class="text-xl font-bold mb-4">Edit Peserta Posyandu Lansia</h2>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             Nama
                         </label>
-                        <input type="text" x-model="editPesertaPosyandulansia.nama_peserta_lansia"
+                        <input type="text" x-model="editPesertaPosyanduLansia.nama_peserta_lansia"
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('nama_peserta_lansia')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -136,7 +177,7 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             TTL
                         </label>
-                        <input type="text" name="TTL_lansia" x-model="editPesertaPosyandulansia.TTL_lansia"
+                        <input type="text" name="TTL_lansia" x-model="editPesertaPosyanduLansia.TTL_lansia"
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('TTL_lansia')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -147,7 +188,7 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             NIK
                         </label>
-                        <input type="text" name="NIK_lansia" x-model="editPesertaPosyandulansia.NIK_lansia"
+                        <input type="text" name="NIK_lansia" x-model="editPesertaPosyanduLansia.NIK_lansia"
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('NIK_lansia')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -159,7 +200,7 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             Alamat
                         </label>
-                        <input type="text" name="alamat_lansia" x-model="editPesertaPosyandulansia.alamat_lansia"
+                        <input type="text" name="alamat_lansia" x-model="editPesertaPosyanduLansia.alamat_lansia"
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('alamat_lansia')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -170,7 +211,7 @@
                         <label class="block text-gray-700 text-sm font-bold mb-2">
                             Nomor Whatsapp
                         </label>
-                        <input type="number" name="wa_lansia" x-model="editPesertaPosyandulansia.wa_lansia"
+                        <input type="number" name="wa_lansia" x-model="editPesertaPosyanduLansia.wa_lansia"
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
                         @error('wa_lansia')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -183,7 +224,7 @@
                             Batal
                         </button>
                         <button type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                            class="button-primary">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -193,13 +234,13 @@
 
       
 <!-- Modal Tambah Peserta -->
-        <div x-show="showAddModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+        <div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <form action="/pesertaposyandulansia" method="post" class="space-y-4">
                 @csrf
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full max-h-[80vh] overflow-y-auto">
-                    <h2 class="text-xl mb-4">Tambah Peserta Posyandu Lansia</h2>
+                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+                    <h2 class="text-xl font-bold mb-4">Tambah Peserta Posyandu Lansia</h2>
                     <div class="mb-2">
-                        <label class="block mb-1">Nama</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nama</label>
                         <input id="nama_peserta_lansia" type="text" name="nama_peserta_lansia" required
                             class="w-full p-2 border rounded">
                         @error('nama_peserta_lansia')
@@ -207,7 +248,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="block mb-1">TTL</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">TTL</label>
                         <input id="TTL_lansia" type="text" name="TTL_lansia" required
                             class="w-full p-2 border rounded">
                         @error('TTL_lansia')
@@ -215,7 +256,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="block mb-1">NIK</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">NIK</label>
                         <input id="NIK_lansia" type="number" name="NIK_lansia" required
                             class="w-full p-2 border rounded">
                         @error('NIK_lansia')
@@ -225,7 +266,7 @@
 
 
                     <div class="mb-2">
-                        <label class="block mb-1">Alamat</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Alamat</label>
                         <input id="alamat_lansia" type="text" name="alamat_lansia" required
                             class="w-full p-2 border rounded">
                         @error('alamat_lansia')
@@ -234,7 +275,7 @@
                     </div>
 
                     <div class="mb-2">
-                        <label class="block mb-1">Nomor Whatsapp</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nomor Whatsapp</label>
                         <input id="wa_lansia" type="number" name="wa_lansia" required
                             class="w-full p-2 border rounded">
                         @error('wa_lansia')
@@ -245,13 +286,13 @@
                     <div class="flex justify-end">
                         <button @click="showAddModal = false"
                             class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+                        <button type="submit" class="button-primary">Tambah</button>
 
                     </div>
                 </div>
             </form>
         </div>
-    </div>
+    
 
      <!-- Alpine.js Data -->
      <script>

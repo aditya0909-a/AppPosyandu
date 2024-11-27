@@ -16,6 +16,14 @@ return new class extends Migration
             $table->timestamps();
             $table->string('nama_jadwal');
             $table->date('tanggal_jadwal');
+            $table->enum('lokasi_jadwal', ['BanjarDesa', 'BanjarBingin', 'BanjarDajanPakung']);
+            $table->enum('Posyandu', ['PosyanduBalita', 'PosyanduLansia']);
+            $table->enum('Imunisasi', ['iya', 'tidak']);
+            $table->enum('obat_cacing', ['iya', 'tidak']);
+            $table->enum('susu', ['iya', 'tidak']);
+            $table->enum('tes_lansia', ['iya', 'tidak']);
+            $table->enum('PMT_lansia', ['iya', 'tidak']);
+
         });
     }
 

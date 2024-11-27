@@ -6,6 +6,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Akun Pengguna - Admin</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        body {
+            background-color: #E6F7FF;
+            color: #4A4A4A;
+            padding-top: 64px;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 153, 204, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 153, 204, 0.2);
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #0077B5, #0099CC);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .button-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        
+        .input-field {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .input-field:focus {
+            border-color: #0077B5;
+            outline: none;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .modal-bg {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
 </head>
 <style>
     body {
@@ -15,7 +74,7 @@
     /* Pastikan konten tidak tertutup navbar */
 </style>
 
-<body class="bg-gray-100" x-data="appData()">
+<body x-data="appData()">
     @if (session('success'))
         <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
             class="mb-4 rounded-lg border border-green-200 bg-green-100 p-4 fixed top-20 right-4 z-50 max-w-md shadow-lg"
@@ -63,16 +122,13 @@
     <div class="max-w-4xl mx-auto p-6">
 
         <!-- Navbar -->
-        <nav class="bg-white shadow-md p-4 fixed top-0 left-0 right-0 z-10">
+        <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <!-- Back Button -->
-                <button onclick="window.location.href = '/dashboard/admin'" class="text-blue-500 focus:outline-none mr-4">
+                <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
-                <!-- Title -->
-                <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
-                <div class="ml-auto text-blue-500 font-sans">Akun Admin</div>
-                <!-- Keterangan akun "Admin" muncul di mobile -->
+                <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
+                <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
             </div>
         </nav>
 
@@ -80,7 +136,7 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Kelola Akun Pengguna</h1>
-            <button @click="showAddModal = true" class="bg-blue-500 text-white px-2 py-1 rounded">Tambah Akun</button>
+            <button @click="showAddModal = true" class="button-primary">Tambah Akun</button>
         </div>
 
        <!-- Search Bar -->
@@ -112,11 +168,11 @@
        
         <!-- Modal Edit Pengguna -->
         <div x-show="showEditModal"
-            class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
+            class="modal-bg fixed inset-0 flex items-center justify-center">
             <form :action="'/users/' + editUser.id" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
                     <h2 class="text-xl font-bold mb-4">Edit Akun Pengguna</h2>
 
                     <div class="mb-4">
@@ -174,7 +230,7 @@
                             Batal
                         </button>
                         <button type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
+                            class="button-primary">
                             Simpan Perubahan
                         </button>
                     </div>
@@ -184,13 +240,13 @@
 
       
 <!-- Modal Tambah Pengguna -->
-        <div x-show="showAddModal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center">
+        <div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <form action="/register" method="post" class="space-y-4">
                 @csrf
-                <div class="bg-white p-6 rounded shadow-lg max-w-lg w-full">
+                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
                     <h2 class="text-xl mb-4">Tambah Akun Pengguna</h2>
                     <div class="mb-2">
-                        <label class="block mb-1">Nama</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Nama</label>
                         <input id="name" type="text" name="name" required
                             class="w-full p-2 border rounded">
                         @error('name')
@@ -198,7 +254,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="block mb-1">Id Pengguna</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Id Pengguna</label>
                         <input id="id_User" type="text" name="id_user" required
                             class="w-full p-2 border rounded">
                         @error('id_user')
@@ -206,7 +262,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="block mb-1">Password</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
                         <input id="password" type="password" name="password" required
                             class="w-full p-2 border rounded">
                         @error('password')
@@ -214,7 +270,7 @@
                         @enderror
                     </div>
                     <div class="mb-2">
-                        <label class="block mb-1">Role</label>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Role</label>
                         <select id="role" name="role" class="w-full p-2 border rounded">
                             <option value="admin">Admin</option>
                             <option value="petugas">Petugas</option>
@@ -229,7 +285,7 @@
                     <div class="flex justify-end">
                         <button @click="showAddModal = false"
                             class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Tambah</button>
+                        <button type="submit" class="button-primary">Tambah</button>
 
                     </div>
                 </div>

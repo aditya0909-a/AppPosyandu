@@ -3,73 +3,74 @@
 namespace App\Http\Controllers;
 
 use App\Models\PesertaPosyanduBalita;
+use App\Models\DataKesehatanBalita; // Tambahkan ini
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class PPBController extends Controller
-
 {
+    // Menampilkan semua data peserta balita
     public function index()
     {
-        // Mengambil semua data pengguna dari tabel 'PesertaPosyanduBalita'
-        $PesertaPosyanduBalitas = PesertaPosyanduBalita::all(); // $users adalah koleksi data semua pengguna
-
-        // Mengirimkan data pengguna ke view 'fitur_databalita_admin'
+        $PesertaPosyanduBalitas = PesertaPosyanduBalita::all();
         return view('fitur_databalita_admin', compact('PesertaPosyanduBalitas'));
     }
 
+    // Menampilkan data spesifik peserta balita berdasarkan ID
     public function DataPesertaBalita($id)
     {
-        // Mengambil semua data pengguna dari tabel 'PesertaPosyanduBalita'
-        $PesertaPosyanduBalita = PesertaPosyanduBalita::find($id); // $users adalah koleksi data semua pengguna
+        $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
 
-        // Mengirimkan data pengguna ke view 'fitur_databalita_admin'
         return view('DataPesertaPosyanduBalita_admin', [
-            'PesertaPosyanduBalita' => $PesertaPosyanduBalita
+            'PesertaPosyanduBalita' => $PesertaPosyanduBalita,
         ]);
     }
-    
+
+    // Menambahkan data peserta balita baru
     public function register(Request $request)
     {
-        // Validasi data input
         $validatedData = $request->validate([
             'nama_peserta_balita' => 'required|max:255',
-            'TTL_balita' => 'required|max:255',
+            'TempatLahir_balita' => 'required|max:255',
+            'TanggalLahir_balita' => 'required|date',
             'NIK_balita' => 'required|max:16',
-            'nama_orangtua_balita' => 'required|max:225',
+            'nama_orangtua_balita' => 'required|max:255',
             'NIK_orangtua_balita' => 'required|max:16',
             'alamat_balita' => 'required|max:255',
             'wa_balita' => 'required|max:13',
         ]);
 
-       
-
-        // Menyimpan data pengguna ke database
         PesertaPosyanduBalita::create($validatedData);
 
-
-        // Redirect ke halaman yang diinginkan setelah pendaftaran, misalnya dashboard admin
-        return redirect('/fitur_databalita_admin')->with('success', 'peserta berhasil ditambahkan.');
+        return redirect('/fitur_databalita_admin')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
+    // Mengupdate data peserta balita
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'nama_peserta_balita' => 'nullable|max:255',
-            'TTL_balita' => 'nullable|max:255',
+            'TempatLahir_balita' => 'nullable|max:255',
+            'TanggalLahir_balita' => 'nullable|date',
             'NIK_balita' => 'nullable|max:16',
-            'nama_orangtua_balita' => 'nullable|max:225',
+            'nama_orangtua_balita' => 'nullable|max:255',
             'NIK_orangtua_balita' => 'nullable|max:16',
             'alamat_balita' => 'nullable|max:255',
             'wa_balita' => 'nullable|max:13',
         ]);
 
         $peserta = PesertaPosyanduBalita::findOrFail($id);
-       
+
+        // Mengupdate atribut hanya jika field tersebut diisi
         if ($request->filled('nama_peserta_balita')) {
             $peserta->nama_peserta_balita = $validated['nama_peserta_balita'];
         }
-        if ($request->filled('TTL_balita')) {
-            $peserta->TTL_balita = $validated['TTL_balita'];
+        if ($request->filled('TempatLahir_balita')) {
+            $peserta->TempatLahir_balita = $validated['TempatLahir_balita'];
+        }
+        if ($request->filled('TanggalLahir_balita')) {
+            $peserta->TanggalLahir_balita = $validated['TanggalLahir_balita'];
         }
         if ($request->filled('NIK_balita')) {
             $peserta->NIK_balita = $validated['NIK_balita'];
@@ -89,6 +90,89 @@ class PPBController extends Controller
 
         $peserta->save();
 
-        return redirect()->back()->with('success', 'Peserta berhasil diubah');
+        return redirect()->back()->with('success', 'Peserta berhasil diubah.');
     }
+
+    // Menampilkan data peserta berdasarkan ID
+    public function show($id)
+    {
+        $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
+
+        return view('DataPesertaPosyanduBalita_admin', [
+            'PesertaPosyanduBalita' => $PesertaPosyanduBalita,
+        ]);
+    }
+
+    // Menampilkan data kesehatan peserta
+    public function DataKesehatan($id)
+    {
+        $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
+        $data = DB::table('DataKesehatanBalita')
+            ->where('peserta_id', $id)
+            ->select('created_at', 'obat_cacing', 'susu', 'imunisasi', 'keluhan_balita', 'penanganan_balita')
+            ->get();
+
+        $obatCacingData = $data->map(function ($item) {
+            return [
+                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                'keterangan_obat_cacing' => $item->obat_cacing === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan',
+            ];
+        });
+
+        $susuData = $data->map(function ($item) {
+            return [
+                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                'keterangan_susu' => $item->susu === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan',
+            ];
+        });
+
+        $imunisasiData = $data->map(function ($item) {
+            return [
+                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                'jenis_imunisasi' => $item->imunisasi,
+                'keterangan_imunisasi' => $item->imunisasi === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan',
+            ];
+        });
+
+        $keluhanData = $data->map(function ($item) {
+            return [
+                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                'keluhan' => $item->keluhan_balita,
+                'penanganan' => $item->penanganan_balita,
+            ];
+        });
+
+        return view('DataPesertaPosyanduBalita_admin', compact('PesertaPosyanduBalita', 'obatCacingData', 'susuData', 'imunisasiData', 'keluhanData'));
+    }
+
+    public function getChartDataByPeserta($peserta_id)
+    {
+
+        
+        // Ambil data berdasarkan peserta_id
+        $data = DataKesehatanBalita::where('peserta_id', $peserta_id)
+            ->orderBy('bulan_ke') // Jika ingin data diurutkan berdasarkan bulan
+            ->get();
+
+        // Format data untuk chart
+        $chartData = [
+            'tinggiBadan' => [
+                'label' => 'Tinggi Badan (cm)',
+                'data' => $data->pluck('tinggi_balita')->toArray(),
+            ],
+            'beratBadan' => [
+                'label' => 'Berat Badan (kg)',
+                'data' => $data->pluck('berat_balita')->toArray(),
+            ],
+            'lingkarKepala' => [
+                'label' => 'Lingkar Kepala (cm)',
+                'data' => $data->pluck('lingkar_kepala_balita')->toArray(),
+            ],
+        ];
+
+               
+        return response()->json($chartData);
+    }
+
+    
 }

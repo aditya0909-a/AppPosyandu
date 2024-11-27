@@ -3,19 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Posyandu App Landing Page</title>
+  <title>PosyanduGo Landing Page</title>
   {{-- Import Library External: TailwindCSS & AlpineJS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <div class="container">
 </head>
 <style>
-  body { padding-top: 70px; } /* Pastikan konten tidak tertutup navbar */
+  body { padding-top: 90px; } /* Pastikan konten tidak tertutup navbar */
+  
 </style>
 <body class="bg-gray-100">
 
   <!-- Navbar -->
-  <nav class="bg-white bg-opacity-90 shadow-md p-1 fixed top-0 left-0 right-0 z-10">
+  <nav class=" bg-white navbar shadow-md p-4 fixed top-0 left-0 right-0 z-10">
     <div class="container mx-auto flex justify-between items-center p-4 sm:p-4">
-      <a href="#" class="text-2xl font-bold text-blue-500">Posyandu</a>
+      <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
       <!-- Mobile menu button -->
       <div class="lg:hidden">
         <button id="menu-button" class="text-gray-500 focus:outline-none">
@@ -25,6 +27,7 @@
         </button>
       </div>
 
+     
       <!-- Links -->
       <div class="hidden lg:flex space-x-6 items-center">
         <a href="#features" class="text-gray-700 hover:text-blue-500">Features</a>
@@ -42,11 +45,11 @@
   </nav>
 
   <!-- Hero Section -->
-  <section class="bg-blue-500 text-white py-20">
+  <section class="bg-[#0077B5] text-white py-20">
     <div class="container mx-auto text-center p-6 sm:p-8">
       <h1 class="text-4xl font-bold mb-4">Welcome to Posyandu App</h1>
-      <p class="text-lg mb-6">Posyandu digital yang mempermudah pelayanan kesehatan ibu dan anak.</p>
-      <a href="/login" class="bg-white text-blue-500 px-6 py-3 rounded font-semibold hover:bg-gray-100">Get Started</a>
+      <p class="text-lg mb-6">Posyandu digital yang mempermudah pelayanan kesehatan balita dan lansia.</p>
+      <a href="/login" class="bg-white text-[#0077B5] px-6 py-3 rounded font-semibold hover:bg-gray-100">Get Started</a>
     </div>
   </section>
 
@@ -88,11 +91,9 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-4 p-6 sm:p-8">
-    <div class="container mx-auto text-center">
-      <p>&copy; 2024 Posyandu App. All rights reserved.</p>
-    </div>
-  </footer>
+<footer class="bg-[#0077B5] text-white py-4 mt-10 text-center">
+  <p>&copy; 2024 PosyanduGo. All rights reserved.</p>
+</footer>
 
   <!-- Toggle Mobile Menu -->
   <script>

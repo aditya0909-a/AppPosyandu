@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Peserta Posyandu Balita - Admin</title>
+    <title>Pendaftaran Peserta Balita - Petugas</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -108,17 +108,17 @@
     <div class="max-w-4xl mx-auto p-6">
         <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href = '/dashboard/petugas'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
-                <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
+                <div class="ml-auto text-[#0077B5] font-sans">Akun Petugas</div>
             </div>
         </nav>
 
         <div class="flex justify-between items-center mb-6 mt-8">
-            <h1 class="text-2xl font-bold">Data Peserta Posyandu Balita</h1>
-            <button @click="showAddModal = true" class="button-primary">Tambah Peserta</button>
+            <h1 class="text-2xl font-bold">Pendaftaran Peserta Posyandu</h1>
+            <button @click="showAddModal = true" class="button-primary">Daftar Peserta</button>
         </div>
 
         <div class="flex items-center mb-4">

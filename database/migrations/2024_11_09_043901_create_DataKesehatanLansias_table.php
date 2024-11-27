@@ -21,8 +21,13 @@ return new class extends Migration
             $table->enum('kognitif_lokasi', ['bisa', 'tidak']); 
             $table->enum('kognitif_waktu', ['bisa', 'tidak']);
             $table->enum('kognitif_kecemasan', ['cemas', 'tidak']); 
-            $table->enum('dengar_bisik', ['tidak_baik', 'kurang baik', 'cukup_baik', 'baik', 'sangat_baik']); 
-            $table->enum('dengar_langsung', ['tidak_baik', 'kurang baik', 'cukup_baik', 'baik', 'sangat_baik']);
+            $table->enum('dengar_bisik', ['kurang baik', 'cukup_baik', 'baik']); 
+            $table->enum('dengar_langsung', ['kurang baik', 'cukup_baik', 'baik']);
+            $table->enum('lihat', ['kurang baik', 'cukup_baik', 'baik']);
+            $table->enum('mobilisasi', ['kurang baik', 'cukup_baik', 'baik']);
+            $table->enum('PMT', ['iya', 'tidak']);
+            $table->string('keluhan_lansia');
+            $table->string('obat_lansia');
         });
     }
 

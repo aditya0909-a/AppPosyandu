@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('DataKesehatanBalita', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->integer('peserta_id');
+            $table->integer('bulan_ke')->default(0); // Nilai default berupa angka
             $table->integer('tinggi_balita');
             $table->integer('berat_balita');
             $table->integer('lingkar_kepala_balita');
             $table->enum('imunisasi', ['tidak', 'polio', 'DPT', 'Hib', 'campak', 'BCG', 'MMR', 'Varicella', 'Rotavirus', 'PCV']); // imunisasi terbatas pada pilihan tertentu
             $table->enum('obat_cacing', ['tidak', 'iya']); // pemberihan obat cacing terbatas pada pilihan tertentu
             $table->enum('susu', ['tidak', 'iya']); // pemberihan susu terbatas pada pilihan tertentu
+            $table->string('keluhan_balita')->nullable()->default('');
+            $table->string('penanganan_balita')->nullable()->default('');
         });
     }
 

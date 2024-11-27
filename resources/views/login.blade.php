@@ -8,9 +8,32 @@
     <title>Posyandu Login</title>
     {{-- Import Library External: TailwindCSS & AlpineJS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        /* Menggunakan path gambar di Laravel dengan helper asset */
+        body {
+            background-image: url('{{ asset('images/background.jpg') }}');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .overlay {
+            background-color: rgba(0, 118, 181, 0.704);
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 100%; /* Batas lebar maksimum */
+            
+        }
+        
+        .button-primary {
+      background: linear-gradient(135deg, #0077B5, #0099CC);
+      color: #FFFFFF;
+    }
+    </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="flex items-center justify-center min-h-screen">
+    <div class="overlay max-w-md w-full p-6 sm:p-8">
 
               <!-- Alert Section -->
               @if (session()->has('loginError'))
@@ -24,7 +47,7 @@
 
             <!-- Logo -->
             <div class="text-center mb-6">
-                <a href="/welcome" class="text-2xl sm:text-3xl font-bold text-blue-500">Posyandu</a>
+                <a href="/" class="text-2xl sm:text-3xl font-bold text-[#0077B5]">Posyandu</a>
                 <p class="text-gray-600">Masuk ke akun Anda</p>
             </div>
 
@@ -49,12 +72,12 @@
                     </label>
                 </div>
                 <button type="submit"
-                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
+                    class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 button-primary">Login</button>
             </form>
 
             <!-- Divider -->
             <div class="mt-6 flex items-center justify-center">
-                <span class="text-gray-500">&copy; 2024 Posyandu App. All rights reserved</span>
+                <span class="text-gray-500">&copy; 2024 PosyanduGo. All rights reserved</span>
             </div>
         </div>
     </div>
