@@ -48,7 +48,7 @@
 
 
        <!-- Jadwal -->
-       <a href="/fiturjadwal_peserta_lansia" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+       <a href="/fiturjadwal/pesertalansia" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
         <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Jadwal</h2>
         <p class="text-sm opacity-75">Informasi dan jadwal kegiatan posyandu lansia</p>

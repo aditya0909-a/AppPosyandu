@@ -128,7 +128,7 @@
         <template x-for="PesertaPosyanduBalita in filteredPesertaPosyanduBalitas" :key="PesertaPosyanduBalita.id">
             <div class="card mb-6">
                 <div class="flex justify-between items-center">
-                    <a :href="'/DataPesertaPosyanduBalita_admin/' + PesertaPosyanduBalita.id">
+                    <a :href="'/admin.databalita/' + PesertaPosyanduBalita.id">
                         <h2 class="text-xl font-bold" x-text="PesertaPosyanduBalita.nama_peserta_balita"></h2>
                     </a>
                     <button

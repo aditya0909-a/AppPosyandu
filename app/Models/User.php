@@ -46,4 +46,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function jadwals() {
+        return $this->belongsToMany(Jadwal::class, 'petugas_jadwal');
+    }
+    
 }

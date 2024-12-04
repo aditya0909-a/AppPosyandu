@@ -130,49 +130,49 @@
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Pendaftaran -->
-      <a href="/fiturposyandulasia_pendaftaran_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/pendaftaran/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/register.png') }}" alt="Pendaftaran" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Pendaftaran</h2>
         <p class="text-sm opacity-75">Pendaftaran peserta posyandu lansia</p>
       </a>
 
       <!-- Penimbangan -->
-      <a href="/fiturposyandulansia_penimbangan_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/penimbangan/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/weight.png') }}" alt="Penimbangan" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Penimbangan</h2>
         <p class="text-sm opacity-75">Input berat badan lansia</p>
       </a>
 
       <!-- Pengukuran -->
-      <a href="/fiturposyandulansia_pengukuran_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/pengukuran/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/height.png') }}" alt="Pengukuran" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Pengukuran</h2>
         <p class="text-sm opacity-75">Input tinggi badan, lingkar lengan, dan lingkar perut lansia</p>
       </a>
 
       <!-- Tes Kognitif -->
-      <a href="/fiturposyandulansia_teskognitif_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/teskognitif/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/idea.png') }}" alt="Tes Kognitif" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Tes Kognitif</h2>
         <p class="text-sm opacity-75">Kuisioner tes kemampuan kognitif lansia</p>
       </a>
 
       <!-- Tes Dengar -->
-      <a href="/fiturposyandulansia_tesdengar_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/tesdengar/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/ear.png') }}" alt="Tes Dengar" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Tes Dengar</h2>
         <p class="text-sm opacity-75">Input data hasil tes dengar lansia</p>
       </a>
 
       <!-- Tes Lihat -->
-      <a href="/fiturposyandulansia_teslihat_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/teslihat/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/biometric.png') }}" alt="Tes Lihat" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Tes Lihat</h2>
         <p class="text-sm opacity-75">Input data hasil tes lihat lansia</p>
       </a>
 
       <!-- Tes Mobilisasi -->
-      <a href="/fiturposyandulansia_tesmobilisasi_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/tesmobilisasi/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/mobilisasi.png') }}" alt="Tes Mobilisasi" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Tes Mobilisasi</h2>
         <p class="text-sm opacity-75">Input data hasil tes mobilisasi lansia</p>
@@ -180,14 +180,14 @@
 
 
       <!-- Keluhan -->
-      <a href="/fiturposyandulansia_keluhan_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/keluhan/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/questionnaire.png') }}" alt="Keluhan" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Informasi Keluhan</h2>
         <p class="text-sm opacity-75">Input data keluhan lansia</p>
       </a>
 
       <!-- Peserta Posyandu Lansia -->
-      <a href="/fiturposyandulansia_peserta_kader" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/peserta/fiturposyandulansia/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/participant.png') }}" alt="Peserta Posyandu" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Peserta Posyandu</h2>
         <p class="text-sm opacity-75">List peserta posyandu hari ini</p>

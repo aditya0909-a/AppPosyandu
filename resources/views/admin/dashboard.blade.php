@@ -39,28 +39,34 @@
   <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- Data Balita -->
-    <a href="/fitur_databalita_admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+    <a href="/fiturdatabalita/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
       <img src="{{ asset('icons/baby.png') }}" alt="Data Balita" class="w-16 h-16 mx-auto mb-4">
       <h2 class="text-xl font-bold">Data Balita</h2>
       <p class="text-sm opacity-75">Informasi dan data balita yang terdaftar</p>
     </a>
 
     <!-- Data Lansia -->
-    <a href="/fitur_datalansia_admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+    <a href="/fiturdatalansia/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
       <img src="{{ asset('icons/grandparents.png') }}" alt="Data Lansia" class="w-16 h-16 mx-auto mb-4">
       <h2 class="text-xl font-bold">Data Lansia</h2>
       <p class="text-sm opacity-75">Informasi dan data lansia yang terdaftar</p>
     </a>
 
     <!-- Penjadwalan -->
-    <a href="/fitur_penjadwalan_admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+    <a href="/fiturpenjadwalan/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
       <img src="{{ asset('icons/schedule.png') }}" alt="Penjadwalan" class="w-16 h-16 mx-auto mb-4">
       <h2 class="text-xl font-bold">Penjadwalan</h2>
       <p class="text-sm opacity-75">Jadwal kegiatan dan layanan posyandu</p>
     </a>
 
+    <!-- Jadwal -->
+    <a href="/jadwal/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+      <h2 class="text-xl font-bold">Jadwal</h2>
+      <p class="text-sm opacity-75">Jadwal kegiatan dan layanan posyandu</p>
+    </a>
+
     <!-- Kelola Akun -->
-    <a href="/fitur_kelolaakun_admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+    <a href="/fiturkelolaakun/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
       <img src="{{ asset('icons/account.png') }}" alt="Kelola Akun" class="w-16 h-16 mx-auto mb-4">
       <h2 class="text-xl font-bold">Kelola Akun</h2>
       <p class="text-sm opacity-75">Manajemen akun pengguna posyandu</p>

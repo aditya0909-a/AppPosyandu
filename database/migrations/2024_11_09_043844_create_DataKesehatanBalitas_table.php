@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('DataKesehatanBalita', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
-            $table->integer('peserta_id');
+            $table->foreignId('peserta_id');
+            $table->foreign('peserta_id')->references('id')->on('PesertaPosyanduBalita')->onDelete('cascade');
             $table->integer('bulan_ke')->default(0); // Nilai default berupa angka
             $table->integer('tinggi_balita');
             $table->integer('berat_balita');
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('susu', ['tidak', 'iya']); // pemberihan susu terbatas pada pilihan tertentu
             $table->string('keluhan_balita')->nullable()->default('');
             $table->string('penanganan_balita')->nullable()->default('');
+            $table->timestamps();
         });
     }
 

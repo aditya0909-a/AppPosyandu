@@ -114,71 +114,76 @@
       </nav>
 
   <!-- Pilihan Jadwal -->
-  <div class="container mx-auto mt-6 px-4">
-    <label for="jadwal" class="block text-xl font-semibold mb-2">Pilih Jadwal Posyandu:</label>
-    <select id="jadwal" x-model="selectedJadwal" class="w-full p-3 bg-white border rounded-lg shadow-md mb-6">
-      <option value="" disabled selected>Pilih jadwal...</option>
-      <template x-for="jadwal in jadwalOptions" :key="jadwal">
-        <option x-text="jadwal" :value="jadwal"></option>
-      </template>
-    </select>
-  </div>
+  <select id="jadwal" x-model="selectedJadwal" x-effect="loadDetailJadwal()" class="w-full p-3 bg-white border rounded-lg shadow-md mb-6">
+    <option value="" disabled selected>Pilih jadwal...</option>
+    <template x-for="jadwal in jadwalOptions" :key="jadwal.id">
+      <option :value="jadwal.id" x-text="jadwal.name"></option>
+    </template>
+  </select>
+  
 
   <!-- Dashboard Grid -->
   <section class="container mx-auto py-10 px-4">
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Pendaftaran -->
-      <a href="/fiturposyanduanak_pendaftaran_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/pendaftaran/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/register.png') }}" alt="Pendaftaran" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Pendaftaran</h2>
         <p class="text-sm opacity-75">Pendaftaran peserta kegiatan posyandu balita</p>
       </a>
 
       <!-- Penimbangan -->
-      <a href="/fiturposyanduanak_penimbangan_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/penimbangan/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/weight.png') }}" alt="Penimbangan" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Penimbangan</h2>
         <p class="text-sm opacity-75">Input data berat badan balita</p>
       </a>
 
       <!-- Pengukuran -->
-      <a href="/fiturposyanduanak_pengukuran_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/pengukuran/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/height.png') }}" alt="Pengukuran" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Pengukuran</h2>
         <p class="text-sm opacity-75">Input data tinggi badan dan lingkar kepala balita</p>
       </a>
 
       <!-- Kuisioner -->
-      <a href="/fiturposyanduanak_kuisioner_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/kuisioner/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/questionnaire.png') }}" alt="Kuisioner" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Kuisioner</h2>
         <p class="text-sm opacity-75">Kuisioner deteksi kesehatan balita</p>
       </a>
 
       <!-- Vitamin -->
-      <a href="/fiturposyanduanak_vitamin_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/vitamin/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/capsule.png') }}" alt="Vitamin" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Vitamin</h2>
         <p class="text-sm opacity-75">Checklist pemberian vitamin</p>
       </a>
 
       <!-- Susu -->
-      <a href="/fiturposyanduanak_susu_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/susu/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="fiturStatus.susu">
         <img src="{{ asset('icons/milk.png') }}" alt="Susu" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Susu</h2>
         <p class="text-sm opacity-75">Checklist pemberian susu</p>
       </a>
 
       <!-- Imunisasi -->
-      <a href="/fiturposyanduanak_imunisasi_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/imunisasi/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="fiturStatus.imunisasi">
         <img src="{{ asset('icons/injection.png') }}" alt="Imunisasi" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Imunisasi</h2>
         <p class="text-sm opacity-75">Checklist pemberian imunisasi</p>
       </a>
 
+      <!-- Obat Cacing -->
+      <a href="/obatcacing/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="fiturStatus.obat_cacing">
+        <img src="{{ asset('icons/injection.png') }}" alt="obatcacing" class="w-16 h-16 mx-auto mb-4">
+        <h2 class="text-xl font-bold">Obat Cacing</h2>
+        <p class="text-sm opacity-75">Checklist pemberian Obat Cacing</p>
+      </a>
+
       <!-- Peserta Posyandu Anak -->
-      <a href="/fiturposyanduanak_peserta_petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
+      <a href="/peserta/fiturposyandubalita/petugas" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform" x-show="selectedJadwal">
         <img src="{{ asset('icons/participant.png') }}" alt="Peserta Posyandu" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Peserta Posyandu</h2>
         <p class="text-sm opacity-75">List peserta posyandu hari ini</p>
@@ -189,18 +194,39 @@
   <!-- Alpine.js Logic -->
   <script>
     function dashboardData() {
-      return {
-        selectedJadwal: '', // Nilai default untuk jadwal yang dipilih
-        jadwalOptions: ['Jadwal 1', 'Jadwal 2', 'Jadwal 3'], // Opsi jadwal yang tersedia
+  return {
+    selectedJadwal: '', // ID jadwal yang dipilih
+    jadwalOptions: [],  // List jadwal dari API
+    fiturStatus: {},    // Status fitur berdasarkan enum
+
+    // Fungsi untuk memuat jadwal
+    loadJadwal() {
+      fetch('/api/jadwal')
+        .then(response => response.json())
+        .then(data => {
+          this.jadwalOptions = data.map(jadwal => ({ id: jadwal.id, name: jadwal.nama_jadwal }));
+        })
+        .catch(error => console.error('Error fetching jadwal:', error));
+    },
+
+    // Fungsi untuk memuat detail jadwal berdasarkan ID
+    loadDetailJadwal() {
+      if (this.selectedJadwal) {
+        fetch(`/api/jadwal/${this.selectedJadwal}`)
+          .then(response => response.json())
+          .then(data => {
+            this.fiturStatus = {
+              imunisasi: data.Imunisasi === 'iya',
+              obat_cacing: data.obat_cacing === 'iya',
+              susu: data.susu === 'iya',
+            };
+          })
+          .catch(error => console.error('Error fetching detail jadwal:', error));
       }
-    }
-  </script>
-<script>
-fetch('/api/jadwal')
-.then(response => response.json())
-.then(data => {
-    console.log(data); // Data jadwal diterima di sini
-});
+    },
+  };
+}
+
 </script>
 
 </body>

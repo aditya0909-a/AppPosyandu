@@ -4,12 +4,13 @@ use App\Http\Controllers\JadwalController;
 use App\Models\User;
 use App\Models\PesertaPosyanduBalita;
 use App\Models\PesertaPosyanduLansia;
-use App\Models\Jadwal;
+use App\Models\jadwal;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PPBcontroller;
 use App\Http\Controllers\PPLcontroller;
+use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\JadwalControllercontroller;
 
 /*
@@ -40,29 +41,71 @@ Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
 Route::middleware(['auth', 'role:petugas'])->group(function () {
 
     Route::get('/dashboard/petugas', function () {
-        return view('dashboard_petugas');
+        return view('petugas.dashboard');
     });
 
-    Route::get('/fiturposyandubalita_petugas', function () {
-        return view('fiturposyandubalita_petugas', [
-            'Jadwals' => Jadwal::all()
-        ]);
+    Route::get('/fiturposyandu/petugas', function () {
+        return view('petugas.fitur_posyandu', [
+            'Jadwals' => Jadwal::all()]);
     });
 
-    Route::get('/fiturposyanduanak_pendaftaran_petugas', function () {
-        return view('fiturposyanduanak_pendaftaran_petugas');
+    
+Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions']);
+
+
+    Route::get('/fiturposyandubalita/petugas', function () {
+        return view('petugas.fitur_posyandubalita');
     });
 
-    Route::get('/fiturposyandulansia_petugas', function () {
-        return view('fiturposyandulansia_petugas');
+    Route::get('/pendaftaran/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_pendaftaran');
     });
 
-    Route::get('/fiturimunisasi_petugas', function () {
-        return view('fiturimunisasi_petugas');
+    Route::get('/api/search', [PPBcontroller::class, 'search'])->name('api.search');
+
+
+    Route::get('/penimbangan/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_penimbangan');
     });
 
-    Route::get('/fiturjadwal_petugas', function () {
-        return view('fiturjadwal_petugas', [
+    Route::get('/pengukuran/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_pengukuran');
+    });
+
+    Route::get('/kuisioner/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_kuisioner');
+    });
+
+    Route::get('/vitamin/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_vitamin');
+    });
+
+    Route::get('/susu/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_susu');
+    });
+
+    Route::get('/imunisasi/fiturposyandubalita/petugas', function () {
+        return view('petugas.posyandubalita.fitur_imunisasi');
+    });
+
+    Route::get('/fiturposyandulansia/petugas', function () {
+        return view('petugas.fitur_posyandulansia');
+    });
+
+    Route::get('/pendaftaran/fiturposyandulansia/petugas', function () {
+        return view('petugas.posyandulansia.fitur_pendaftaran');
+    });
+
+    Route::get('/penimbangan/fiturposyandulansia/petugas', function () {
+        return view('petugas.posyandulansia.fitur_penimbangan');
+    });
+
+    Route::get('/pengukuran/fiturposyandulansia/petugas', function () {
+        return view('petugas.posyandulansia.fitur_pengukuran');
+    });
+
+    Route::get('/fiturjadwal/petugas', function () {
+        return view('petugas.fitur_jadwal', [
             'Jadwals' => Jadwal::all()
         ]);
     });
@@ -71,12 +114,12 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
 
 Route::middleware(['auth', 'role:pesertabalita'])->group(function () {
 
-    Route::get('/dashboard/pesertaBalita', function () {
-        return view('dashboard_peserta_balita');
+    Route::get('/dashboard/pesertabalita', function () {
+        return view('pesertabalita.dashboard');
     });
 
-    Route::get('/fiturjadwal_peserta_balita', function () {
-        return view('fiturjadwal_peserta_balita', [
+    Route::get('/fiturjadwal/pesertabalita', function () {
+        return view('pesertabalita.fitur_jadwal', [
             'Jadwals' => Jadwal::all()
         ]);
     });
@@ -85,12 +128,12 @@ Route::middleware(['auth', 'role:pesertabalita'])->group(function () {
 
 Route::middleware(['auth', 'role:pesertalansia'])->group(function () {
 
-    Route::get('/dashboard/pesertaLansia', function () {
-        return view('dashboard_peserta_lansia');
+    Route::get('/dashboard/pesertalansia', function () {
+        return view('pesertalansia.dashboard');
     });
     
-    Route::get('/fiturjadwal_peserta_lansia', function () {
-        return view('fiturjadwal_peserta_lansia', [
+    Route::get('/fiturjadwal/pesertalansia', function () {
+        return view('pesertalansia.fitur_jadwal', [
             'Jadwals' => Jadwal::all()
         ]);
     });
@@ -99,10 +142,10 @@ Route::middleware(['auth', 'role:pesertalansia'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/admin', function () {
-        return view('dashboard_admin');
+        return view('admin.dashboard');
     });
-    Route::get('/fitur_databalita_admin', function () {
-        return view('fitur_databalita_admin', [
+    Route::get('/fiturdatabalita/admin', function () {
+        return view('admin.fitur_databalita', [
             'PesertaPosyanduBalitas' => PesertaPosyanduBalita::all()
         ]);
     });
@@ -113,16 +156,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/pesertaposyandubalita/{id}', [PPBController::class, 'show'])->name('pesertaposyandubalitas.show');
 
-    Route::get('/DataPesertaPosyanduBalita_admin/{id}', [PPBcontroller::class, 'DataPesertaBalita']);
+    Route::get('/admin.databalita/{id}', [PPBcontroller::class, 'DataPesertaBalita']);
 
-    Route::get('/DataPesertaPosyanduBalita_admin/{id}', [PPBController::class, 'DataKesehatan']);
+    Route::get('/admin.databalita/{id}', [PPBController::class, 'DataKesehatan']);
     
-    Route::get('/chart-data/{peserta_id}', [PPBController::class, 'getChartDataByPeserta']);
 
 
 
-    Route::get('/fitur_datalansia_admin', function () {
-        return view('fitur_datalansia_admin', [
+
+    Route::get('/fiturdatalansia/admin', function () {
+        return view('admin.fitur_datalansia', [
             'PesertaPosyanduLansias' => PesertaPosyanduLansia::all()
         ]);
     });
@@ -136,8 +179,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/DataPesertaPosyanduLansia_admin/{id}', [PPLcontroller::class, 'DataPesertaLansia']);
 
 
-    Route::get('/fitur_penjadwalan_admin', function () {
-        return view('fitur_penjadwalan_admin', [
+    Route::get('/fiturpenjadwalan/admin', function () {
+        return view('admin.fitur_penjadwalan', [
             'Jadwals' => Jadwal::all()
         ]);
     });
@@ -150,8 +193,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/DataPenjadwalan_admin/{id}', [PPLcontroller::class, 'DataPenjadwalan']);
 
-    Route::get('/fitur_kelolaakun_admin', function () {
-        return view('fitur_kelolaakun_admin', [
+    Route::get('/jadwal/admin', function () {
+        return view('admin.jadwal');
+    });
+
+    Route::get('/fiturkelolaakun/admin', function () {
+        return view('admin.fitur_kelolaakun', [
             'users' => User::all()
         ]);
     });

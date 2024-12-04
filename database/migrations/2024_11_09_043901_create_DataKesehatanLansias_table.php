@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('DataKesehatanLansia', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('peserta_id');
+            $table->foreign('peserta_id')->references('id')->on('PesertaPosyanduLansia')->onDelete('cascade');
             $table->timestamps();
             $table->integer('tinggi_lansia');
             $table->integer('berat_lansia');
             $table->integer('lingkar_lengan_lansia');
             $table->integer('lingkar_perut_lansia');
-            $table->enum('kognitif_lokasi', ['bisa', 'tidak']); 
+            $table->enum('kognitif_lokasi', ['bisa', 'tidak']);
             $table->enum('kognitif_waktu', ['bisa', 'tidak']);
-            $table->enum('kognitif_kecemasan', ['cemas', 'tidak']); 
-            $table->enum('dengar_bisik', ['kurang baik', 'cukup_baik', 'baik']); 
+            $table->enum('kognitif_kecemasan', ['cemas', 'tidak']);
+            $table->enum('dengar_bisik', ['kurang baik', 'cukup_baik', 'baik']);
             $table->enum('dengar_langsung', ['kurang baik', 'cukup_baik', 'baik']);
             $table->enum('lihat', ['kurang baik', 'cukup_baik', 'baik']);
             $table->enum('mobilisasi', ['kurang baik', 'cukup_baik', 'baik']);

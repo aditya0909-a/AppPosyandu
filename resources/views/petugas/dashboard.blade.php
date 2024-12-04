@@ -40,8 +40,15 @@
 <section class="container mx-auto py-10 px-4 p-6 sm:p-8">
     <h1 class="text-2xl font-bold text-center mb-8">Pilih Menu</h1>
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Posyandu -->
+            <a href="/fiturposyandu/petugas"
+                class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+                <h2 class="text-xl font-bold">Posyandu</h2>
+                <p class="text-sm opacity-75">Input data kegiatan posyandu balita dan lansia</p>
+            </a>
+
             <!-- Posyandu Balita -->
-            <a href="/fiturposyandubalita_petugas"
+            <a href="/fiturposyandubalita/petugas"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/baby.png') }}" alt="Posyandu Balita" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Posyandu Balita</h2>
@@ -49,7 +56,7 @@
             </a>
 
             <!-- Posyandu Lansia -->
-            <a href="/fiturposyandulansia_petugas"
+            <a href="/fiturposyandulansia/petugas"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/grandparents.png') }}" alt="Posyandu Lansia" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Posyandu Lansia</h2>
@@ -57,7 +64,7 @@
             </a>
 
             <!-- Jadwal -->
-            <a href="/fiturjadwal_petugas"
+            <a href="/fiturjadwal/petugas"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Jadwal</h2>

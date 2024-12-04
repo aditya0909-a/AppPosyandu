@@ -10,19 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class PPBController extends Controller
 {
-    // Menampilkan semua data peserta balita
-    public function index()
-    {
-        $PesertaPosyanduBalitas = PesertaPosyanduBalita::all();
-        return view('fitur_databalita_admin', compact('PesertaPosyanduBalitas'));
-    }
-
-    // Menampilkan data spesifik peserta balita berdasarkan ID
+        // Menampilkan data spesifik peserta balita berdasarkan ID
     public function DataPesertaBalita($id)
     {
         $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
 
-        return view('DataPesertaPosyanduBalita_admin', [
+        return view('admin.databalita', [
             'PesertaPosyanduBalita' => $PesertaPosyanduBalita,
         ]);
     }
@@ -43,7 +36,7 @@ class PPBController extends Controller
 
         PesertaPosyanduBalita::create($validatedData);
 
-        return redirect('/fitur_databalita_admin')->with('success', 'Peserta berhasil ditambahkan.');
+        return redirect('/admin.fitur_databalita')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
     // Mengupdate data peserta balita
@@ -98,7 +91,7 @@ class PPBController extends Controller
     {
         $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
 
-        return view('DataPesertaPosyanduBalita_admin', [
+        return view('admin.databalita', [
             'PesertaPosyanduBalita' => $PesertaPosyanduBalita,
         ]);
     }
@@ -109,7 +102,7 @@ class PPBController extends Controller
         $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
         $data = DB::table('DataKesehatanBalita')
             ->where('peserta_id', $id)
-            ->select('created_at', 'obat_cacing', 'susu', 'imunisasi', 'keluhan_balita', 'penanganan_balita')
+            ->select('created_at', 'obat_cacing', 'susu', 'imunisasi', 'keluhan_balita', 'penanganan_balita', 'bulan_ke', 'tinggi_balita', 'berat_balita', 'lingkar_kepala_balita')
             ->get();
 
         $obatCacingData = $data->map(function ($item) {
@@ -142,7 +135,8 @@ class PPBController extends Controller
             ];
         });
 
-        return view('DataPesertaPosyanduBalita_admin', compact('PesertaPosyanduBalita', 'obatCacingData', 'susuData', 'imunisasiData', 'keluhanData'));
+
+        return view('admin.databalita', compact('PesertaPosyanduBalita', 'obatCacingData', 'susuData', 'imunisasiData', 'keluhanData', 'data'));
     }
 
     public function getChartDataByPeserta($peserta_id)
@@ -151,10 +145,10 @@ class PPBController extends Controller
         
         // Ambil data berdasarkan peserta_id
         $data = DataKesehatanBalita::where('peserta_id', $peserta_id)
-            ->orderBy('bulan_ke') // Jika ingin data diurutkan berdasarkan bulan
+            ->orderBy('bulan_ke') 
             ->get();
 
-        // Format data untuk chart
+        
         $chartData = [
             'tinggiBadan' => [
                 'label' => 'Tinggi Badan (cm)',
@@ -174,5 +168,12 @@ class PPBController extends Controller
         return response()->json($chartData);
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->query('query', '');
+        $results = PesertaPosyanduBalita::where('nama_peserta_balita', 'LIKE', '%' . $query . '%')->get();
+
+        return response()->json($results);
+    }
     
 }

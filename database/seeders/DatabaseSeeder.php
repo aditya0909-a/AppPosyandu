@@ -153,19 +153,51 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
            
         ]);
 
-        \App\Models\Jadwal::create([
-            'nama_jadwal' => 'Posyandu Balita Bingin',
-            'tanggal_jadwal'=> '2025-09-08',
-            'lokasi_jadwal'=> 'BanjarDesa', 
-            'Posyandu'=> 'PosyanduBalita', 
-            'Imunisasi' => 'iya',
-            'obat_cacing' => 'iya',
-            'susu' => 'iya',
-            'tes_lansia' => 'tidak',
-            'PMT_lansia' => 'tidak',
-           
+        \App\Models\jadwal::create([
+            'name' => 'Posyandu Balita',
+            'location' => 'Bingin',
+            'date' => '2024-12-03',
+            'imunisasi' => true,
+            'obatcacing' => true,
+            'susu' => true,
+            'kuisioner' => true,
+            'teskognitif' => false,
+            'tesdengar' => false,
+            'teslihat' => false,
+            'tesmobilisasi' => false,
+            'keluhan' => false,
         ]);
 
-        
+        \App\Models\jadwal::create([
+            'name' => 'Posyandu Balita',
+            'location' => 'Desa',
+            'date' => '2024-12-04',
+            'imunisasi' => false,
+            'obatcacing' => true,
+            'susu' => false,
+            'kuisioner' => true,
+            'teskognitif' => false,
+            'tesdengar' => false,
+            'teslihat' => false,
+            'tesmobilisasi' => false,
+            'keluhan' => false,
+        ]);
+
+        \App\Models\jadwal::create([
+            'name' => 'Posyandu Lansia',
+            'location' => 'Dajan Pangkung',
+            'date' => '2024-12-05',
+            'imunisasi' => false,
+            'obatcacing' => false,
+            'susu' => false,
+            'kuisioner' => false,
+            'teskognitif' => true,
+            'tesdengar' => true,
+            'teslihat' => true,
+            'tesmobilisasi' => true,
+            'keluhan' => true,
+        ]);
+
+                       
     }
 }

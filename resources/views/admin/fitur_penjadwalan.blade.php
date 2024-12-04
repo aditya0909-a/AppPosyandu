@@ -131,7 +131,7 @@
             <div class="card mb-6">
                 <div class="flex justify-between items-center">
                     <a :href="'/DataPenjadwalan_admin/' + Jadwal.id">
-                        <h2 class="text-xl font-bold" x-text="jadwal.nama_jadwal"></h2>
+                        <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
                     </a>
                     <button
                     @click="openEditModal(jadwal.id, jadwal.nama_jadwal, jadwal.tanggal_jadwal, jadwal.lokasi_jadwal,jadwal.Posyandu,jadwal.Imunisasi, jadwal.obat_cacing, jadwal.susu, jadwal.tes_lansia, jadwal.PMT_lansia )"
@@ -143,9 +143,8 @@
                     Edit
                     </button>
                 </div>
-                <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.tanggal_jadwal"></span></div>
-                <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.lokasi_jadwal"></span></div>
-                <div class="text-sm text-gray-600">Posyandu: <span x-text="jadwal.Posyandu"></span></div>
+                <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.date"></span></div>
+                <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.location"></span></div>
             </div>
              </template>
 
