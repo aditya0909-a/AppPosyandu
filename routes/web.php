@@ -177,25 +177,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/pesertaposyandulansia/{id}', [PPLController::class, 'show'])->name('pesertaposyandulansias.show');
 
     Route::get('/DataPesertaPosyanduLansia_admin/{id}', [PPLcontroller::class, 'DataPesertaLansia']);
+   
 
+    Route::get('/fiturpenjadwalan/admin', [JadwalController::class, 'index'])->name('admin.jadwal.index');
 
-    Route::get('/fiturpenjadwalan/admin', function () {
-        return view('admin.fitur_penjadwalan', [
-            'Jadwals' => Jadwal::all()
-        ]);
-    });
+    // Route untuk mendapatkan jadwal berdasarkan ID untuk edit
+    Route::get('/jadwal/{id}', [JadwalController::class, 'getJadwalForEdit']);
 
-    Route::post('/jadwal', [JadwalController::class, 'register'])->name('jadwaljadwals.tambah');
-
-    Route::put('/fitur_penjadwalan_admin/{id}', [JadwalController::class, 'update'])->name('fitur_penjadwalan_admin.update');
-
-    Route::get('/jadwal/{id}', [JadwalController::class, 'show'])->name('jadwals.show');
-
-    Route::get('/DataPenjadwalan_admin/{id}', [PPLcontroller::class, 'DataPenjadwalan']);
-
-    Route::get('/jadwal/admin', function () {
-        return view('admin.jadwal');
-    });
+    Route::post('/jadwal/tambah', [JadwalController::class, 'store'])->name('jadwal.store');
+        
 
     Route::get('/fiturkelolaakun/admin', function () {
         return view('admin.fitur_kelolaakun', [

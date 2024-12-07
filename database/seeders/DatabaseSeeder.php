@@ -136,6 +136,7 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
         ]);
 
         \App\Models\DataKesehatanLansia::create([
+            'peserta_id' => 1,
             'tinggi_lansia' => 150,
             'berat_lansia'=> 60,
             'lingkar_lengan_lansia'=> 15,
@@ -171,7 +172,7 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
         \App\Models\jadwal::create([
             'name' => 'Posyandu Balita',
             'location' => 'Desa',
-            'date' => '2024-12-04',
+            'date' => '2024-12-06',
             'imunisasi' => false,
             'obatcacing' => true,
             'susu' => false,
@@ -186,7 +187,7 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
         \App\Models\jadwal::create([
             'name' => 'Posyandu Lansia',
             'location' => 'Dajan Pangkung',
-            'date' => '2024-12-05',
+            'date' => '2024-12-07',
             'imunisasi' => false,
             'obatcacing' => false,
             'susu' => false,

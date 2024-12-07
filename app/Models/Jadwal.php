@@ -29,6 +29,7 @@ class Jadwal extends Model
         'keluhan',
     ];
 
+    
     /**
      * Casting atribut ke tipe data tertentu.
      *
@@ -46,4 +47,6 @@ class Jadwal extends Model
         'tesmobilisasi' => 'boolean',
         'keluhan' => 'boolean',
     ];
+
+    
 }

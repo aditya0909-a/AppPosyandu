@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -16,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->enum('name', ['Posyandu Balita', 'Posyandu Lansia']); // Kolom enum untuk nama
             $table->enum('location', ['Bingin', 'Desa', 'Dajan Pangkung']); // Kolom enum untuk lokasi
-            $table->date('date'); // Kolom tanggal
+            $table->datetime('date'); // Kolom tanggal
             $table->boolean('imunisasi')->default(false); // Kolom boolean imunisasi
             $table->boolean('obatcacing')->default(false); // Kolom boolean obatcacing
             $table->boolean('susu')->default(false); // Kolom boolean susu
@@ -28,6 +29,8 @@ return new class extends Migration
             $table->boolean('keluhan')->default(false); // Kolom boolean keluhan
             $table->timestamps();
         });
+
+        
     }
 
     /**

@@ -43,24 +43,9 @@
             <!-- Posyandu -->
             <a href="/fiturposyandu/petugas"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+                <img src="{{ asset('icons/posyandu.png') }}" alt="Posyandu" class="w-16 h-16 mx-auto mb-4"> 
                 <h2 class="text-xl font-bold">Posyandu</h2>
                 <p class="text-sm opacity-75">Input data kegiatan posyandu balita dan lansia</p>
-            </a>
-
-            <!-- Posyandu Balita -->
-            <a href="/fiturposyandubalita/petugas"
-                class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
-                <img src="{{ asset('icons/baby.png') }}" alt="Posyandu Balita" class="w-16 h-16 mx-auto mb-4">
-                <h2 class="text-xl font-bold">Posyandu Balita</h2>
-                <p class="text-sm opacity-75">Input data kegiatan posyandu balita</p>
-            </a>
-
-            <!-- Posyandu Lansia -->
-            <a href="/fiturposyandulansia/petugas"
-                class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
-                <img src="{{ asset('icons/grandparents.png') }}" alt="Posyandu Lansia" class="w-16 h-16 mx-auto mb-4">
-                <h2 class="text-xl font-bold">Posyandu Lansia</h2>
-                <p class="text-sm opacity-75">Input data kegiatan posyandu lansia</p>
             </a>
 
             <!-- Jadwal -->

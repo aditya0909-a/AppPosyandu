@@ -49,7 +49,7 @@
         }
 
         .card {
-            background: white;
+            
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -65,9 +65,7 @@
         }
     </style>
 </head>
-<style>
-    body { padding-top: 64px; }
-</style>
+
 <body x-data="appData()">
     @if (session('success'))
     <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
@@ -127,229 +125,331 @@
 
     
         <!-- Filtered Jadwal List -->
-        <template x-for="jadwal in filteredJadwals" :key="jadwal.id">
-            <div class="card mb-6">
-                <div class="flex justify-between items-center">
-                    <a :href="'/DataPenjadwalan_admin/' + Jadwal.id">
-                        <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
-                    </a>
-                    <button
-                    @click="openEditModal(jadwal.id, jadwal.nama_jadwal, jadwal.tanggal_jadwal, jadwal.lokasi_jadwal,jadwal.Posyandu,jadwal.Imunisasi, jadwal.obat_cacing, jadwal.susu, jadwal.tes_lansia, jadwal.PMT_lansia )"
-                    class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                    Edit
-                    </button>
-                </div>
-                <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.date"></span></div>
-                <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.location"></span></div>
-            </div>
-             </template>
+<template x-for="jadwal in filteredJadwals" :key="jadwal.id">
+    <div 
+        class="card mb-6 p-4 rounded-lg" 
+        :class="{
+            'bg-gray-200': normalizeDate(jadwal.date) < normalizeDate(new Date()), // Abu-abu jika sudah lewat
+            'bg-white': normalizeDate(jadwal.date) >= normalizeDate(new Date()) // Putih jika belum
+        }">
+        <div class="flex justify-between items-center">
+            <a :href="'/DataPenjadwalan_admin/' + jadwal.id">
+                <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
+            </a>
+            <button
+                @click="openEditModal(jadwal.id, jadwal.name, jadwal.date, jadwal.location)"
+                class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit
+            </button>
+        </div>
+        <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.formatted_date"></span></div>
+        <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.location"></span></div>
+    </div>
+</template>
 
         
         <!-- Modal Tambah Jadwal -->
-<div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" x-data="{ posyanduType: '' }">
-  <form action="/jadwalposyandu" method="post" class="space-y-4">
-      @csrf
-      <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]"">
-          <h2 class="text-xl font-bold  mb-4">Tambah Jadwal Posyandu</h2>
+<div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <form method="POST" action="{{ route('jadwal.store') }}" @submit="saveJadwal" class="space-y-4">
+        @csrf
+        <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+            <h2 class="text-xl font-bold mb-4">Tambah Jadwal Posyandu</h2>
 
-          <div class="mb-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Nama Jadwal</label>
-              <input id="nama_jadwal" type="text" name="nama_jadwal" required class="w-full p-2 border rounded">
-              @error('nama_jadwal')
-                  <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-              @enderror
-          </div>
-
-          <div class="mb-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Jadwal</label>
-              <input id="tanggal_jadwal" type="date" name="tanggal_jadwal" required class="w-full p-2 border rounded">
-              @error('tanggal_jadwal')
-                  <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-              @enderror
-          </div>
-
-          <div class="mb-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi Jadwal</label>
-              <input id="lokasi_jadwal" type="text" name="lokasi_jadwal" required class="w-full p-2 border rounded">
-              @error('lokasi_jadwal')
-                  <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-              @enderror
-          </div>
-
-          <div class="mb-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Posyandu</label>
-              <select id="posyandu" name="posyandu" class="w-full p-2 border rounded" x-model="posyanduType">
-                  <option value="">Pilih Posyandu</option>
-                  <option value="PosyanduBalita">Posyandu Balita</option>
-                  <option value="PosyanduLansia">Posyandu Lansia</option>
-              </select>
-              @error('posyandu')
-                  <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-              @enderror
-          </div>
-
-          <!-- Checkbox for Posyandu Balita options -->
-          <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-              <input id="imunisasi" type="checkbox" name="imunisasi" class="mr-2">
-              <label for="imunisasi" class="inline-block">Imunisasi</label>
-          </div>
-
-          <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-              <input id="obat_cacing" type="checkbox" name="obat_cacing" class="mr-2">
-              <label for="obat_cacing" class="inline-block">Obat Cacing</label>
-          </div>
-
-          <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-              <input id="susu" type="checkbox" name="susu" class="mr-2">
-              <label for="susu" class="inline-block">Susu</label>
-          </div>
-
-          <!-- Checkbox for Posyandu Lansia options -->
-          <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduLansia'">
-              <input id="tes_lansia" type="checkbox" name="tes_lansia" class="mr-2">
-              <label for="tes_lansia" class="inline-block">Tes Lansia</label>
-          </div>
-
-          <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduLansia'">
-              <input id="PMT_lansia" type="checkbox" name="PMT_lansia" class="mr-2">
-              <label for="PMT_lansia" class="inline-block">PMT Lansia</label>
-          </div>
-
-          <div class="flex justify-end">
-              <button @click="showAddModal = false" type="button" class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
-              <button type="submit" class="button-primary">Tambah</button>
-          </div>
-      </div>
-  </form>
-</div>
-
-
-
-<!-- Modal Edit Jadwal -->
-<div x-show="showEditModal"
-  class="modal-bg fixed inset-0 flex items-center justify-center" x-data="{ posyanduType: '' }">
-  <form :action="route('fitur_penjadwalan_admin.update', editJadwal.id)" method="POST" class="space-y-4">
-    @csrf
-    @method('PUT')    
-      <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-          <h2 class="text-xl font-bold mb-4">Edit Jadwal Posyandu</h2>
-
-          <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Nama Jadwal</label>
-              <input type="text" x-model="editJadwal.nama_jadwal" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-              @error('nama_jadwal') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-          </div>
-
-          <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Jadwal</label>
-              <input type="date" x-model="editJadwal.tanggal_jadwal" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-              @error('tanggal_jadwal') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-          </div>
-
-          <div class="mb-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi Jadwal</label>
-              <input type="text" x-model="editJadwal.lokasi_jadwal" class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-              @error('lokasi_jadwal') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-          </div>
-
-          <div class="mb-2">
-            <label class="block text-gray-700 text-sm font-bold mb-2">Posyandu</label>
-            <select id="posyandu" name="posyandu" class="w-full p-2 border rounded" x-model="posyanduType">
-                <option value="">Pilih Posyandu</option>
-                <option value="PosyanduBalita">Posyandu Balita</option>
-                <option value="PosyanduLansia">Posyandu Lansia</option>
-            </select>
-            @error('posyandu')
+            <!-- Nama Posyandu -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Posyandu</label>
+                <select id="name" name="name" class="w-full p-2 border rounded" x-model="posyanduType">
+                    <option value="">Pilih Posyandu</option>
+                    <option value="Posyandu Balita">Posyandu Balita</option>
+                    <option value="Posyandu Lansia">Posyandu Lansia</option>
+                </select>
+                @error('name')
                 <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-            @enderror
+                @enderror
+            </div>
+
+            <!-- Lokasi -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi Jadwal</label>
+                <select id="location" name="location" class="w-full p-2 border rounded">
+                    <template x-for="location in locations" :key="location">
+                        <option :value="location" x-text="location"></option>
+                    </template>
+                </select>
+                @error('location')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Tanggal Jadwal -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Jadwal</label>
+                <input id="date" type="date" name="date" required class="w-full p-2 border rounded">
+                @error('date')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Checkbox Posyandu Balita -->
+            <div x-show="posyanduType === 'Posyandu Balita'">
+                <div class="mb-2 flex items-center">
+                    <input id="imunisasi" type="checkbox" name="imunisasi" class="mr-2">
+                    <label for="imunisasi" class="inline-block">Imunisasi</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="obatcacing" type="checkbox" name="obatcacing" class="mr-2">
+                    <label for="obatcacing" class="inline-block">Obat Cacing</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="susu" type="checkbox" name="susu" class="mr-2">
+                    <label for="susu" class="inline-block">Susu</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="kuisioner" type="checkbox" name="kuisioner" class="mr-2">
+                    <label for="kuisioner" class="inline-block">Kuisioner</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="keluhan" type="checkbox" name="keluhan" class="mr-2">
+                    <label for="keluhan" class="inline-block">Keluhan</label>
+                </div>
+            </div>
+
+            <!-- Checkbox Posyandu Lansia -->
+            <div x-show="posyanduType === 'Posyandu Lansia'">
+                <div class="mb-2 flex items-center">
+                    <input id="teskognitif" type="checkbox" name="teskognitif" class="mr-2">
+                    <label for="teskognitif" class="inline-block">Tes Kognitif</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="tesdengar" type="checkbox" name="tesdengar" class="mr-2">
+                    <label for="tesdengar" class="inline-block">Tes Dengar</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="teslihat" type="checkbox" name="teslihat" class="mr-2">
+                    <label for="teslihat" class="inline-block">Tes Lihat</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="tesmobilisasi" type="checkbox" name="tesmobilisasi" class="mr-2">
+                    <label for="tesmobilisasi" class="inline-block">Tes Mobilisasi</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="keluhan" type="checkbox" name="keluhan" class="mr-2">
+                    <label for="keluhan" class="inline-block">Keluhan</label>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button @click="resetAddModal" type="button" class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
+                <button type="submit" class="button-primary">Tambah</button>
+            </div>
         </div>
-
-        <!-- Checkbox for Posyandu Balita options -->
-        <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-          <input id="imunisasi" type="checkbox" x-model="editJadwal.Imunisasi" name="imunisasi" class="mr-2">
-          <label for="imunisasi" class="inline-block">Imunisasi</label>
-          @error('imunisasi') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-      </div>
-
-      <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-          <input id="obat_cacing" type="checkbox" x-model="editJadwal.obat_cacing" name="obat_cacing" class="mr-2">
-          <label for="obat_cacing" class="inline-block">Obat Cacing</label>
-          @error('obat_cacing') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-      </div>
-
-      <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduBalita'">
-          <input id="susu" type="checkbox" name="susu" class="mr-2">
-          <label for="susu" class="inline-block">Susu</label>
-          @error('susu') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-      </div>
-
-      <!-- Checkbox for Posyandu Lansia options -->
-      <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduLansia'">
-          <input id="tes_lansia" type="checkbox" x-model="editJadwal.tes_lansia" name="tes_lansia" class="mr-2">
-          <label for="tes_lansia" class="inline-block">Tes Lansia</label>
-          @error('tes_lansia') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-      </div>
-
-      <div class="mb-2 flex items-center" x-show="posyanduType === 'PosyanduLansia'">
-          <input id="PMT_lansia" type="checkbox" x-model="editJadwal.PMT_lansia" name="PMT_lansia" class="mr-2">
-          <label for="PMT_lansia" class="inline-block">PMT Lansia</label>
-          @error('PMT_lansia') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-      </div>
-         
-          <div class="flex justify-end space-x-2">
-              <button type="button" @click="showEditModal = false"
-                  class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
-                  Batal
-              </button>
-              <button type="submit"
-                  class="button-primary">
-                  Simpan Perubahan
-              </button>
-          </div>
-      </div>
-  </form>
+    </form>
 </div>
 
 
-    <!-- Alpine.js Data -->
-    <script>
-      function appData() {
-          return {
-              showAddModal: false,
-              showEditModal: false,
-              searchTerm: '',
-              Jadwals: @json($Jadwals), // Jadwal data from backend
-              
-              editJadwal: { // New object for Edit Jadwal
-                  id: null,
-                  nama_jadwal: '',
-                  tanggal_jadwal: '',
-                  lokasi_jadwal: '',
-                  Posyandu: '',
-                  Imunisasi: '',
-                  obat_cacing: '',
-                  susu: '',
-                  tes_lansia: '',
-                  PMT_lansia: ''
-              },
-              
-              openEditModal(id, nama_jadwal, tanggal_jadwal, lokasi_jadwal, Posyandu, Imunisasi, obat_cacing, susu, tes_lansia, PMT_lansia) {
-                  this.editJadwal = { id, nama_jadwal, tanggal_jadwal, lokasi_jadwal, Posyandu, Imunisasi, obat_cacing, susu, tes_lansia, PMT_lansia };
-                  this.showEditModal = true;
-              },
-              get filteredJadwals() {
-                  if (this.searchTerm === '') {
-                      return this.Jadwals;
-                  }
-                  return this.Jadwals.filter(Jadwal => Jadwal.nama_jadwal.toLowerCase().includes(this.searchTerm.toLowerCase()));
-              }
-          };
-      }
-    </script>
+ <!-- Modal Edit Jadwal -->
+ <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
+    <form @submit.prevent="updateJadwal" class="space-y-4">
+        @csrf
+        @method('PUT')
+        <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+            <h2 class="text-xl font-bold mb-4">Edit Jadwal Posyandu</h2>
+
+            <!-- Nama Posyandu -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Nama Posyandu</label>
+                <select id="name" name="name" class="w-full p-2 border rounded" x-model="editJadwal.name">
+                    <option value="Posyandu Balita" :selected="editJadwal.name === 'Posyandu Balita'">Posyandu Balita</option>
+                    <option value="Posyandu Lansia" :selected="editJadwal.name === 'Posyandu Lansia'">Posyandu Lansia</option>
+                </select>
+                @error('name')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Lokasi -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Lokasi Jadwal</label>
+                <select id="location" name="location" class="w-full p-2 border rounded" x-model="editJadwal.location">
+                    <option value="Bingin" :selected="editJadwal.location === 'Bingin'">Bingin</option>
+                    <option value="Desa" :selected="editJadwal.location === 'Desa'">Desa</option>
+                    <option value="Dajan Pangkung" :selected="editJadwal.location === 'Dajan Pangkung'">Dajan Pangkung</option>
+                </select>
+                @error('location')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Tanggal Jadwal -->
+            <div class="mb-2">
+                <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Jadwal</label>
+                <input id="date" type="datetime-local" name="date" :value="editJadwal.date" required class="w-full p-2 border rounded">
+                @error('date')
+                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <!-- Checkbox Posyandu Balita -->
+            <div x-show="editJadwal.name === 'Posyandu Balita'">
+                <div class="mb-2 flex items-center">
+                    <input id="imunisasi" type="checkbox" name="imunisasi" x-model="editJadwal.imunisasi" class="mr-2">
+                    <label for="imunisasi" class="inline-block">Imunisasi</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="obatcacing" type="checkbox" name="obatcacing" x-model="editJadwal.obatcacing" class="mr-2">
+                    <label for="obatcacing" class="inline-block">Obat Cacing</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="susu" type="checkbox" name="susu" x-model="editJadwal.susu" class="mr-2">
+                    <label for="susu" class="inline-block">Susu</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="kuisioner" type="checkbox" name="kuisioner" x-model="editJadwal.kuisioner" class="mr-2">
+                    <label for="kuisioner" class="inline-block">Kuisioner</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="keluhan" type="checkbox" name="keluhan" x-model="editJadwal.keluhan" class="mr-2">
+                    <label for="keluhan" class="inline-block">Keluhan</label>
+                </div>
+            </div>
+
+            <!-- Checkbox Posyandu Lansia -->
+            <div x-show="editJadwal.name === 'Posyandu Lansia'">
+                <div class="mb-2 flex items-center">
+                    <input id="teskognitif" type="checkbox" name="teskognitif" x-model="editJadwal.teskognitif" class="mr-2">
+                    <label for="teskognitif" class="inline-block">Tes Kognitif</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="tesdengar" type="checkbox" name="tesdengar" x-model="editJadwal.tesdengar" class="mr-2">
+                    <label for="tesdengar" class="inline-block">Tes Dengar</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="teslihat" type="checkbox" name="teslihat" x-model="editJadwal.teslihat" class="mr-2">
+                    <label for="teslihat" class="inline-block">Tes Lihat</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="tesmobilisasi" type="checkbox" name="tesmobilisasi" x-model="editJadwal.tesmobilisasi" class="mr-2">
+                    <label for="tesmobilisasi" class="inline-block">Tes Mobilisasi</label>
+                </div>
+                <div class="mb-2 flex items-center">
+                    <input id="keluhan" type="checkbox" name="keluhan" x-model="editJadwal.keluhan" class="mr-2">
+                    <label for="keluhan" class="inline-block">Keluhan</label>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2">
+                <button type="button" @click="showEditModal = false"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                    Batal
+                </button>
+                <button type="submit" class="button-primary">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<script>
+    function appData() {
+        return {
+            showAddModal: false,
+            showEditModal: false,
+            searchTerm: '',
+            posyanduType: '', // Untuk mengontrol pilihan jenis Posyandu (Balita/Lansia)
+            locations: ['Bingin', 'Desa', 'Dajan Pangkung'], // Lokasi tersedia
+            Jadwals: @json($Jadwals), // Data jadwal dari backend
+            
+            editJadwal: { 
+                id: null,
+                name: '',
+                date: '',
+                location: ''
+            },
+
+            // Normalize Date to Remove Time
+        normalizeDate(date) {
+            const d = new Date(date);
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        },
+            
+        openEditModal(id, name, date, location) {
+    console.log(id, name, date, location); // Log parameters
+    const jadwal = this.Jadwals.find(j => j.id === id);
+    console.log(jadwal); // Log the selected jadwal object
+    this.editJadwal = {
+        id: jadwal.id,
+        name: jadwal.name,
+        date: jadwal.date,
+        location: jadwal.location,
+        imunisasi: jadwal.imunisasi,
+        obatcacing: jadwal.obatcacing,
+        susu: jadwal.susu,
+        kuisioner: jadwal.kuisioner,
+        keluhan: jadwal.keluhan,
+        teskognitif: jadwal.teskognitif,
+        tesdengar: jadwal.tesdengar,
+        teslihat: jadwal.teslihat,
+        teskognitif: jadwal.teskognitif
+    };
+    this.showEditModal = true; // Show modal after setting data
+}
+,
+
+                // Update jadwal
+                updateJadwal() {
+                    // Make sure to send the updated jadwal data to the server via an AJAX request
+                    this.showEditModal = false; 
+                    alert("Jadwal berhasil diperbarui!");
+                },
+
+            // Fungsi membuka modal tambah jadwal
+            openAddModal() {
+                this.resetAddModal();
+                this.showAddModal = true;
+            },
+
+            // Reset data modal tambah jadwal
+            resetAddModal() {
+                this.posyanduType = '';
+                this.showAddModal = false;
+            },
+
+            // Simpan data dari modal tambah jadwal
+            saveJadwal(event) {
+                event.preventDefault();
+                console.log("Jadwal baru disimpan:", {
+                    posyanduType: this.posyanduType,
+                });
+                this.resetAddModal();
+            },
+
+            // Fungsi filter jadwal berdasarkan pencarian
+get filteredJadwals() {
+    const today = new Date();
+
+    // Sort jadwals so that future dates come first
+    return this.Jadwals
+        .filter(jadwal => jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+        .sort((a, b) => {
+            // Compare jadwal.date, placing future dates first
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateA >= today ? -1 : 1; // Future dates should come first
+        });
+}
+
+            
+        };
+    }
+</script>
+
     
 </body>
 </html>

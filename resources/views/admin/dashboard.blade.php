@@ -59,12 +59,7 @@
       <p class="text-sm opacity-75">Jadwal kegiatan dan layanan posyandu</p>
     </a>
 
-    <!-- Jadwal -->
-    <a href="/jadwal/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
-      <h2 class="text-xl font-bold">Jadwal</h2>
-      <p class="text-sm opacity-75">Jadwal kegiatan dan layanan posyandu</p>
-    </a>
-
+    
     <!-- Kelola Akun -->
     <a href="/fiturkelolaakun/admin" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
       <img src="{{ asset('icons/account.png') }}" alt="Kelola Akun" class="w-16 h-16 mx-auto mb-4">
