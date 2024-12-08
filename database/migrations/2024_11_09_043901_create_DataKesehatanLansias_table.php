@@ -13,8 +13,16 @@ return new class extends Migration
     {
         Schema::create('DataKesehatanLansia', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('peserta_id');
-            $table->foreign('peserta_id')->references('id')->on('PesertaPosyanduLansia')->onDelete('cascade');
+            // Relasi ke tabel PesertaPosyanduBalita
+            $table->foreignId('peserta_id')
+                ->constrained('PesertaPosyanduLansia')
+                ->onDelete('cascade');
+
+            // Relasi ke tabel Jadwal
+            $table->foreignId('jadwal_id')
+                ->constrained('Jadwals')
+                ->onDelete('cascade');
+
             $table->timestamps();
             $table->integer('tinggi_lansia');
             $table->integer('berat_lansia');

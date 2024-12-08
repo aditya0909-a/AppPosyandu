@@ -9,11 +9,6 @@ class Jadwal extends Model
 {
     use HasFactory;
 
-    /**
-     * Kolom yang dapat diisi (mass assignable).
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'location',
@@ -29,12 +24,6 @@ class Jadwal extends Model
         'keluhan',
     ];
 
-    
-    /**
-     * Casting atribut ke tipe data tertentu.
-     *
-     * @var array
-     */
     protected $casts = [
         'date' => 'date',
         'imunisasi' => 'boolean',
@@ -48,5 +37,25 @@ class Jadwal extends Model
         'keluhan' => 'boolean',
     ];
 
-    
+    // Relasi many-to-many dengan peserta balita
+    public function pesertaBalita()
+    {
+        return $this->belongsToMany(PesertaPosyanduBalita::class, 'PesertaJadwal', 'jadwal_id', 'peserta_id')
+                    ->withPivot('id')
+                    ->withTimestamps();
+    }
+
+    // Relasi many-to-many dengan peserta lansia
+    public function pesertaLansia()
+    {
+        return $this->belongsToMany(PesertaPosyanduLansia::class, 'PesertaJadwalLansia', 'jadwal_id', 'peserta_id')
+                    ->withPivot('id')
+                    ->withTimestamps();
+    }
+
+    // Relasi ke Data Kesehatan Lansia
+    public function dataKesehatanLansia()
+    {
+        return $this->hasMany(DataKesehatanLansia::class, 'jadwal_id', 'id');
+    }
 }

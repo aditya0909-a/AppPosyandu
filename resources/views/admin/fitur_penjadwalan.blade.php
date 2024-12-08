@@ -430,20 +430,15 @@
                 this.resetAddModal();
             },
 
-            // Fungsi filter jadwal berdasarkan pencarian
-get filteredJadwals() {
-    const today = new Date();
-
-    // Sort jadwals so that future dates come first
-    return this.Jadwals
-        .filter(jadwal => jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-        .sort((a, b) => {
-            // Compare jadwal.date, placing future dates first
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateA >= today ? -1 : 1; // Future dates should come first
-        });
-}
+            // Filter jadwal berdasarkan searchTerm
+            get filteredJadwals() {
+                if (this.searchTerm === '') {
+                    return this.Jadwals;
+                }
+                return this.Jadwals.filter(jadwal => 
+                    jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+                );
+            }
 
             
         };

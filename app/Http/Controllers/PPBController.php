@@ -175,5 +175,21 @@ class PPBController extends Controller
 
         return response()->json($results);
     }
+
+    public function getPesertaByJadwal($jadwalId)
+    {
+        // Ambil data peserta melalui relasi di DataKesehatanBalita
+        $peserta = PesertaPosyanduBalita::whereHas('dataKesehatan', function ($query) use ($jadwalId) {
+            $query->where('jadwal_id', $jadwalId);
+        })->with(['dataKesehatan' => function ($query) use ($jadwalId) {
+            $query->where('jadwal_id', $jadwalId);
+        }])->get();
+
+        // Return hasil dalam format JSON atau ke view
+        return response()->json([
+            'jadwal_id' => $jadwalId,
+            'peserta' => $peserta,
+        ]);
+    }
     
 }

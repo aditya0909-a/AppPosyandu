@@ -27,9 +27,9 @@ class RedirectIfAuthenticated
                 case 'petugas':
                     return redirect('/dashboard/petugas');
                 case 'pesertabalita':
-                    return redirect('/dashboard/pesertaBalita');
+                    return redirect('/dashboard/pesertabalita');
                 case 'pesertalansia':
-                    return redirect('/dashboard/pesertaLansia');
+                    return redirect('/dashboard/pesertalansia');
                 default:
                     // Jika role tidak sesuai, bisa diarahkan ke halaman tertentu atau logout
                     return redirect('/logout');

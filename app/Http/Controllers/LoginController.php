@@ -20,11 +20,11 @@ class LoginController extends Controller
             $user = Auth::user();
             if ($user->role == 'pesertabalita') {
                 $request->session()->regenerate();
-                return Redirect::intended('/dashboard/pesertaBalita');
+                return Redirect::intended('/dashboard/pesertabalita');
             }
             if ($user->role == 'pesertalansia') {
                 $request->session()->regenerate();
-                return Redirect::intended('/dashboard/pesertaLansia');
+                return Redirect::intended('/dashboard/pesertalansia');
             }
             if ($user->role == 'petugas') {
 

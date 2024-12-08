@@ -10,5 +10,25 @@ class PesertaPosyanduLansia extends Model
     use HasFactory;
 
     protected $table = 'PesertaPosyanduLansia';
-    protected $fillable = ['nama_peserta_lansia', 'TTL_lansia', 'NIK_lansia', 'alamat_lansia', 'wa_lansia'];
+    protected $fillable = [
+        'nama_peserta_lansia',
+        'TTL_lansia',
+        'NIK_lansia',
+        'alamat_lansia',
+        'wa_lansia'
+    ];
+
+    // Relasi many-to-many dengan jadwal
+    public function jadwals()
+    {
+        return $this->belongsToMany(Jadwal::class, 'PesertaJadwalLansia', 'peserta_id', 'jadwal_id')
+                    ->withPivot('id')
+                    ->withTimestamps();
+    }
+
+    // Relasi ke Data Kesehatan Lansia
+    public function dataKesehatan()
+    {
+        return $this->hasMany(DataKesehatanLansia::class, 'peserta_id', 'id');
+    }
 }

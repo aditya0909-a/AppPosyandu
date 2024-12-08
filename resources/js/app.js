@@ -1,9 +1,13 @@
 import './bootstrap';
 import Alpine from 'alpinejs'
 import Highcharts from 'highcharts';
- 
+import Vue from 'vue';
 window.Alpine = Alpine
  
+new Vue({
+    el: '#app',
+});
+
 Alpine.start()
 
 // Contoh untuk membuat grafik

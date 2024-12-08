@@ -13,8 +13,17 @@ return new class extends Migration
     {
         Schema::create('DataKesehatanBalita', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('peserta_id');
-            $table->foreign('peserta_id')->references('id')->on('PesertaPosyanduBalita')->onDelete('cascade');
+
+            // Relasi ke tabel PesertaPosyanduBalita
+            $table->foreignId('peserta_id')
+                ->constrained('PesertaPosyanduBalita')
+                ->onDelete('cascade');
+
+            // Relasi ke tabel Jadwal
+            $table->foreignId('jadwal_id')
+                ->constrained('Jadwals')
+                ->onDelete('cascade');
+
             $table->integer('bulan_ke')->default(0); // Nilai default berupa angka
             $table->integer('tinggi_balita');
             $table->integer('berat_balita');

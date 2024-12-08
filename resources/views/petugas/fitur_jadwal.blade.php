@@ -49,7 +49,6 @@
       }
 
       .card {
-          background: white;
           border-radius: 16px;
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           padding: 20px;
@@ -123,28 +122,23 @@
       
     <!-- Filtered Jadwal List -->
     <template x-for="jadwal in filteredJadwals" :key="jadwal.id">
-      <div class="card mb-6 p-4 border rounded shadow">
-          <div class="flex justify-between items-center mb-2">
-              <a :href="'/DataPenjadwalan_admin/' + jadwal.id">
-                  <h2 class="text-xl font-bold" x-text="jadwal.nama_jadwal"></h2>
-              </a>
-          </div>
-          <div class="text-sm text-gray-600">
-              <div class="flex items-center">
-                  <span class="font-semibold">Tanggal:</span>
-                  <span class="ml-1" x-text="jadwal.tanggal_jadwal"></span>
-              </div>
-              <div class="flex items-center mt-1">
-                  <span class="font-semibold">Lokasi:</span>
-                  <span class="ml-1" x-text="jadwal.lokasi_jadwal"></span>
-              </div>
-              <div class="flex items-center mt-1">
-                  <span class="font-semibold">Posyandu:</span>
-                  <span class="ml-1" x-text="jadwal.Posyandu"></span>
-              </div>
-          </div>
-      </div>
-  </template>
+        <div 
+            class="card mb-6 p-4 rounded-lg" 
+            :class="{
+                'bg-gray-200': normalizeDate(jadwal.date) < normalizeDate(new Date()), // Abu-abu jika sudah lewat
+                'bg-white': normalizeDate(jadwal.date) >= normalizeDate(new Date()) // Putih jika belum
+            }">
+            <div class="flex justify-between items-center">
+                <a :href="'/DataPenjadwalan_admin/' + jadwal.id">
+                    <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
+                </a>
+
+            </div>
+            <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.formatted_date"></span></div>
+            <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.location"></span></div>
+        </div>
+    </template>
+   
   
        
   </div>
@@ -154,16 +148,25 @@
         return {
             searchTerm: '',
             Jadwals: @json($Jadwals), // Jadwal data from backend
-                                    
             
+            // Fungsi untuk normalisasi tanggal agar mudah dibandingkan
+            normalizeDate(date) {
+                // Pastikan date adalah objek Date, jika string, ubah menjadi Date
+                return typeof date === 'string' ? new Date(date).setHours(0, 0, 0, 0) : date.setHours(0, 0, 0, 0);
+            },
+
+            // Filter jadwal berdasarkan searchTerm
             get filteredJadwals() {
                 if (this.searchTerm === '') {
                     return this.Jadwals;
                 }
-                return this.Jadwals.filter(Jadwal => Jadwal.nama_jadwal.toLowerCase().includes(this.searchTerm.toLowerCase()));
+                return this.Jadwals.filter(jadwal => 
+                    jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+                );
             }
         };
     }
-  </script>
+</script>
+
 </body>
 </html>

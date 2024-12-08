@@ -72,88 +72,6 @@ class DatabaseSeeder extends Seeder
            
         ]);
 
-        \App\Models\DataKesehatanBalita::create([
-            'peserta_id' => 1,
-            'tinggi_balita' => 90,
-            'berat_balita'=> 5,
-            'lingkar_kepala_balita'=> 22,
-            'imunisasi'=> 'DPT',
-            'obat_cacing'=> 'iya', 
-            'susu'=> 'iya',
-            'keluhan_balita'=> 'BAB lebih sering dari biasanya, tinja encer atau cair, kadang disertai demam',
-            'penanganan_balita'=> 'Berikan oralit untuk mencegah dehidrasi, 
-Berikan makanan yang mudah dicerna seperti bubur atau pisang,
-Jaga kebersihan diri dan lingkungan sekitar, 
-Jika diare berlangsung lama atau disertai darah, segera bawa ke dokter',   
-           
-        ]);
-
-        \App\Models\DataKesehatanBalita::create([
-            'peserta_id' => 1,
-            'tinggi_balita' => 95,
-            'berat_balita'=> 8,
-            'lingkar_kepala_balita'=> 25,
-            'imunisasi'=> 'BCG',
-            'keluhan_balita'=> 'Kulit di area popok menjadi merah, gatal, dan mungkin timbul lepuhan',
-            'penanganan_balita'=> 'Ganti popok secara teratur dan bersihkan area popok dengan air hangat,
-Biarkan kulit bayi terbuka sejenak agar bisa bernapas,
-Oleskan krim ruam popok yang mengandung seng oksida',
-           
-        ]);
-
-        \App\Models\DataKesehatanBalita::create([
-            'peserta_id' => 2,
-            'tinggi_balita' => 90,
-            'berat_balita'=> 5,
-            'lingkar_kepala_balita'=> 22,
-            'imunisasi'=> 'BCG',
-            'obat_cacing'=> 'iya', 
-            'susu'=> 'iya',
-            'keluhan_balita'=> 'Susah BAB, tinja keras dan kering, perut kembung',
-            'penanganan_balita'=> 'Perbanyak asupan makanan berserat seperti buah-buahan dan sayuran,
-Berikan banyak cairan,
-Lakukan pijatan perut secara lembut,
-Jika konstipasi berlangsung lama, konsultasikan ke dokter', 
-           
-        ]);
-
-        \App\Models\DataKesehatanBalita::create([
-            'peserta_id' => 2,
-            'tinggi_balita' => 95,
-            'berat_balita'=> 8,
-            'lingkar_kepala_balita'=> 25,
-            'imunisasi'=> 'BCG',
-           
-        ]);
-
-        \App\Models\PesertaPosyanduLansia::create([
-            'nama_peserta_lansia' => 'Bagas',
-            'TTL_lansia'=> 'Lamongan, 23 Juli 1960',
-            'NIK_lansia'=> '1234567890523', 
-            'alamat_lansia'=> 'jl raya kuta no 59', 
-            'wa_lansia' => '081534527577',
-           
-        ]);
-
-        \App\Models\DataKesehatanLansia::create([
-            'peserta_id' => 1,
-            'tinggi_lansia' => 150,
-            'berat_lansia'=> 60,
-            'lingkar_lengan_lansia'=> 15,
-            'lingkar_perut_lansia'=> 40,
-            'kognitif_lokasi'=> 'bisa', 
-            'kognitif_waktu'=> 'bisa', 
-            'kognitif_kecemasan'=> 'tidak', 
-            'dengar_bisik'=> 'baik',
-            'dengar_langsung'=> 'baik',
-            'lihat'=> 'baik', 
-            'mobilisasi'=> 'baik',
-            'PMT'=> 'iya',     
-            'keluhan_lansia'=> 'hipertensi', 
-            'obat_lansia'=> 'diuretik', 
-           
-        ]);
-
         \App\Models\jadwal::create([
             'name' => 'Posyandu Balita',
             'location' => 'Bingin',
@@ -197,6 +115,125 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
             'teslihat' => true,
             'tesmobilisasi' => true,
             'keluhan' => true,
+        ]);
+
+
+        \App\Models\DataKesehatanBalita::create([
+            'peserta_id' => 1,
+            'jadwal_id' => 1,
+            'tinggi_balita' => 90,
+            'berat_balita'=> 5,
+            'lingkar_kepala_balita'=> 22,
+            'imunisasi'=> 'DPT',
+            'obat_cacing'=> 'iya', 
+            'susu'=> 'iya',
+            'keluhan_balita'=> 'BAB lebih sering dari biasanya, tinja encer atau cair, kadang disertai demam',
+            'penanganan_balita'=> 'Berikan oralit untuk mencegah dehidrasi, 
+Berikan makanan yang mudah dicerna seperti bubur atau pisang,
+Jaga kebersihan diri dan lingkungan sekitar, 
+Jika diare berlangsung lama atau disertai darah, segera bawa ke dokter',   
+           
+        ]);
+
+        \App\Models\DataKesehatanBalita::create([
+            'peserta_id' => 1,
+            'jadwal_id' => 2,
+            'tinggi_balita' => 95,
+            'berat_balita'=> 8,
+            'lingkar_kepala_balita'=> 25,
+            'imunisasi'=> 'BCG',
+            'keluhan_balita'=> 'Kulit di area popok menjadi merah, gatal, dan mungkin timbul lepuhan',
+            'penanganan_balita'=> 'Ganti popok secara teratur dan bersihkan area popok dengan air hangat,
+Biarkan kulit bayi terbuka sejenak agar bisa bernapas,
+Oleskan krim ruam popok yang mengandung seng oksida',
+           
+        ]);
+
+        \App\Models\DataKesehatanBalita::create([
+            'peserta_id' => 2,
+            'jadwal_id' => 1,
+            'tinggi_balita' => 90,
+            'berat_balita'=> 5,
+            'lingkar_kepala_balita'=> 22,
+            'imunisasi'=> 'BCG',
+            'obat_cacing'=> 'iya', 
+            'susu'=> 'iya',
+            'keluhan_balita'=> 'Susah BAB, tinja keras dan kering, perut kembung',
+            'penanganan_balita'=> 'Perbanyak asupan makanan berserat seperti buah-buahan dan sayuran,
+Berikan banyak cairan,
+Lakukan pijatan perut secara lembut,
+Jika konstipasi berlangsung lama, konsultasikan ke dokter', 
+           
+        ]);
+
+        \App\Models\DataKesehatanBalita::create([
+            'peserta_id' => 2,
+            'jadwal_id' => 2,
+            'tinggi_balita' => 95,
+            'berat_balita'=> 8,
+            'lingkar_kepala_balita'=> 25,
+            'imunisasi'=> 'BCG',
+           
+        ]);
+
+        \App\Models\PesertaPosyanduLansia::create([
+            'nama_peserta_lansia' => 'Bagas',
+            'TTL_lansia'=> 'Lamongan, 23 Juli 1960',
+            'NIK_lansia'=> '1234567890523', 
+            'alamat_lansia'=> 'jl raya kuta no 59', 
+            'wa_lansia' => '081534527577',
+           
+        ]);
+
+        \App\Models\DataKesehatanLansia::create([
+            'peserta_id' => 1,
+            'jadwal_id' => 3,
+            'tinggi_lansia' => 150,
+            'berat_lansia'=> 60,
+            'lingkar_lengan_lansia'=> 15,
+            'lingkar_perut_lansia'=> 40,
+            'kognitif_lokasi'=> 'bisa', 
+            'kognitif_waktu'=> 'bisa', 
+            'kognitif_kecemasan'=> 'tidak', 
+            'dengar_bisik'=> 'baik',
+            'dengar_langsung'=> 'baik',
+            'lihat'=> 'baik', 
+            'mobilisasi'=> 'baik',
+            'PMT'=> 'iya',     
+            'keluhan_lansia'=> 'hipertensi', 
+            'obat_lansia'=> 'diuretik', 
+           
+        ]);
+
+        
+        \App\Models\PesertaJadwalBalita::create([
+            'peserta_id' => 1,
+            'jadwal_id'=> 1,
+           
+        ]);
+
+        \App\Models\PesertaJadwalBalita::create([
+            'peserta_id' => 1,
+            'jadwal_id'=> 2,
+           
+        ]);
+
+        \App\Models\PesertaJadwalBalita::create([
+            'peserta_id' => 2,
+            'jadwal_id'=> 1,
+           
+        ]);
+
+        \App\Models\PesertaJadwalBalita::create([
+            'peserta_id' => 2,
+            'jadwal_id'=> 2,
+           
+        ]);
+
+        \App\Models\PesertaJadwalLansia::create([
+            'peserta_id' => 1,
+            'jadwal_id'=> 1,
+           
         ]);
 
                        

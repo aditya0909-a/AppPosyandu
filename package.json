@@ -25,6 +25,7 @@
     "license": "ISC",
     "dependencies": {
         "alpinejs": "^3.14.3",
-        "highcharts": "^11.4.8"
+        "highcharts": "^11.4.8",
+        "vue": "^2.7.16"
     }
 }

@@ -52,11 +52,7 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     
 Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions']);
 
-
-    Route::get('/fiturposyandubalita/petugas', function () {
-        return view('petugas.fitur_posyandubalita');
-    });
-
+    
     Route::get('/pendaftaran/fiturposyandubalita/petugas', function () {
         return view('petugas.posyandubalita.fitur_pendaftaran');
     });
@@ -88,10 +84,6 @@ Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions'])
         return view('petugas.posyandubalita.fitur_imunisasi');
     });
 
-    Route::get('/fiturposyandulansia/petugas', function () {
-        return view('petugas.fitur_posyandulansia');
-    });
-
     Route::get('/pendaftaran/fiturposyandulansia/petugas', function () {
         return view('petugas.posyandulansia.fitur_pendaftaran');
     });
@@ -104,11 +96,11 @@ Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions'])
         return view('petugas.posyandulansia.fitur_pengukuran');
     });
 
+    
+
     Route::get('/fiturjadwal/petugas', function () {
-        return view('petugas.fitur_jadwal', [
-            'Jadwals' => Jadwal::all()
-        ]);
-    });
+        return app(JadwalController::class)->index('petugas.fitur_jadwal');
+    })->name('petugas.jadwal.index');
 });
 
 
@@ -119,10 +111,8 @@ Route::middleware(['auth', 'role:pesertabalita'])->group(function () {
     });
 
     Route::get('/fiturjadwal/pesertabalita', function () {
-        return view('pesertabalita.fitur_jadwal', [
-            'Jadwals' => Jadwal::all()
-        ]);
-    });
+        return app(JadwalController::class)->index('pesertabalita.fitur_jadwal');
+    })->name('pesertabalita.jadwal.index');
     
 });
 
@@ -132,13 +122,13 @@ Route::middleware(['auth', 'role:pesertalansia'])->group(function () {
         return view('pesertalansia.dashboard');
     });
     
+    
     Route::get('/fiturjadwal/pesertalansia', function () {
-        return view('pesertalansia.fitur_jadwal', [
-            'Jadwals' => Jadwal::all()
-        ]);
-    });
-
+        return app(JadwalController::class)->index('pesertalansia.fitur_jadwal');
+    })->name('pesertalansia.jadwal.index');
 });
+
+
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/admin', function () {
@@ -160,10 +150,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin.databalita/{id}', [PPBController::class, 'DataKesehatan']);
     
-
-
-
-
     Route::get('/fiturdatalansia/admin', function () {
         return view('admin.fitur_datalansia', [
             'PesertaPosyanduLansias' => PesertaPosyanduLansia::all()
@@ -179,12 +165,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/DataPesertaPosyanduLansia_admin/{id}', [PPLcontroller::class, 'DataPesertaLansia']);
    
 
-    Route::get('/fiturpenjadwalan/admin', [JadwalController::class, 'index'])->name('admin.jadwal.index');
+    Route::get('/fiturpenjadwalan/admin', function () {
+        return app(JadwalController::class)->index('admin.fitur_penjadwalan');
+    })->name('admin.jadwal.index');
 
     // Route untuk mendapatkan jadwal berdasarkan ID untuk edit
     Route::get('/jadwal/{id}', [JadwalController::class, 'getJadwalForEdit']);
 
     Route::post('/jadwal/tambah', [JadwalController::class, 'store'])->name('jadwal.store');
+
+    Route::get('/jadwal/{jadwalId}/peserta', [PPBController::class, 'getPesertaByJadwal']);
+
+    Route::get('/tampilanjadwal/admin', function () {
+        return view('admin.jadwal');
+    });
+
+    Route::get('/admin.jadwal/{id}', [Jadwalcontroller::class, 'DataJadwal']);
         
 
     Route::get('/fiturkelolaakun/admin', function () {

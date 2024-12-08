@@ -11,22 +11,21 @@ Carbon::setLocale('id');
 class JadwalController extends Controller
 {
     
-public function index()
-{
-    $jadwals = Jadwal::all()->map(function ($jadwal) {
-        return [
-            'id' => $jadwal->id,
-            'name' => $jadwal->name,
-            'date' => $jadwal->date,
-            'location' => $jadwal->location,
-            'formatted_date' => $jadwal->date ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') : null,
-        ];
-    });
-
-    //dd($jadwals); // Debug hasil map sebelum dikirim ke view
-
-    return view('admin.fitur_penjadwalan', ['Jadwals' => $jadwals]);
-}
+    public function index($view = 'admin.fitur_penjadwalan')
+    {
+        $jadwals = Jadwal::all()->map(function ($jadwal) {
+            return [
+                'id' => $jadwal->id,
+                'name' => $jadwal->name,
+                'date' => $jadwal->date,
+                'location' => $jadwal->location,
+                'formatted_date' => $jadwal->date ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') : null,
+            ];
+        });
+    
+        return view($view, ['Jadwals' => $jadwals]);
+    }
+    
    
 public function getJadwalOptions(Request $request)
 {
@@ -107,4 +106,46 @@ public function getJadwalForEdit($id)
         // Return data jadwal dalam format JSON
         return response()->json($jadwal);
     }
+
+    public function GetUnduhanOption($jadwalId)
+{
+    // Ambil data jadwal berdasarkan jadwal_id
+    $jadwal = Jadwal::findOrFail($jadwalId);
+
+      
+    // Ambil nilai boolean dari kolom-kolom di tabel jadwals
+    $unduhanOptions = [
+        'daftar_hadir' => 1,
+        'data_pertumbuhan' => $jadwal->has_data_pertumbuhan,
+        'data_pemberian_pmt' => $jadwal->has_data_pemberian_pmt,
+        'data_pemberian_obat_cacing' => $jadwal->has_data_pemberian_obat_cacing,
+        'data_imunisasi' => $jadwal->has_data_imunisasi,
+    ];
+
+    return response()->json([
+        'jadwal_id' => $jadwalId,
+        'unduhanOptions' => $unduhanOptions,
+    ]);
+
+    
+}
+
+public function DataJadwal($id)
+{
+    // Mengambil data jadwal berdasarkan ID
+    $jadwal = Jadwal::findOrFail($id);
+
+    // Menambahkan format tanggal yang diubah dengan isoFormat
+    $jadwal->formatted_date = $jadwal->date 
+        ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') 
+        : null;
+
+    // Mengirimkan data ke view
+    return view('admin.jadwal', [
+        'jadwal' => $jadwal,
+    ]);
+}
+
+
+    
 }
