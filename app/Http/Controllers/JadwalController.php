@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Jadwal;
+use App\Models\PesertaPosyanduBalita;
+use App\Models\PesertaPosyanduLansia;
+use App\Models\Jadwal; // Tambahkan ini
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 Carbon::setLocale('id');
@@ -11,20 +12,31 @@ Carbon::setLocale('id');
 class JadwalController extends Controller
 {
     
-    public function index($view = 'admin.fitur_penjadwalan')
+    public function index()
     {
-        $jadwals = Jadwal::all()->map(function ($jadwal) {
+        $jadwals = Jadwal::latest('date')->get()->map(function ($jadwal) {
             return [
                 'id' => $jadwal->id,
                 'name' => $jadwal->name,
                 'date' => $jadwal->date,
                 'location' => $jadwal->location,
                 'formatted_date' => $jadwal->date ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') : null,
+                'imunisasi' => $jadwal->imunisasi,       // Menambahkan properti boolean
+                'obatcacing' => $jadwal->obatcacing,    // Menambahkan properti boolean
+                'susu' => $jadwal->susu,                // Menambahkan properti boolean
+                'kuisioner' => $jadwal->kuisioner,      // Menambahkan properti boolean
+                'teskognitif' => $jadwal->teskognitif,  // Menambahkan properti boolean
+                'tesdengar' => $jadwal->tesdengar,      // Menambahkan properti boolean
+                'teslihat' => $jadwal->teslihat,        // Menambahkan properti boolean
+                'tesmobilisasi' => $jadwal->tesmobilisasi, // Menambahkan properti boolean
+                'keluhan' => $jadwal->keluhan,          // Menambahkan properti boolean
             ];
         });
-    
-        return view($view, ['Jadwals' => $jadwals]);
+
+
+        return view('admin.fitur_penjadwalan', ['Jadwals' => $jadwals]);
     }
+
     
    
 public function getJadwalOptions(Request $request)
@@ -80,7 +92,7 @@ public function store(Request $request)
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'date' => 'required|date|after:today', // Validasi tanggal agar setelah hari ini
+            'date' => 'required|date|after:today',
             'imunisasi' => 'nullable|boolean',
             'obatcacing' => 'nullable|boolean',
             'susu' => 'nullable|boolean',
@@ -90,61 +102,117 @@ public function store(Request $request)
             'tesdengar' => 'nullable|boolean',
             'teslihat' => 'nullable|boolean',
             'tesmobilisasi' => 'nullable|boolean',
+        ], [
+            'name.required' => 'Nama jadwal harus diisi.',
+            'name.string' => 'Nama jadwal harus berupa teks.',
+            'name.max' => 'Nama jadwal tidak boleh lebih dari 255 karakter.',
+            'location.required' => 'Lokasi harus diisi.',
+            'location.string' => 'Lokasi harus berupa teks.',
+            'location.max' => 'Lokasi tidak boleh lebih dari 255 karakter.',
+            'date.required' => 'Tanggal harus diisi.',
+            'date.date' => 'Tanggal harus berupa format tanggal yang valid.',
+            'date.after' => 'Tanggal harus lebih dari hari ini.',
+            'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
+            'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
+            'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
+            'kuisioner.boolean' => 'Kuisioner harus berupa pilihan ya atau tidak.',
+            'keluhan.boolean' => 'Keluhan harus berupa pilihan ya atau tidak.',
+            'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
+            'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
+            'teslihat.boolean' => 'Tes lihat harus berupa pilihan ya atau tidak.',
+            'tesmobilisasi.boolean' => 'Tes mobilisasi harus berupa pilihan ya atau tidak.',
         ]);
 
         Jadwal::create($validatedData);
 
-        return redirect('/admin.fitur_penjadwalan')->with('success', 'Peserta berhasil ditambahkan.');
+
+        return redirect('/fiturpenjadwalan/admin')->with('success', 'Jadwal berhasil ditambahkan');
     }
 
 
-public function getJadwalForEdit($id)
+    public function update(Request $request, $id)
     {
-        // Ambil data jadwal dari database
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'date' => 'required|date|after:today',
+            'imunisasi' => 'nullable|boolean',
+            'obatcacing' => 'nullable|boolean',
+            'susu' => 'nullable|boolean',
+            'kuisioner' => 'nullable|boolean',
+            'keluhan' => 'nullable|boolean',
+            'teskognitif' => 'nullable|boolean',
+            'tesdengar' => 'nullable|boolean',
+            'teslihat' => 'nullable|boolean',
+            'tesmobilisasi' => 'nullable|boolean',
+        ], [
+            'name.required' => 'Nama jadwal harus diisi.',
+            'name.string' => 'Nama jadwal harus berupa teks.',
+            'name.max' => 'Nama jadwal tidak boleh lebih dari 255 karakter.',
+            'location.required' => 'Lokasi harus diisi.',
+            'location.string' => 'Lokasi harus berupa teks.',
+            'location.max' => 'Lokasi tidak boleh lebih dari 255 karakter.',
+            'date.required' => 'Tanggal harus diisi.',
+            'date.date' => 'Tanggal harus berupa format tanggal yang valid.',
+            'date.after' => 'Tanggal harus lebih dari hari ini.',
+            'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
+            'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
+            'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
+            'kuisioner.boolean' => 'Kuisioner harus berupa pilihan ya atau tidak.',
+            'keluhan.boolean' => 'Keluhan harus berupa pilihan ya atau tidak.',
+            'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
+            'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
+            'teslihat.boolean' => 'Tes lihat harus berupa pilihan ya atau tidak.',
+            'tesmobilisasi.boolean' => 'Tes mobilisasi harus berupa pilihan ya atau tidak.',
+        ]);
+
         $jadwal = Jadwal::findOrFail($id);
+        $jadwal->update($validatedData);
 
-        // Return data jadwal dalam format JSON
-        return response()->json($jadwal);
+        return redirect('/fiturpenjadwalan/admin')->with('success', 'Jadwal berhasil diubah.');
     }
-
-    public function GetUnduhanOption($jadwalId)
-{
-    // Ambil data jadwal berdasarkan jadwal_id
-    $jadwal = Jadwal::findOrFail($jadwalId);
-
-      
-    // Ambil nilai boolean dari kolom-kolom di tabel jadwals
-    $unduhanOptions = [
-        'daftar_hadir' => 1,
-        'data_pertumbuhan' => $jadwal->has_data_pertumbuhan,
-        'data_pemberian_pmt' => $jadwal->has_data_pemberian_pmt,
-        'data_pemberian_obat_cacing' => $jadwal->has_data_pemberian_obat_cacing,
-        'data_imunisasi' => $jadwal->has_data_imunisasi,
-    ];
-
-    return response()->json([
-        'jadwal_id' => $jadwalId,
-        'unduhanOptions' => $unduhanOptions,
-    ]);
 
     
-}
 
-public function DataJadwal($id)
+public function showJadwalWithPeserta($id)
 {
     // Mengambil data jadwal berdasarkan ID
     $jadwal = Jadwal::findOrFail($id);
 
-    // Menambahkan format tanggal yang diubah dengan isoFormat
+    // Format tanggal
     $jadwal->formatted_date = $jadwal->date 
         ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') 
         : null;
+    $jadwal->imunisasi_status = $jadwal->imunisasi ? 'Imunisasi' : null;
+    $jadwal->obatcacing_status = $jadwal->obatcacing ? 'pemberian obat cacing' : null;
+    $jadwal->susu_status = $jadwal->susu ? 'pemberian susu' : null;
+    $jadwal->kuisioner_status = $jadwal->kuisioner ? 'kuisioner kesehatan balita' : null;
+    $jadwal->keluhan_status = $jadwal->keluhan ? 'keluhan kesehatan lansia' : null;
+    $jadwal->teskognitif_status = $jadwal->teskognitif ? 'tes kognitif lansia' : null;
+    $jadwal->teslihat_status = $jadwal->teslihat ? 'tes lihat lansia' : null;
+    $jadwal->tesdengar_status = $jadwal->tesdengar ? 'tes kognitif lansia' : null;
 
-    // Mengirimkan data ke view
+    // Mengambil data peserta balita berdasarkan jadwal
+    $pesertaBalita = PesertaPosyanduBalita::whereHas('dataKesehatan', function ($query) use ($id) {
+        $query->where('jadwal_id', $id);
+    })->get();
+
+    // Mengambil data peserta lansia berdasarkan jadwal
+    $pesertaLansia = PesertaPosyanduLansia::whereHas('dataKesehatan', function ($query) use ($id) {
+        $query->where('jadwal_id', $id);
+    })->get();
+
+    // Menggabungkan kedua data peserta (balita dan lansia)
+    $peserta = $pesertaBalita->merge($pesertaLansia);
+
+    // Kirimkan data jadwal dan peserta ke view
     return view('admin.jadwal', [
         'jadwal' => $jadwal,
+        'peserta' => $peserta,
     ]);
 }
+
+
 
 
     

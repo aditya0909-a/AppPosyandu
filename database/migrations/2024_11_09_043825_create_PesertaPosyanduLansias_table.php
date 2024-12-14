@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nama_peserta_lansia');
-            $table->string('TTL_lansia');
+            $table->string('TempatLahir_lansia');
+            $table->date('TanggalLahir_lansia');
             $table->string('NIK_lansia');
             $table->string('alamat_lansia');
             $table->string('wa_lansia');

@@ -3,37 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\PesertaPosyanduLansia;
+use App\Models\DataKesehatanLansia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class PPLController extends Controller
 
 {
-    public function index()
-    {
-        // Mengambil semua data pengguna dari tabel 'PesertaPosyandulansia'
-        $PesertaPosyanduLansias = PesertaPosyanduLansia::all(); // $PesertaPosyanduLansias adalah koleksi data semua peserta lansia
-
-        // Mengirimkan data pengguna ke view 'fitur_datalansia_admin'
-        return view('fitur_datalansia_admin', compact('PesertaPosyanduLansias'));
-    }
+       
+        // Menampilkan data spesifik peserta lansia berdasarkan ID
+        public function DataPesertaLansia($id)
+        {
+            $PesertaPosyanduLansia = PesertaPosyanduLansia::findOrFail($id);
     
-    public function DataPesertaLansia($id)
-    {
-        // Mengambil semua data pengguna dari tabel 'PesertaPosyanduBalita'
-        $PesertaPosyanduLansia = PesertaPosyanduLansia::find($id); // $users adalah koleksi data semua pengguna
-
-        // Mengirimkan data pengguna ke view 'fitur_databalita_admin'
-        return view('DataPesertaPosyanduLansia_admin', [
-            'PesertaPosyanduLansia' => $PesertaPosyanduLansia
-        ]);
-    }
-
+            return view('admin.datalansia', [
+                'PesertaPosyanduLansia' => $PesertaPosyanduLansia,
+            ]);
+        }
+    
+    
     public function register(Request $request)
     {
         // Validasi data input
         $validatedData = $request->validate([
             'nama_peserta_lansia' => 'required|max:255',
-            'TTL_lansia' => 'required|max:255',
+            'TempatLahir_lansia' => 'required|max:255',
+            'TanggalLahir_lansia' => 'required|date',
             'NIK_lansia' => 'required|max:25',
             'alamat_lansia' => 'required|max:255',
             'wa_lansia' => 'required|max:15',
@@ -82,4 +78,54 @@ class PPLController extends Controller
 
         return redirect()->back()->with('success', 'Peserta berhasil diubah');
     }
+
+    // Menampilkan data kesehatan peserta
+    public function DataKesehatan($id)
+    {
+        $PesertaPosyanduLansia = PesertaPosyanduLansia::findOrFail($id);
+        $data = DB::table('DataKesehatanLansia')
+            ->where('peserta_id', $id)
+            ->select('created_at','keluhan_lansia', 'obat_lansia', 'tinggi_lansia', 'berat_lansia', 'lingkar_lengan_lansia', 'lingkar_perut_lansia')
+            ->get();
+
+        $keluhanData = $data->map(function ($item) {
+            return [
+                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
+                'keluhan' => $item->keluhan_lansia,
+                'obat' => $item->obat_lansia,
+            ];
+        });
+
+
+        return view('admin.datalansia', compact('PesertaPosyanduLansia', 'data'));
+    }
+
+    public function getChartDataByPeserta($peserta_id)
+    {
+
+        
+        // Ambil data berdasarkan peserta_id
+        $data = DataKesehatanLansia::where('peserta_id', $peserta_id)
+            ->orderBy('created_at', 'asc') 
+            ->get();
+
+        
+        $chartData = [
+            'tinggiBadan' => [
+                'label' => 'Tinggi Badan (cm)',
+                'data' => $data->pluck('tinggi_lansia')->toArray(),
+            ],
+            'beratBadan' => [
+                'label' => 'Berat Badan (kg)',
+                'data' => $data->pluck('berat_lansia')->toArray(),
+            ],
+            'lingkarKepala' => [
+                'label' => 'Lingkar Kepala (cm)',
+                'data' => $data->pluck('lingkar_kepala_lansia')->toArray(),
+            ],
+        ];
+
+               
+        return response()->json($chartData);
+    }  
 }

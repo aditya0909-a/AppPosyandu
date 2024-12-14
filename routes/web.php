@@ -144,8 +144,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::put('/pesertaposyandubalita/{id}', [PPBController::class, 'update'])->name('pesertaposyandubalitas.update');
 
-    Route::get('/pesertaposyandubalita/{id}', [PPBController::class, 'show'])->name('pesertaposyandubalitas.show');
-
     Route::get('/admin.databalita/{id}', [PPBcontroller::class, 'DataPesertaBalita']);
 
     Route::get('/admin.databalita/{id}', [PPBController::class, 'DataKesehatan']);
@@ -156,31 +154,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ]);
     });
 
-    Route::post('/pesertaposyandulansia', [PPLController::class, 'register'])->name('pesertaposyandulansiapesertas.tambah');
+    Route::post('/pesertaposyandulansia', [PPBController::class, 'register'])->name('pesertaposyandulansiapesertas.tambah');
 
-    Route::put('/pesertaposyandulansia/{id}', [PPLController::class, 'update'])->name('pesertaposyandulansias.update');
+    Route::put('/pesertaposyandulansia/{id}', [PPBController::class, 'update'])->name('pesertaposyandulansias.update');
 
-    Route::get('/pesertaposyandulansia/{id}', [PPLController::class, 'show'])->name('pesertaposyandulansias.show');
+    Route::get('/admin.datalansia/{id}', [PPBcontroller::class, 'DataPesertaLansia']);
 
-    Route::get('/DataPesertaPosyanduLansia_admin/{id}', [PPLcontroller::class, 'DataPesertaLansia']);
+    Route::get('/admin.datalansia/{id}', [PPBController::class, 'DataKesehatan']);
+    
    
-
-    Route::get('/fiturpenjadwalan/admin', function () {
-        return app(JadwalController::class)->index('admin.fitur_penjadwalan');
-    })->name('admin.jadwal.index');
-
-    // Route untuk mendapatkan jadwal berdasarkan ID untuk edit
-    Route::get('/jadwal/{id}', [JadwalController::class, 'getJadwalForEdit']);
-
+    Route::get('/fiturpenjadwalan/admin', [JadwalController::class, 'index'])->name('admin.jadwal.index');
+    
     Route::post('/jadwal/tambah', [JadwalController::class, 'store'])->name('jadwal.store');
 
-    Route::get('/jadwal/{jadwalId}/peserta', [PPBController::class, 'getPesertaByJadwal']);
+    Route::put('/jadwal/update/{id}', [JadwalController::class, 'update']);
 
-    Route::get('/tampilanjadwal/admin', function () {
-        return view('admin.jadwal');
-    });
-
-    Route::get('/admin.jadwal/{id}', [Jadwalcontroller::class, 'DataJadwal']);
+    Route::get('/admin/jadwal/{id}', [JadwalController::class, 'showJadwalWithPeserta'])->name('admin.jadwal');
         
 
     Route::get('/fiturkelolaakun/admin', function () {

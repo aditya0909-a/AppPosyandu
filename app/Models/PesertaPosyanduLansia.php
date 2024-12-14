@@ -12,7 +12,8 @@ class PesertaPosyanduLansia extends Model
     protected $table = 'PesertaPosyanduLansia';
     protected $fillable = [
         'nama_peserta_lansia',
-        'TTL_lansia',
+        'TempatLahir_lansia',
+        'TanggalLahir_lansia',
         'NIK_lansia',
         'alamat_lansia',
         'wa_lansia'

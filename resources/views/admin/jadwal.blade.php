@@ -36,19 +36,6 @@
             border-radius: 1rem 1rem 0 0;
         }
 
-        .button-primary {
-            background: linear-gradient(135deg, #0077B5, #0099CC);
-            color: #FFFFFF;
-            padding: 12px 24px;
-            border-radius: 8px;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-
-        .button-primary:hover {
-            background: linear-gradient(135deg, #0099CC, #0077B5);
-            transform: scale(1.05);
-        }
-
         /* Table Styling */
         table th,
         table td {
@@ -64,7 +51,7 @@
 <div class="max-w-4xl mx-auto p-6">
     <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
         <div class="container mx-auto flex items-center">
-            <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
+            <button onclick="window.location.href = '/fiturpenjadwalan/admin'" class="text-[#0077B5] mr-4">
                 &larr; Back
             </button>
             <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -85,75 +72,119 @@
         <div class="p-6">
             <!-- Keterangan Kegiatan -->
             <div class="mb-6">
-                <div class="text-lg font-semibold">Nama Kegiatan: <span class="font-normal">{{ $jadwal->name }}</span></div>
-                <div class="text-lg font-semibold mt-2">Lokasi: <span class="font-normal">{{ $jadwal->location }}</span></div>
-                <div class="text-lg font-semibold mt-2">Tanggal: <span class="font-normal">{{ $jadwal->formatted_date }}</span></div>
+                <div class="text-lg font-semibold">Nama Kegiatan</div>
+                <span class="font-normal">{{ $jadwal->name }}</span>
+                <div class="text-lg font-semibold mt-2">Lokasi</div>
+                <span class="font-normal">{{ $jadwal->location }}</span>
+                <div class="text-lg font-semibold mt-2">Tanggal</div>
+                <span class="font-normal">{{ $jadwal->formatted_date }}</span>
             </div>
 
             <!-- Rangkaian Kegiatan -->
             <div class="mb-6">
-                <h3 class="text-xl font-semibold">Rangkaian Kegiatan:</h3>
+            <h3 class="text-xl font-semibold">Rangkaian Kegiatan:</h3>
                 <ul class="list-disc pl-6 mt-2">
-                    <li>Pemeriksaan Kesehatan Umum</li>
-                    <li>Pemberian Imunisasi</li>
-                    <li>Penyuluhan Gizi dan Kesehatan</li>
-                    <li>Distribusi Obat-obatan</li>
+                 <li>Pendaftaran</li>
+                 <li>Pengukuran Pertumbuhan</li>
+                 @if($jadwal->imunisasi_status)
+                     <li>{{ $jadwal->imunisasi_status }}</li>
+                 @endif
+                 @if($jadwal->obatcacing_status)
+                     <li>{{ $jadwal->obatcacing_status }}</li>
+                 @endif
+                 @if($jadwal->susu_status)
+                     <li>{{ $jadwal->susu_status }}</li>
+                 @endif
+                 @if($jadwal->kuisioner_status)
+                     <li>{{ $jadwal->kuisioner_status }}</li>
+                 @endif
+                 @if($jadwal->keluhan_status)
+                     <li>{{ $jadwal->keluhan_status }}</li>
+                 @endif
+                 @if($jadwal->teskognitif_status)
+                     <li>{{ $jadwal->teskognitif_status }}</li>
+                 @endif
+                 @if($jadwal->teslihat_status)
+                     <li>{{ $jadwal->teslihat_status }}</li>
+                 @endif
+                 @if($jadwal->tesdengar_status)
+                     <li>{{ $jadwal->tesdengar_status }}</li>
+                 @endif
                 </ul>
             </div>
 
-            <div id="app">
-                <!-- Tabel Kehadiran Peserta -->
-                <div class="table-container mb-6">
-                    <h3 class="text-xl font-semibold">Daftar Kehadiran Peserta:</h3>
-                    <table class="min-w-full mt-2 table-auto border-collapse border border-gray-300">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2">No</th>
-                                <th class="border border-gray-300 px-4 py-2">Nama Peserta</th>
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Unduh Data Kegiatan</h2>
+                
+                @if($peserta->isEmpty())
+                    <p>Tidak ada Data Kegiatan.</p>
+                @else
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                    <thead class="bg-blue-100">
+                    </thead>
+                    <tbody>
+                        @php
+                            // Daftar kegiatan dengan boolean sebagai kunci dan tautan
+                            $dataKegiatan = [
+                                'Daftar Hadir Peserta' => ['active' => true, 'link' => url('/daftar-hadir')],
+                                'Data Pengukuran' => ['active' => true, 'link' => url('/data-pengukuran')],
+                                'Data Imunisasi' => ['active' => $jadwal->imunisasi, 'link' => url('/data-imunisasi')],
+                                'Data Pemberian Obat Cacing' => ['active' => $jadwal->obatcacing, 'link' => url('/data-obat-cacing')],
+                                'Data Pemberian Susu' => ['active' => $jadwal->susu, 'link' => url('/data-susu')],
+                                'Data Kuisioner Kesehatan Balita' => ['active' => $jadwal->kuisioner, 'link' => url('/data-kuisioner')],
+                                'Data Keluhan Kesehatan Lansia' => ['active' => $jadwal->keluhan, 'link' => url('/data-keluhan')],
+                                'Data Tes Kognitif Lansia' => ['active' => $jadwal->teskognitif, 'link' => url('/data-tes-kognitif')],
+                                'Data Tes Penglihatan Lansia' => ['active' => $jadwal->teslihat, 'link' => url('/data-tes-penglihatan')],
+                                'Data Tes Pendengaran Lansia' => ['active' => $jadwal->tesdengar, 'link' => url('/data-tes-pendengaran')],
+                            ];
+                        @endphp
+                
+                        @foreach($dataKegiatan as $kegiatan => $data)
+                            @if($data['active'])
+                                <tr class="hover:bg-blue-50">
+                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                        <a href="{{ $data['link'] }}" class="text-blue-500 hover:underline">{{ $kegiatan }}</a>
+                                    </td>
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+                               
+                @endif
+            </div>
+
+            <a :href="'/admin/jadwal/' + jadwal.id">
+                <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
+            </a>
+
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-4">Daftar Peserta</h2>
+                
+                @if($peserta->isEmpty())
+                    <p>Tidak ada peserta untuk jadwal ini.</p>
+                @else
+                    <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                        <thead class="bg-blue-100">
+                            <tr>
+                                <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">No</th>
+                                <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">Nama Peserta</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Menggunakan v-for untuk mengiterasi peserta -->
-                            <tr v-for="(pesertaItem, index) in peserta" :key="pesertaItem.id">
-                                <td class="border border-gray-300 px-4 py-2">@{{ index + 1 }}</td>
-                                <td class="border border-gray-300 px-4 py-2">@{{ pesertaItem.nama_peserta_balita }}</td>
-                            </tr>
+                            @foreach($peserta as $index => $item)
+                                <tr class="hover:bg-blue-50">
+                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $index + 1 }}</td>
+                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                        {{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}
+                                    </td>                                   
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
-                </div>
+                @endif
             </div>
-            
-
-           <!-- Tombol untuk Mengunduh Data -->
-<div class="flex space-x-4" x-data="{ unduhanOptions: @entangle('unduhanOptions'), open: true }">
-    
-    <!-- Tombol Dinamis Berdasarkan Data Unduhan -->
-    <template x-if="unduhanOptions">
-        <div>
-            <button x-show="unduhanOptions.daftar_hadir" class="button-primary w-1/3 mt-4">
-                Unduh Kehadiran
-            </button>
-
-            <button x-show="unduhanOptions.data_pertumbuhan" class="button-primary w-1/3 mt-4">
-                Unduh Data Pertumbuhan
-            </button>
-
-            <button x-show="unduhanOptions.data_pemberian_pmt" class="button-primary w-1/3 mt-4">
-                Unduh Data Pemberian PMT
-            </button>
-
-            <button x-show="unduhanOptions.data_pemberian_obat_cacing" class="button-primary w-1/3 mt-4">
-                Unduh Data Pemberian Obat Cacing
-            </button>
-
-            <button x-show="unduhanOptions.data_imunisasi" class="button-primary w-1/3 mt-4">
-                Unduh Data Imunisasi
-            </button>
-        </div>
-    </template>
-
-</div>
-
+                        
 
  </div>
  </div>

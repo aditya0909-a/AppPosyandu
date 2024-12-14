@@ -178,7 +178,8 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
 
         \App\Models\PesertaPosyanduLansia::create([
             'nama_peserta_lansia' => 'Bagas',
-            'TTL_lansia'=> 'Lamongan, 23 Juli 1960',
+            'TempatLahir_lansia'=> 'Lamongan',
+            'TanggalLahir_lansia' => '2004-07-23',
             'NIK_lansia'=> '1234567890523', 
             'alamat_lansia'=> 'jl raya kuta no 59', 
             'wa_lansia' => '081534527577',

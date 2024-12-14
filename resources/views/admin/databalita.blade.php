@@ -12,7 +12,7 @@
     <style>
         /* Default Styling */
         body {
-            background-color: #E6F7FF;
+            background-color: #FFFFFF;
             /* Biru Muda */
             color: #4A4A4A;
             padding-left: 16px;
@@ -30,6 +30,19 @@
             background: linear-gradient(135deg, #0077B5, #0099CC);
             color: #FFFFFF;
 
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #00A9D1, #0077B5);
+            padding: 1.5rem;
+            color: white;
+            border-radius: 1rem 1rem 0 0;
         }
 
         /* Responsif untuk layar kecil (mobile) */
@@ -86,7 +99,7 @@
     <!-- Navbar -->
     <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
         <div class="container mx-auto flex items-center">
-            <button onclick="window.location.href = '/fitur_databalita_admin'" class="text-[#0077B5] mr-4">
+            <button onclick="window.location.href = '/fiturdatabalita/admin'" class="text-[#0077B5] mr-4">
                 &larr; Back
             </button>
             <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -94,54 +107,39 @@
         </div>
     </nav>
 
-    <body class=" p-5" style="background-color: #E6F7FF; padding-top: 100px;">
+    <body class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
         <div x-data="{ showGrowthChart: false }">
-            <!-- Header -->
-            <h2 class="text-3xl font-bold text-center mb-2" style="color: #000000;">Data Peserta</h2>
-            <h2 class="text-3xl font-bold text-center mb-4" style="color: #000000;">Posyandu Balita</h2>
-
-            <!-- Informasi Dasar Balita -->
-            <div class="mb-6">
-                <div class="bg-white p-6 rounded-lg shadow-lg">
-                    <table class="w-full text-left border-collapse text-gray-900 text-lg">
-                        <tbody>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">Nama Lengkap</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->nama_peserta_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">Tempat Lahir</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->TempatLahir_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">Tanggal Lahir</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->TanggalLahir_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">NIK Balita</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->NIK_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">Nama Orang Tua</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->nama_orangtua_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">NIK Orang Tua</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->NIK_orangtua_balita }}</td>
-                            </tr>
-                            <tr class="border-b border-gray-300">
-                                <th class="py-4 px-6 font-bold bg-gray-100">Alamat</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->alamat_balita }}</td>
-                            </tr>
-                            <tr>
-                                <th class="py-4 px-6 font-bold bg-gray-100">Nomor WhatsApp</th>
-                                <td class="py-4 px-6">{{ $PesertaPosyanduBalita->wa_balita }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            
+            <div x-data="{ open: false }" class="max-w-4xl mx-auto mt-8 card">
+                <!-- Card Header -->
+                <div class="card-header">
+                    <h2 class="text-2xl font-semibold ">Data Peserta</h2>
+                    <h2 class="text-2xl font-semibold">Posyandu Balita</h2>
+                </div>
+        
+                <!-- Card Body -->
+                <div class="p-6">
+                    <!-- Keterangan Kegiatan -->
+                    <div class="mb-6">
+                        <div class="text-lg text-black font-semibold">Nama Lengkap</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->nama_peserta_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Tempat Lahir</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->TempatLahir_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Tanggal Lahir</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->TanggalLahir_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">NIK Balita</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->NIK_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Nama Orang Tua</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->nama_orangtua_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">NIK Orang Tua</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->NIK_orangtua_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Alamat Balita</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->alamat_balita }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Nomor WhatsApp</div>
+                        <span class="font-normal">{{ $PesertaPosyanduBalita->wa_balita }}</span>
+                    </div>
                 </div>
             </div>
-
 
             <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduBalita->id }})">
 

@@ -86,15 +86,6 @@ class PPBController extends Controller
         return redirect()->back()->with('success', 'Peserta berhasil diubah.');
     }
 
-    // Menampilkan data peserta berdasarkan ID
-    public function show($id)
-    {
-        $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
-
-        return view('admin.databalita', [
-            'PesertaPosyanduBalita' => $PesertaPosyanduBalita,
-        ]);
-    }
 
     // Menampilkan data kesehatan peserta
     public function DataKesehatan($id)
@@ -166,30 +157,6 @@ class PPBController extends Controller
 
                
         return response()->json($chartData);
-    }
-
-    public function search(Request $request)
-    {
-        $query = $request->query('query', '');
-        $results = PesertaPosyanduBalita::where('nama_peserta_balita', 'LIKE', '%' . $query . '%')->get();
-
-        return response()->json($results);
-    }
-
-    public function getPesertaByJadwal($jadwalId)
-    {
-        // Ambil data peserta melalui relasi di DataKesehatanBalita
-        $peserta = PesertaPosyanduBalita::whereHas('dataKesehatan', function ($query) use ($jadwalId) {
-            $query->where('jadwal_id', $jadwalId);
-        })->with(['dataKesehatan' => function ($query) use ($jadwalId) {
-            $query->where('jadwal_id', $jadwalId);
-        }])->get();
-
-        // Return hasil dalam format JSON atau ke view
-        return response()->json([
-            'jadwal_id' => $jadwalId,
-            'peserta' => $peserta,
-        ]);
-    }
+    }  
     
 }
