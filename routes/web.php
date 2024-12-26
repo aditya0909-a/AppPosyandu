@@ -181,12 +181,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/fiturpenjadwalan/admin', [JadwalController::class, 'index'])->name('admin.jadwal.index');
 
-    // Route untuk mendapatkan jadwal berdasarkan ID untuk edit
-    Route::get('/jadwal/{id}', [JadwalController::class, 'getJadwalForEdit']);
-
+    
+    
     Route::post('/jadwal/tambah', [JadwalController::class, 'store'])->name('jadwal.store');
-        
 
+Route::put('/jadwal/update/{id}', [JadwalController::class, 'update']);
+    
     Route::get('/fiturkelolaakun/admin', function () {
         return view('admin.fitur_kelolaakun', [
             'users' => User::all()
