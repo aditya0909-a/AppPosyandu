@@ -25,6 +25,9 @@ class DataKesehatanLansia extends Model
         'lihat',
         'mobilisasi',
         'PMT',
+        'tensi_lansia',
+        'guladarah_lansia',
+        'kolesterol_lansia',
         'keluhan_lansia',
         'obat_lansia'
     ];

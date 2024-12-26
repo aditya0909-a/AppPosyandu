@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jadwal Posyandu - Admin</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -166,8 +167,7 @@
                         jadwal.imunisasi, 
                         jadwal.obatcacing, 
                         jadwal.susu, 
-                        jadwal.kuisioner, 
-                        jadwal.keluhan, 
+                        jadwal.pemeriksaan, 
                         jadwal.teskognitif, 
                         jadwal.tesdengar, 
                         jadwal.teslihat, 
@@ -248,12 +248,8 @@
                             <label for="susu" class="inline-block">Susu</label>
                         </div>
                         <div class="flex items-center mb-2">
-                            <input id="kuisioner" type="checkbox" name="kuisioner" value="1" class="mr-2">
-                            <label for="kuisioner" class="inline-block">Kuisioner</label>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <input id="keluhan" type="checkbox" name="keluhan" value="1" class="mr-2">
-                            <label for="keluhan" class="inline-block">Keluhan</label>
+                            <input id="pemeriksaan" type="checkbox" name="pemeriksaan" value="1" class="mr-2">
+                            <label for="pemeriksaan" class="inline-block">pemeriksaan</label>
                         </div>
                     </div>
 
@@ -278,8 +274,8 @@
                             <label for="tesmobilisasi" class="inline-block">Tes Mobilisasi</label>
                         </div>
                         <div class="flex items-center mb-2">
-                            <input id="keluhan" type="checkbox" name="keluhan" value="1" class="mr-2">
-                            <label for="keluhan" class="inline-block">Keluhan</label>
+                            <input id="pemeriksaan" type="checkbox" name="pemeriksaan" value="1" class="mr-2">
+                            <label for="pemeriksaan" class="inline-block">pemeriksaan</label>
                         </div>
                     </div>
 
@@ -362,15 +358,9 @@
                                 <label for="susu">Susu</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="kuisioner" type="checkbox" name="kuisioner"
-                                    x-model="editJadwal.kuisioner" :value="1" :unchecked-value="0"
-                                    class="mr-2">
-                                <label for="kuisioner">Kuisioner</label>
-                            </div>
-                            <div class="flex items-center mb-2">
-                                <input id="keluhan" type="checkbox" name="keluhan" x-model="editJadwal.keluhan"
+                                <input id="pemeriksaan" type="checkbox" name="pemeriksaan" x-model="editJadwal.pemeriksaan"
                                     :value="1" :unchecked-value="0" class="mr-2">
-                                <label for="keluhan">Keluhan</label>
+                                <label for="pemeriksaan">pemeriksaan</label>
                             </div>
                         </div>
                     </template>
@@ -402,9 +392,9 @@
                                 <label for="tesmobilisasi">Tes Mobilisasi</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="keluhan" type="checkbox" name="keluhan" x-model="editJadwal.keluhan"
+                                <input id="pemeriksaan" type="checkbox" name="pemeriksaan" x-model="editJadwal.pemeriksaan"
                                     :value="1" :unchecked-value="0" class="mr-2">
-                                <label for="keluhan">Keluhan</label>
+                                <label for="pemeriksaan">pemeriksaan</label>
                             </div>
                         </div>
                     </template>
@@ -444,8 +434,7 @@
                     imunisasi: false,
                     obatcacing: false,
                     susu: false,
-                    kuisioner: false,
-                    keluhan: false,
+                    pemeriksaan: false,
                     teskognitif: false,
                     tesdengar: false,
                     teslihat: false,
@@ -461,7 +450,7 @@
 
 
                 openEditModal(
-                    id, name, location, date, imunisasi, obatcacing, susu, kuisioner, keluhan, teskognitif, tesdengar,
+                    id, name, location, date, imunisasi, obatcacing, susu, pemeriksaan, teskognitif, tesdengar,
                     teslihat, tesmobilisasi
                 ) {
                     this.editJadwal = {
@@ -472,8 +461,7 @@
                         imunisasi: imunisasi, // Konversi ke boolean
                         obatcacing: obatcacing,
                         susu: susu,
-                        kuisioner: kuisioner,
-                        keluhan: keluhan,
+                        pemeriksaan: pemeriksaan,
                         teskognitif: teskognitif,
                         tesdengar: tesdengar,
                         teslihat: teslihat,
@@ -514,22 +502,7 @@
                     });
                     this.resetAddModal();
                 },
-
-                // Fungsi filter jadwal berdasarkan pencarian
-                // get filteredJadwals() {
-                //     const today = new Date();
-
-                //     // Sort jadwals so that future dates come first
-                //     return this.Jadwals
-                //         .filter(jadwal => jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-                //         .sort((a, b) => {
-                //             // Compare jadwal.date, placing future dates first
-                //             const dateA = new Date(a.date);
-                //             const dateB = new Date(b.date);
-                //             return dateA >= today ? -1 : 1; // Future dates should come first
-                //         });
-                // }
-
+                
                 get filteredJadwals() {
                     const today = new Date();
 

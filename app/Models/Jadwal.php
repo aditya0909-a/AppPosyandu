@@ -16,7 +16,6 @@ class Jadwal extends Model
         'imunisasi',
         'obatcacing',
         'susu',
-        'kuisioner',
         'teskognitif',
         'tesdengar',
         'teslihat',
@@ -29,7 +28,7 @@ class Jadwal extends Model
         'imunisasi' => 'boolean',
         'obatcacing' => 'boolean',
         'susu' => 'boolean',
-        'kuisioner' => 'boolean',
+        'vitamin' => 'boolean',
         'teskognitif' => 'boolean',
         'tesdengar' => 'boolean',
         'teslihat' => 'boolean',
@@ -40,7 +39,7 @@ class Jadwal extends Model
     // Relasi many-to-many dengan peserta balita
     public function pesertaBalita()
     {
-        return $this->belongsToMany(PesertaPosyanduBalita::class, 'PesertaJadwal', 'jadwal_id', 'peserta_id')
+        return $this->belongsToMany(PesertaPosyanduBalita::class, 'PesertaJadwalBalita', 'jadwal_id', 'peserta_id')
                     ->withPivot('id')
                     ->withTimestamps();
     }

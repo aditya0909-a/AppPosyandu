@@ -139,8 +139,8 @@
                     <div class="grid grid-cols-2 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         <!-- Tampilkan item dashboard hanya jika jadwal cocok -->
                         <template x-for="item in filteredDashboardItems" :key="item.title">
-
-                            <a :href="item.link"
+                            <a
+                                :href="`${item.link}/${(jadwalOptions.find(j => j.date === selectedJadwal)?.id) || ''}`"
                                 class="block p-6 text-center text-white transition-transform transform rounded-lg shadow-lg button-primary hover:scale-105">
                                 <img :src="item.image" alt="" class="w-16 h-16 mx-auto mb-4">
                                 <h2 class="text-xl font-bold" x-text="item.title"></h2>
@@ -149,6 +149,7 @@
                         </template>
                     </div>
                 </section>
+                
             </div>
         </div>
         
@@ -210,13 +211,6 @@
                             key: 'pengukuran_balita'
                         },
                         {
-                            title: 'Kuisioner',
-                            description: 'Kuisioner deteksi kesehatan balita',
-                            image: '{{ asset('icons/questionnaire.png') }}', // URL gambar
-                            link: '/kuisioner/fiturposyandubalita/petugas',
-                            key: 'kuisioner'
-                        },
-                        {
                             title: 'Vitamin',
                             description: 'Checklist pemberian vitamin.',
                             image: '{{ asset('icons/capsule.png') }}', // URL gambar
@@ -228,7 +222,7 @@
                             description: 'Checklist pemberian susu.',
                             image: '{{ asset('icons/milk.png') }}', // URL gambar
                             link: '/susu/fiturposyandubalita/petugas',
-                            key: 'obatCacing'
+                            key: 'susu'
                         },
                         {
                             title: 'Imunisasi',
@@ -240,16 +234,9 @@
                         {
                             title: 'Pemberian Obat Cacing',
                             description: 'Checklist pemberian obat cacing.',
-                            image: '{{ asset('icons/injection.png') }}', // URL gambar
+                            image: '{{ asset('icons/medicine.png') }}', // URL gambar
                             link: '/obatcacing/fiturposyandubalita/petugas',
                             key: 'obatcacing'
-                        },
-                        {
-                            title: 'List Kehadiran',
-                            description: 'List peserta posyandu hari ini.',
-                            image: '{{ asset('icons/participant.png') }}', // URL gambar
-                            link: '/peserta/fiturposyandubalita/petugas',
-                            key: 'pesertaposyandu_balita'
                         },
                         {
                             title: 'Pendaftaran',
@@ -301,18 +288,11 @@
                             key: 'tesmobilisasi'
                         },
                         {
-                            title: 'Informasi Keluhan',
-                            description: 'Input data keluhan lansia',
+                            title: 'Pemeriksaan Dokter',
+                            description: 'Cek tensi, gula darah, kolestrol, dan keluhan lansia',
                             image: '{{ asset('icons/questionnaire.png') }}', // URL gambar
-                            link: '/keluhan/fiturposyandulansia/petugas',
-                            key: 'keluhan'
-                        },
-                        {
-                            title: 'List Kehadiran',
-                            description: 'List peserta posyandu hari ini.',
-                            image: '{{ asset('icons/participant.png') }}', // URL gambar
-                            link: '/peserta/fiturposyandulansia/petugas',
-                            key: 'pesertaposyandu_lansia'
+                            link: '/pemeriksaan/fiturposyandulansia/petugas',
+                            key: 'pemeriksaan'
                         },
 
                     ],
@@ -326,27 +306,24 @@
                             current.pendaftaran_balita = true; // Default true
                             current.penimbangan_balita = true; // Default true
                             current.pengukuran_balita = true; // Default true
-                            current.pesertaposyandu_balita = true; // Default true
                             current.imunisasi = current.imunisasi ?? false; // Opsional
                             current.obatcacing = current.obatcacing ?? false; // Opsional
                             current.susu = current.susu ?? false; // Opsional
                             current.vitamin = current.vitamin ?? false; // Opsional
-                            current.kuisioner = current.kuisioner ?? false; // Opsional
                             current.pendaftaran_lansia = false; // Default false
                             current.penimbangan_lansia = false; // Default false
                             current.pengukuran_lansia = false; // Default false
                             current.teskognitif = current.teskognitif ?? false; // Opsional
                             current.tesdengar = current.tesdengar ?? false; // Opsional
                             current.teslihat = current.teslihat ?? false; // Opsional
-                            current.keluhan = current.keluhan ?? false; // Opsional
-                            current.pesertaposyandu_lansia = false; // Default false
+                            current.pemeriksaan = current.pemeriksaan ?? false; // Opsional
                         }
                         if (current && current.name === this.posyanduTypes.LANSIA) {
                             // Aturan default untuk Posyandu Lansia
                             current.pendaftaran_lansia = true; // Default true
                             current.penimbangan_lansia = true; // Default true
                             current.pengukuran_lansia = true; // Default true
-                            current.pesertaposyandu_lansia = true; // Default true
+                            current.pemeriksaan = current.pemeriksaan ?? true; // Opsional
                         }
         
                         return current;

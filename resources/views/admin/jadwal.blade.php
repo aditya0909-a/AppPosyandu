@@ -95,11 +95,8 @@
                  @if($jadwal->susu_status)
                      <li>{{ $jadwal->susu_status }}</li>
                  @endif
-                 @if($jadwal->kuisioner_status)
-                     <li>{{ $jadwal->kuisioner_status }}</li>
-                 @endif
-                 @if($jadwal->keluhan_status)
-                     <li>{{ $jadwal->keluhan_status }}</li>
+                 @if($jadwal->pemeriksaan_status)
+                     <li>{{ $jadwal->pemeriksaan_status }}</li>
                  @endif
                  @if($jadwal->teskognitif_status)
                      <li>{{ $jadwal->teskognitif_status }}</li>
@@ -131,8 +128,7 @@
                                 'Data Imunisasi' => ['active' => $jadwal->imunisasi, 'link' => url('/data-imunisasi')],
                                 'Data Pemberian Obat Cacing' => ['active' => $jadwal->obatcacing, 'link' => url('/data-obat-cacing')],
                                 'Data Pemberian Susu' => ['active' => $jadwal->susu, 'link' => url('/data-susu')],
-                                'Data Kuisioner Kesehatan Balita' => ['active' => $jadwal->kuisioner, 'link' => url('/data-kuisioner')],
-                                'Data Keluhan Kesehatan Lansia' => ['active' => $jadwal->keluhan, 'link' => url('/data-keluhan')],
+                                'Data pemeriksaan Kesehatan Lansia' => ['active' => $jadwal->pemeriksaan, 'link' => url('/data-pemeriksaan')],
                                 'Data Tes Kognitif Lansia' => ['active' => $jadwal->teskognitif, 'link' => url('/data-tes-kognitif')],
                                 'Data Tes Penglihatan Lansia' => ['active' => $jadwal->teslihat, 'link' => url('/data-tes-penglihatan')],
                                 'Data Tes Pendengaran Lansia' => ['active' => $jadwal->tesdengar, 'link' => url('/data-tes-pendengaran')],
@@ -153,10 +149,6 @@
                                
                 @endif
             </div>
-
-            <a :href="'/admin/jadwal/' + jadwal.id">
-                <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
-            </a>
 
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-4">Daftar Peserta</h2>
@@ -189,30 +181,6 @@
  </div>
  </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-<script>
-    new Vue({
-        el: '#app',
-        data: {
-            jadwalId: 1,  // ID Jadwal yang ingin diambil
-            peserta: []  // Tempat menyimpan data peserta
-        },
-        mounted() {
-            // Ambil data peserta berdasarkan jadwal_id
-            this.fetchPesertaByJadwal();
-        },
-        methods: {
-            fetchPesertaByJadwal() {
-                fetch(`http://127.0.0.1:8000/jadwal/${this.jadwalId}/peserta`)
-                    .then(response => response.json())
-                    .then(data => {
-                        this.peserta = data.peserta;  // Menyimpan data peserta ke dalam state
-                    })
-                    .catch(error => console.error('Error fetching data:', error));
-            }
-        }
-    });
-</script>
-
 
 </body>
 

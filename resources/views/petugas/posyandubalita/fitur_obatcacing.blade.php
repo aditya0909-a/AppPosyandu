@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pemberian vitamin Balita - Petugas</title>
+    <title>Pemberian Obat Cacing Balita - Petugas</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -78,7 +78,7 @@
             </nav>
 
             <div class="flex justify-center items-center mb-6 mt-8">
-                <h1 class="text-3xl text-center font-bold">Checklist Pemberian vitamin</h1>
+                <h1 class="text-3xl text-center font-bold">Checklist Pemberian Obat Cacing</h1>
             </div>
 
             <div class="flex items-center mb-4">
@@ -90,7 +90,7 @@
                 $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
 
                 // Nilai prioritas: enum 'tidak' (0) -> prioritas tinggi
-                return isset($dataKesehatan) && $dataKesehatan->vitamin === 'tidak' ? 0 : 1;
+                return isset($dataKesehatan) && $dataKesehatan->obat_cacing === 'tidak' ? 0 : 1;
             });
             @endphp
 
@@ -101,8 +101,8 @@
                         $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
                     @endphp
 
-                    @if(isset($dataKesehatan) && $dataKesehatan->vitamin === 'iya')
-                        <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
+                    @if(isset($dataKesehatan) && $dataKesehatan->obat_cacing === 'iya')
+                    <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
                     @else
                         <div class="card mb-6 p-4 rounded-lg bg-white flex justify-between items-center">
                     @endif
@@ -112,14 +112,14 @@
                             <h2 class="text-xl font-bold">{{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}</h2>
                             <p class="text-sm text-gray-600">
                                 Status: 
-                                {{ isset($dataKesehatan) ? ($dataKesehatan->vitamin === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan') : '-' }}
+                                {{ isset($dataKesehatan) ? ($dataKesehatan->obat_cacing === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan') : '-' }}
                             </p>
                         </div>
 
                         <!-- Tombol di Kanan -->
                         @if(isset($dataKesehatan))
                             <button 
-                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->vitamin }}')"
+                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->obat_cacing }}')"
                                 class="inline-flex items-center px-4 py-2 button-primary">
                                 Input
                             </button>
@@ -127,12 +127,11 @@
                     </div>
                 @endforeach
             </div>
-
             
 
             <!-- Modal Edit -->
             <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
-                <form :action="'/update-vitamin/' + editData.id" method="POST" class="space-y-4">
+                <form :action="'/update-obatcacing/' + editData.id" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
             
@@ -140,10 +139,10 @@
                         <h2 class="text-xl font-bold mb-4">Checklist Pemberian</h2>
                                   
                         <div class="mb-4">
-                            <label class="block text-sm font-bold text-gray-700">Status Vitamin</label>
+                            <label class="block text-sm font-bold text-gray-700">Status Obat Cacing</label>
                             <select 
-                                name="vitamin" 
-                                x-model="editData.vitamin"
+                                name="obat_cacing" 
+                                x-model="editData.obat_cacing"
                                 class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                                 <option value="" disabled>Pilih Status</option>
@@ -179,12 +178,12 @@
             showEditModal: false,
             editData: {
                 id: null,
-                vitamin: ''
+                obat_cacing: ''
             },
-            openEditModal(id, vitamin) {
+            openEditModal(id, obat_cacing) {
                 this.editData = {
                     id: id,
-                    vitamin: vitamin,
+                    obat_cacing: obat_cacing,
                 };
                 this.showEditModal = true;
             }

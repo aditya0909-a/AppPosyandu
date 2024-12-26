@@ -10,8 +10,6 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\PPBcontroller;
 use App\Http\Controllers\PPLcontroller;
-use App\Http\Controllers\PetugasController;
-use App\Http\Controllers\JadwalControllercontroller;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,59 +46,80 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
         return view('petugas.fitur_posyandu', [
             'Jadwals' => Jadwal::all()]);
     });
-
     
-Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions']);
+    Route::get('/api/jadwal-options', [JadwalController::class, 'getJadwalOptions']);
+       
+    Route::get('/pendaftaran/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'pendaftaran']);
 
+    Route::post('/pesertabarubalita', [PPBController::class, 'register']);
+
+    Route::get('/api/datapesertabalita', [PPBcontroller::class, 'index']);
+
+    Route::post('/pendaftaran/fiturposyandubalita/store', [PPBcontroller::class, 'store']);
+
+    Route::post('/pendaftaran/fiturposyandubalita/destroy', [PPBcontroller::class, 'destroy']);
+
+
+    Route::get('/penimbangan/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'penimbangan']);
+
+    Route::put('/update-penimbangan/{id}', [PPBcontroller::class, 'updatepenimbangan']);
     
-    Route::get('/pendaftaran/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_pendaftaran');
+    Route::get('/pengukuran/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'pengukuran']);
+
+    Route::put('/update-pengukuran/{id}', [PPBcontroller::class, 'updatepengukuran']);
+
+    Route::get('/kuisioner/fiturposyandubalita/petugas/{jadwalId}', function ($jadwalId) {
+        return view('petugas.posyandubalita.fitur_kuisioner', ['jadwalId' => $jadwalId]);
     });
 
-    Route::get('/api/search', [PPBcontroller::class, 'search'])->name('api.search');
+    Route::get('/vitamin/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'vitamin']);
 
-
-    Route::get('/penimbangan/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_penimbangan');
-    });
-
-    Route::get('/pengukuran/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_pengukuran');
-    });
-
-    Route::get('/kuisioner/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_kuisioner');
-    });
-
-    Route::get('/vitamin/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_vitamin');
-    });
-
-    Route::get('/susu/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_susu');
-    });
-
-    Route::get('/imunisasi/fiturposyandubalita/petugas', function () {
-        return view('petugas.posyandubalita.fitur_imunisasi');
-    });
-
-    Route::get('/pendaftaran/fiturposyandulansia/petugas', function () {
-        return view('petugas.posyandulansia.fitur_pendaftaran');
-    });
-
-    Route::get('/penimbangan/fiturposyandulansia/petugas', function () {
-        return view('petugas.posyandulansia.fitur_penimbangan');
-    });
-
-    Route::get('/pengukuran/fiturposyandulansia/petugas', function () {
-        return view('petugas.posyandulansia.fitur_pengukuran');
-    });
-
+    Route::put('/update-vitamin/{id}', [PPBcontroller::class, 'updatevitamin']);
     
+    Route::get('/susu/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'susu']);
 
-    Route::get('/fiturjadwal/petugas', function () {
-        return app(JadwalController::class)->index('petugas.fitur_jadwal');
-    })->name('petugas.jadwal.index');
+    Route::put('/update-susu/{id}', [PPBcontroller::class, 'updatesusu']);
+
+    Route::get('/obatcacing/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'obatcacing']);
+
+    Route::put('/update-obatcacing/{id}', [PPBcontroller::class, 'updateobatcacing']);
+
+    Route::get('/imunisasi/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'imunisasi']);
+
+    Route::put('/update-imunisasi/{id}', [PPBcontroller::class, 'updateimunisasi']);
+
+    Route::get('/pendaftaran/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'pendaftaran']);
+
+    Route::post('/pesertabarulansia', [PPLController::class, 'register']);
+
+    Route::get('/api/datapesertalansia', [PPLcontroller::class, 'index']);
+
+    Route::post('/pendaftaran/fiturposyandulansia/store', [PPLcontroller::class, 'store']);
+
+    Route::post('/pendaftaran/fiturposyandulansia/destroy', [PPLcontroller::class, 'destroy']);
+
+    Route::get('/penimbangan/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'penimbangan']);
+
+    Route::put('/update-penimbangan-lansia/{id}', [PPLcontroller::class, 'updatepenimbangan']);
+
+    Route::get('/pengukuran/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'pengukuran']);
+
+    Route::put('/update-pengukuran-lansia/{id}', [PPLcontroller::class, 'updatepengukuran']);
+
+    Route::get('/pemeriksaan/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'pemeriksaan']);
+
+    Route::put('/update-pemeriksaan/{id}', [PPLcontroller::class, 'updatepemeriksaan']);
+
+    Route::get('/tesdengar/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'tesdengar']);
+    
+    Route::get('/teskognitif/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'teskognitif']);
+
+    Route::get('/teslihat/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'teslihat']);
+
+    Route::get('/tesmobilisasi/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'tesmobilisasi']);
+
+    Route::get('/fiturjadwal/petugas', [JadwalController::class, 'jadwalPetugas'])->name('jadwal.petugas');
+
 });
 
 
@@ -110,9 +129,8 @@ Route::middleware(['auth', 'role:pesertabalita'])->group(function () {
         return view('pesertabalita.dashboard');
     });
 
-    Route::get('/fiturjadwal/pesertabalita', function () {
-        return app(JadwalController::class)->index('pesertabalita.fitur_jadwal');
-    })->name('pesertabalita.jadwal.index');
+    Route::get('/fiturjadwal/pesertabalita', [JadwalController::class, 'jadwalPesertaBalita'])->name('jadwal.pesertaBalita');
+
     
 });
 
@@ -122,10 +140,8 @@ Route::middleware(['auth', 'role:pesertalansia'])->group(function () {
         return view('pesertalansia.dashboard');
     });
     
-    
-    Route::get('/fiturjadwal/pesertalansia', function () {
-        return app(JadwalController::class)->index('pesertalansia.fitur_jadwal');
-    })->name('pesertalansia.jadwal.index');
+    Route::get('/fiturjadwal/pesertalansia', [JadwalController::class, 'jadwalPesertaLansia'])->name('jadwal.pesertaLansia');
+
 });
 
 
@@ -147,6 +163,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin.databalita/{id}', [PPBcontroller::class, 'DataPesertaBalita']);
 
     Route::get('/admin.databalita/{id}', [PPBController::class, 'DataKesehatan']);
+
+    Route::get('/api/chart-data/{id}', [PPBcontroller::class, 'getChartDataByPeserta']);
     
     Route::get('/fiturdatalansia/admin', function () {
         return view('admin.fitur_datalansia', [

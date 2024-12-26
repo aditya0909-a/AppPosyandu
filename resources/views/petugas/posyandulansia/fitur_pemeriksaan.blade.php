@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengukuran Balita - Petugas</title>
+    <title>Pengukuran Lansia - Petugas</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -78,7 +78,7 @@
             </nav>
 
             <div class="flex justify-center items-center mb-6 mt-8">
-                <h1 class="text-3xl text-center font-bold">Pengukuran Balita</h1>
+                <h1 class="text-3xl text-center font-bold">Pemeriksaan Dokter</h1>
             </div>
 
             <div class="flex items-center mb-4">
@@ -91,7 +91,7 @@
         
                 // Nilai prioritas: data tidak lengkap (0) -> prioritas tinggi
                 return isset($dataKesehatan) && 
-                       ($dataKesehatan->tinggi_balita > 0 && $dataKesehatan->lingkar_kepala_balita > 0) ? 1 : 0;
+                       ($dataKesehatan->tensi_lansia > 0 && $dataKesehatan->guladarah_lansia > 0 && $dataKesehatan->kolesterol_lansia > 0) ? 1 : 0;
             });
             @endphp
         
@@ -102,7 +102,7 @@
                     @endphp
             
                     @if(isset($dataKesehatan) && 
-                        ($dataKesehatan->tinggi_balita > 0 && $dataKesehatan->lingkar_kepala_balita > 0))
+                        ($dataKesehatan->tensi_lansia > 0 && $dataKesehatan->guladarah_lansia > 0 && $dataKesehatan->kolesterol_lansia > 0))
                         <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
                     @else
                         <div class="card mb-6 p-4 rounded-lg bg-white flex justify-between items-center">
@@ -110,19 +110,22 @@
             
                         <!-- Konten Kiri -->
                         <div>
-                            <h2 class="text-xl font-bold">{{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}</h2>
+                            <h2 class="text-xl font-bold">{{ $item->nama_peserta_lansia }}</h2>
                             <p class="text-sm text-gray-600">
-                                Tinggi Badan: {{ isset($dataKesehatan) ? $dataKesehatan->tinggi_balita : '-' }} cm
+                                Tensi Darah: {{ isset($dataKesehatan) ? $dataKesehatan->tensi_lansia : '-' }} mmHg
                             </p>
                             <p class="text-sm text-gray-600">
-                                Lingkar Kepala: {{ isset($dataKesehatan) ? $dataKesehatan->lingkar_kepala_balita : '-' }} cm
+                                Gula Darah: {{ isset($dataKesehatan) ? $dataKesehatan->guladarah_lansia : '-' }} mg/dL
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                Kolesterol: {{ isset($dataKesehatan) ? $dataKesehatan->kolesterol_lansia : '-' }} mg/dL
                             </p>
                         </div>
             
                         <!-- Tombol di Kanan -->
                         @if(isset($dataKesehatan))
                             <button 
-                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->tinggi_balita }}', '{{ $dataKesehatan->lingkar_kepala_balita }}')"
+                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->tensi_lansia }}', '{{ $dataKesehatan->guladarah_lansia }}', '{{ $dataKesehatan->kolesterol_lansia }}', '{{ $dataKesehatan->keluhan_lansia }}', '{{ $dataKesehatan->obat_lansia }}')"
                                 class="inline-flex items-center px-4 py-2 button-primary">
                                 Input
                             </button>
@@ -135,38 +138,80 @@
 
             <!-- Modal Edit Pengguna -->
             <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
-                <form :action="'/update-pengukuran/' + editData.id" method="POST" class="space-y-4">
+                <form :action="'/update-pemeriksaan/' + editData.id" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
             
                     <div class="bg-white p-6 rounded-lg shadow-lg max-w-md">
-                        <h2 class="text-xl font-bold mb-4">Input Pengukuran</h2>
+                        <h2 class="text-xl font-bold mb-4">Input Pemeriksaan</h2>
                                     
                         <div class="mb-4">
-                            <label class="block text-sm font-bold text-gray-700">Tinggi Badan</label>
+                            <label class="block text-sm font-bold text-gray-700">Tensi</label>
                             <div class="flex items-center">
                                 <input 
                                     type="number" 
-                                    name="tinggi_balita" 
-                                    x-model="editData.tinggi_balita"
+                                    name="tensi_lansia" 
+                                    x-model="editData.tensi_lansia"
                                     step="0.01"
                                     class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
-                                <span class="ml-2 text-gray-700">cm</span>
+                                <span class="ml-2 text-gray-700">mmHg</span>
                             </div>
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-sm font-bold text-gray-700">Lingkar Kepala</label>
+                            <label class="block text-sm font-bold text-gray-700">Kolesterol</label>
                             <div class="flex items-center">
                                 <input 
                                     type="number" 
-                                    name="lingkar_kepala_balita" 
-                                    x-model="editData.lingkar_kepala_balita"
+                                    name="kolesterol_lansia" 
+                                    x-model="editData.kolesterol_lansia"
                                     step="0.01"
                                     class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
-                                <span class="ml-2 text-gray-700">cm</span>
+                                <span class="ml-2 text-gray-700">mg/dL</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700">Gula Darah</label>
+                            <div class="flex items-center">
+                                <input 
+                                    type="number" 
+                                    name="guladarah_lansia" 
+                                    x-model="editData.guladarah_lansia"
+                                    step="0.01"
+                                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                <span class="ml-2 text-gray-700">mg/dL</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700">Keluhan</label>
+                            <div class="flex items-center">
+                                <input 
+                                    type="text" 
+                                    name="keluhan_lansia" 
+                                    x-model="editData.keluhan_lansia"
+                                    step="0.01"
+                                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                <span class="ml-2 text-white">mg/dL</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700">Obat</label>
+                            <div class="flex items-center">
+                                <input 
+                                    type="text" 
+                                    name="obat_lansia" 
+                                    x-model="editData.obat_lansia"
+                                    step="0.01"
+                                    class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                <span class="ml-2 text-white">mg/dL</span>
                             </div>
                         </div>
                                               
@@ -197,14 +242,20 @@
             showEditModal: false,
             editData: {
                 id: null,
-                tinggi_balita: '',
-                lingkar_kepala_balita: ''
+                tensi_lansia: '',
+                guladarah_lansia: '',
+                kolesterol_lansia: '',
+                keluhan_lansia: '',
+                obat_lansia: ''
             },
-            openEditModal(id, tinggi, lingkar) {
+            openEditModal(id, tensi, guladarah, kolesterol, keluhan, obat) {
                 this.editData = {
                     id: id,
-                    tinggi_balita: tinggi,
-                    lingkar_kepala_balita: lingkar
+                    tensi_lansia: tensi,
+                    guladarah_lansia: guladarah,
+                    kolesterol_lansia: kolesterol,
+                    keluhan_lansia: keluhan,
+                    obat_lansia: obat,
                 };
                 this.showEditModal = true;
             }

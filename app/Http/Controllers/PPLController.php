@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PesertaPosyanduLansia;
+use App\Models\PesertaJadwalLansia;
 use App\Models\DataKesehatanLansia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,14 +36,12 @@ class PPLController extends Controller
             'wa_lansia' => 'required|max:15',
         ]);
 
-       
-
         // Menyimpan data pengguna ke database
         PesertaPosyanduLansia::create($validatedData);
 
 
         // Redirect ke halaman yang diinginkan setelah pendaftaran, misalnya dashboard admin
-        return redirect('/fitur_datalansia_admin')->with('success', 'peserta berhasil ditambahkan.');
+        return redirect()->back()->with('success', 'Peserta berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -124,8 +123,210 @@ class PPLController extends Controller
                 'data' => $data->pluck('lingkar_kepala_lansia')->toArray(),
             ],
         ];
-
                
         return response()->json($chartData);
-    }  
+    }
+    
+    public function index()
+    {
+        // Ambil data dari tabel pesertaposyandubalita
+        $peserta = PesertaPosyanduLansia::select('id', 'nama_peserta_lansia')->get();
+
+        // Kembalikan data dalam format JSON
+        return response()->json($peserta);
+    }
+    
+        public function store(Request $request)
+    {
+        // Validasi Input
+        $validatedData = $request->validate([
+            'jadwal_id' => 'required',
+            'peserta_id' => 'required',
+        ]);
+
+        try {
+            // Simpan ke tabel datakesehatanlansia
+            Datakesehatanlansia::create([
+                'jadwal_id' => $validatedData['jadwal_id'],
+                'peserta_id' => $validatedData['peserta_id'],
+            ]);
+
+            // Simpan ke tabel pesertajadwallansia
+            PesertaJadwalLansia::create([
+                'jadwal_id' => $validatedData['jadwal_id'],
+                'peserta_id' => $validatedData['peserta_id'],
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil disimpan.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function destroy(Request $request)
+    {
+        // Validasi Input
+        $validatedData = $request->validate([
+            'jadwal_id' => 'required|integer',
+            'peserta_id' => 'required|integer',
+        ]);
+
+        try {
+            // Hapus dari tabel datakesehatanlansia
+            Datakesehatanlansia::where('jadwal_id', $validatedData['jadwal_id'])
+                ->where('peserta_id', $validatedData['peserta_id'])
+                ->delete();
+
+            // Hapus dari tabel pesertajadwallansia
+            PesertaJadwalLansia::where('jadwal_id', $validatedData['jadwal_id'])
+                ->where('peserta_id', $validatedData['peserta_id'])
+                ->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Peserta berhasil dihapus.'
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 422);
+        }
+    }
+
+    public function showpesertajadwal($viewName)
+    {
+
+        
+        // Mengambil jadwal_id dari segmen ke-4 URL
+        $jadwalId = request()->segment(4);
+
+        // Mengambil data peserta balita berdasarkan jadwal
+        $peserta = PesertaPosyanduLansia::with('dataKesehatan')
+        ->whereHas('dataKesehatan', function ($query) use ($jadwalId) {
+            $query->where('jadwal_id', $jadwalId);
+        })->get();
+
+        // Kirimkan data jadwal dan peserta ke view yang ditentukan
+        return view($viewName, [
+            'peserta' => $peserta,
+            'jadwalId' => $jadwalId,
+        ]);
+    }
+
+    public function pendaftaran()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_pendaftaran');
+    }
+
+    public function pengukuran()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_pengukuran');
+    }
+
+    public function penimbangan()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_penimbangan');
+    }
+
+    public function pemeriksaan()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_pemeriksaan');
+    }
+
+    public function tesdengar()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_tesdengar');
+    }
+
+    public function teskognitif()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_teskognitif');
+    }
+
+    public function teslihat()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_teslihat');
+    }
+
+    public function tesmobilisasi()
+    {
+        return $this->showpesertajadwal('petugas.posyandulansia.fitur_tesmobilisasi');
+    }
+
+    public function updatepengukuran(Request $request, $id)
+{
+    $validated = $request->validate([
+        'tinggi_lansia' => 'nullable|numeric|min:0',
+        'lingkar_lengan_lansia' => 'nullable|numeric|min:0',
+        'lingkar_perut_lansia' => 'nullable|numeric|min:0',
+    ]);
+
+    // Ambil data kesehatan berdasarkan ID
+    $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+
+    // Update data kesehatan
+    $dataKesehatan->tinggi_lansia = $validated['tinggi_lansia'];
+    $dataKesehatan->lingkar_lengan_lansia = $validated['lingkar_lengan_lansia'];
+    $dataKesehatan->lingkar_perut_lansia = $validated['lingkar_perut_lansia'];
+
+
+    $dataKesehatan->save();
+
+    return redirect()->back()->with('success', 'Data kesehatan berhasil diperbarui.');
+}
+
+public function updatepenimbangan(Request $request, $id)
+{
+    $validated = $request->validate([
+        'berat_lansia' => 'nullable|numeric|min:0',
+        
+    ]);
+
+    // Ambil data kesehatan berdasarkan ID
+    $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+
+    // Update data kesehatan
+    $dataKesehatan->berat_lansia = $validated['berat_lansia'];
+
+    $dataKesehatan->save();
+
+    return redirect()->back()->with('success', 'Data kesehatan berhasil diperbarui.');
+}
+
+public function updatepemeriksaan(Request $request, $id)
+{
+    $validated = $request->validate([
+        'tensi_lansia' => 'nullable|numeric|min:0',
+        'guladarah_lansia' => 'nullable|numeric|min:0',
+        'kolesterol_lansia' => 'nullable|numeric|min:0',
+        'keluhan_lansia' => 'nullable|string',
+        'obat_lansia' => 'nullable|string',
+    ]);
+
+    // Ambil data kesehatan berdasarkan ID
+    $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+
+    // Update data kesehatan
+    $dataKesehatan->tensi_lansia = $validated['tensi_lansia'];
+    $dataKesehatan->guladarah_lansia = $validated['guladarah_lansia'];
+    $dataKesehatan->kolesterol_lansia = $validated['kolesterol_lansia'];
+    $dataKesehatan->keluhan_lansia = $validated['keluhan_lansia'];
+    $dataKesehatan->obat_lansia = $validated['obat_lansia'];
+
+
+    $dataKesehatan->save();
+
+    return redirect()->back()->with('success', 'Data kesehatan berhasil diperbarui.');
+}
+
+    
 }

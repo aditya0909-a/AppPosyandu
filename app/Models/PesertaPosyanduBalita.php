@@ -24,7 +24,7 @@ class PesertaPosyanduBalita extends Model
     // Relasi many-to-many dengan Jadwal
     public function jadwals()
     {
-        return $this->belongsToMany(Jadwal::class, 'PesertaJadwal', 'peserta_id', 'jadwal_id')
+        return $this->belongsToMany(Jadwal::class, 'PesertaJadwalBalita', 'peserta_id', 'jadwal_id')
                     ->withPivot('id') // Mengakses id pivot jika diperlukan
                     ->withTimestamps();
     }

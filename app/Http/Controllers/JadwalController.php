@@ -24,12 +24,11 @@ class JadwalController extends Controller
                 'imunisasi' => $jadwal->imunisasi,       // Menambahkan properti boolean
                 'obatcacing' => $jadwal->obatcacing,    // Menambahkan properti boolean
                 'susu' => $jadwal->susu,                // Menambahkan properti boolean
-                'kuisioner' => $jadwal->kuisioner,      // Menambahkan properti boolean
                 'teskognitif' => $jadwal->teskognitif,  // Menambahkan properti boolean
                 'tesdengar' => $jadwal->tesdengar,      // Menambahkan properti boolean
                 'teslihat' => $jadwal->teslihat,        // Menambahkan properti boolean
                 'tesmobilisasi' => $jadwal->tesmobilisasi, // Menambahkan properti boolean
-                'keluhan' => $jadwal->keluhan,          // Menambahkan properti boolean
+                'pemeriksaan' => $jadwal->pemeriksaan,          // Menambahkan properti boolean
             ];
         });
 
@@ -57,12 +56,12 @@ public function getJadwalOptions(Request $request)
             'imunisasi',
             'obatcacing',
             'susu',
-            'kuisioner',
+            'vitamin',
             'teskognitif',
             'tesdengar',
             'teslihat',
             'tesmobilisasi',
-            'keluhan'
+            'pemeriksaan'
         )
         ->get()
         ->map(function ($jadwal) {
@@ -75,12 +74,12 @@ public function getJadwalOptions(Request $request)
                 'imunisasi' => $jadwal->imunisasi,
                 'obatcacing' => $jadwal->obatcacing,
                 'susu' => $jadwal->susu,
-                'kuisioner' => $jadwal->kuisioner,
+                'vitamin' => $jadwal->vitamin,
                 'teskognitif' => $jadwal->teskognitif,
                 'tesdengar' => $jadwal->tesdengar,
                 'teslihat' => $jadwal->teslihat,
                 'tesmobilisasi' => $jadwal->tesmobilisasi,
-                'keluhan' => $jadwal->keluhan,
+                'pemeriksaan' => $jadwal->pemeriksaan,
             ];
         });
 
@@ -96,8 +95,8 @@ public function store(Request $request)
             'imunisasi' => 'nullable|boolean',
             'obatcacing' => 'nullable|boolean',
             'susu' => 'nullable|boolean',
-            'kuisioner' => 'nullable|boolean',
-            'keluhan' => 'nullable|boolean',
+            'vitamin' => 'nullable|boolean',
+            'pemeriksaan' => 'nullable|boolean',
             'teskognitif' => 'nullable|boolean',
             'tesdengar' => 'nullable|boolean',
             'teslihat' => 'nullable|boolean',
@@ -115,8 +114,8 @@ public function store(Request $request)
             'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
             'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
             'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
-            'kuisioner.boolean' => 'Kuisioner harus berupa pilihan ya atau tidak.',
-            'keluhan.boolean' => 'Keluhan harus berupa pilihan ya atau tidak.',
+            'vitamin.boolean' => 'Vitamin harus berupa pilihan ya atau tidak.',
+            'pemeriksaan.boolean' => 'pemeriksaan harus berupa pilihan ya atau tidak.',
             'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
             'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
             'teslihat.boolean' => 'Tes lihat harus berupa pilihan ya atau tidak.',
@@ -139,8 +138,8 @@ public function store(Request $request)
             'imunisasi' => 'nullable|boolean',
             'obatcacing' => 'nullable|boolean',
             'susu' => 'nullable|boolean',
-            'kuisioner' => 'nullable|boolean',
-            'keluhan' => 'nullable|boolean',
+            'vitamin' => 'nullable|boolean',
+            'pemeriksaan' => 'nullable|boolean',
             'teskognitif' => 'nullable|boolean',
             'tesdengar' => 'nullable|boolean',
             'teslihat' => 'nullable|boolean',
@@ -158,8 +157,8 @@ public function store(Request $request)
             'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
             'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
             'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
-            'kuisioner.boolean' => 'Kuisioner harus berupa pilihan ya atau tidak.',
-            'keluhan.boolean' => 'Keluhan harus berupa pilihan ya atau tidak.',
+            'vitamin.boolean' => 'Vitamin harus berupa pilihan ya atau tidak.',
+            'pemeriksaan.boolean' => 'pemeriksaan harus berupa pilihan ya atau tidak.',
             'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
             'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
             'teslihat.boolean' => 'Tes lihat harus berupa pilihan ya atau tidak.',
@@ -186,8 +185,7 @@ public function showJadwalWithPeserta($id)
     $jadwal->imunisasi_status = $jadwal->imunisasi ? 'Imunisasi' : null;
     $jadwal->obatcacing_status = $jadwal->obatcacing ? 'pemberian obat cacing' : null;
     $jadwal->susu_status = $jadwal->susu ? 'pemberian susu' : null;
-    $jadwal->kuisioner_status = $jadwal->kuisioner ? 'kuisioner kesehatan balita' : null;
-    $jadwal->keluhan_status = $jadwal->keluhan ? 'keluhan kesehatan lansia' : null;
+    $jadwal->pemeriksaan_status = $jadwal->pemeriksaan ? 'pemeriksaan kesehatan lansia' : null;
     $jadwal->teskognitif_status = $jadwal->teskognitif ? 'tes kognitif lansia' : null;
     $jadwal->teslihat_status = $jadwal->teslihat ? 'tes lihat lansia' : null;
     $jadwal->tesdengar_status = $jadwal->tesdengar ? 'tes kognitif lansia' : null;
@@ -212,8 +210,46 @@ public function showJadwalWithPeserta($id)
     ]);
 }
 
+    public function jadwalPetugas()
+    {
+        return $this->getJadwalView('petugas.fitur_jadwal');
+    }
 
+    // Menampilkan jadwal untuk peserta balita
+    public function jadwalPesertaBalita()
+    {
+        return $this->getJadwalView('pesertabalita.fitur_jadwal');
+    }
 
+    // Menampilkan jadwal untuk peserta lansia
+    public function jadwalPesertaLansia()
+    {
+        return $this->getJadwalView('pesertalansia.fitur_jadwal');
+    }
 
+    // Fungsi untuk mengambil jadwal dan mengirimkannya ke view
+    private function getJadwalView($viewName)
+    {
+        try {
+
+            Carbon::setLocale('id');
+            // Ambil semua data jadwal dari database
+            $jadwals = Jadwal::all()->map(function ($jadwal) {
+                return [
+                    'id' => $jadwal->id,
+                    'name' => $jadwal->name,
+                    'date' => $jadwal->date,
+                    'formatted_date' => Carbon::parse($jadwal->date)->translatedFormat('d F Y'),
+                    'location' => $jadwal->location,
+                ];
+            });
+
+            // Kirim data jadwal ke view yang sesuai
+            return view($viewName, ['Jadwals' => $jadwals]);
+        } catch (\Exception $e) {
+            // Redirect jika terjadi error
+            return redirect()->back()->with('error', 'Gagal mengambil data jadwal. Silakan coba lagi.');
+        }
+    }
     
 }

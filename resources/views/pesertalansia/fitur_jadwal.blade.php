@@ -157,13 +157,25 @@ function appData() {
 
         // Filter jadwal berdasarkan searchTerm
         get filteredJadwals() {
-            if (this.searchTerm === '') {
-                return this.Jadwals;
-            }
-            return this.Jadwals.filter(jadwal => 
-                jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-            );
-        }
+                    const today = new Date();
+
+                    // Sort jadwals so that future dates come first
+                    return this.Jadwals
+                        .filter(jadwal => jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
+                        .sort((a, b) => {
+                            const dateA = new Date(a.date);
+                            const dateB = new Date(b.date);
+
+                            // Pastikan tanggal sudah normal, tanpa waktu
+                            const normalizedDateA = new Date(dateA.getFullYear(), dateA.getMonth(), dateA
+                        .getDate());
+                            const normalizedDateB = new Date(dateB.getFullYear(), dateB.getMonth(), dateB
+                        .getDate());
+
+                            // Letakkan tanggal yang lebih baru di depan
+                            return normalizedDateA >= normalizedDateB ? -1 : 1;
+                        });
+                }
     };
 }
 </script>

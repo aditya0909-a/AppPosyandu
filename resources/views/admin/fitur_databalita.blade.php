@@ -369,7 +369,7 @@
                         </button>
                         <button type="submit"
                         class="button-primary">
-                            Simpan Perubahan
+                            Simpan
                         </button>
                     </div>
                 </div>

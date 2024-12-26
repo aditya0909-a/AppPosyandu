@@ -21,12 +21,12 @@ return new class extends Migration
             $table->boolean('imunisasi')->default(false); // Kolom boolean imunisasi
             $table->boolean('obatcacing')->default(false); // Kolom boolean obatcacing
             $table->boolean('susu')->default(false); // Kolom boolean susu
-            $table->boolean('kuisioner')->default(false); // Kolom boolean kuisioner
+            $table->boolean('vitamin')->default(false); // Kolom boolean vitamin
             $table->boolean('teskognitif')->default(false); // Kolom boolean teskognitif
             $table->boolean('tesdengar')->default(false); // Kolom boolean tesdengar
             $table->boolean('teslihat')->default(false); // Kolom boolean teslihat
             $table->boolean('tesmobilisasi')->default(false); // Kolom boolean tesmobilisasi
-            $table->boolean('keluhan')->default(false); // Kolom boolean keluhan
+            $table->boolean('pemeriksaan')->default(true); // Kolom boolean pemeriksaan
             $table->timestamps();
         });
 

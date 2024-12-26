@@ -79,12 +79,11 @@ class DatabaseSeeder extends Seeder
             'imunisasi' => true,
             'obatcacing' => true,
             'susu' => true,
-            'kuisioner' => true,
             'teskognitif' => false,
             'tesdengar' => false,
             'teslihat' => false,
             'tesmobilisasi' => false,
-            'keluhan' => false,
+            'pemeriksaan' => false,
         ]);
 
         \App\Models\jadwal::create([
@@ -94,12 +93,11 @@ class DatabaseSeeder extends Seeder
             'imunisasi' => false,
             'obatcacing' => true,
             'susu' => false,
-            'kuisioner' => true,
             'teskognitif' => false,
             'tesdengar' => false,
             'teslihat' => false,
             'tesmobilisasi' => false,
-            'keluhan' => false,
+            'pemeriksaan' => false,
         ]);
 
         \App\Models\jadwal::create([
@@ -109,12 +107,12 @@ class DatabaseSeeder extends Seeder
             'imunisasi' => false,
             'obatcacing' => false,
             'susu' => false,
-            'kuisioner' => false,
+            'vitamin' => false,
             'teskognitif' => true,
             'tesdengar' => true,
             'teslihat' => true,
             'tesmobilisasi' => true,
-            'keluhan' => true,
+            'pemeriksaan' => true,
         ]);
 
 
@@ -127,11 +125,7 @@ class DatabaseSeeder extends Seeder
             'imunisasi'=> 'DPT',
             'obat_cacing'=> 'iya', 
             'susu'=> 'iya',
-            'keluhan_balita'=> 'BAB lebih sering dari biasanya, tinja encer atau cair, kadang disertai demam',
-            'penanganan_balita'=> 'Berikan oralit untuk mencegah dehidrasi, 
-Berikan makanan yang mudah dicerna seperti bubur atau pisang,
-Jaga kebersihan diri dan lingkungan sekitar, 
-Jika diare berlangsung lama atau disertai darah, segera bawa ke dokter',   
+            'vitamin'=> 'iya',   
            
         ]);
 
@@ -142,10 +136,7 @@ Jika diare berlangsung lama atau disertai darah, segera bawa ke dokter',
             'berat_balita'=> 8,
             'lingkar_kepala_balita'=> 25,
             'imunisasi'=> 'BCG',
-            'keluhan_balita'=> 'Kulit di area popok menjadi merah, gatal, dan mungkin timbul lepuhan',
-            'penanganan_balita'=> 'Ganti popok secara teratur dan bersihkan area popok dengan air hangat,
-Biarkan kulit bayi terbuka sejenak agar bisa bernapas,
-Oleskan krim ruam popok yang mengandung seng oksida',
+            'vitamin'=> 'tidak',
            
         ]);
 
@@ -158,11 +149,7 @@ Oleskan krim ruam popok yang mengandung seng oksida',
             'imunisasi'=> 'BCG',
             'obat_cacing'=> 'iya', 
             'susu'=> 'iya',
-            'keluhan_balita'=> 'Susah BAB, tinja keras dan kering, perut kembung',
-            'penanganan_balita'=> 'Perbanyak asupan makanan berserat seperti buah-buahan dan sayuran,
-Berikan banyak cairan,
-Lakukan pijatan perut secara lembut,
-Jika konstipasi berlangsung lama, konsultasikan ke dokter', 
+            'vitamin'=> 'iya', 
            
         ]);
 
@@ -200,7 +187,10 @@ Jika konstipasi berlangsung lama, konsultasikan ke dokter',
             'dengar_langsung'=> 'baik',
             'lihat'=> 'baik', 
             'mobilisasi'=> 'baik',
-            'PMT'=> 'iya',     
+            'PMT'=> 'iya',
+            'tensi_lansia'=> 100,
+            'guladarah_lansia'=> 100,
+            'kolesterol_lansia'=> 150,     
             'keluhan_lansia'=> 'hipertensi', 
             'obat_lansia'=> 'diuretik', 
            

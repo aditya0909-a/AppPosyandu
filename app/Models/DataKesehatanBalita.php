@@ -14,12 +14,13 @@ class DataKesehatanBalita extends Model
         'peserta_id',
         'jadwal_id', // Tambahkan kolom untuk referensi ke jadwal
         'bulan_ke',
-        'tinggi_Balita',
+        'tinggi_balita',
         'berat_balita',
         'lingkar_kepala_balita',
         'imunisasi',
         'obat_cacing',
         'susu',
+        'vitamin',
         'keluhan_balita',
         'penanganan_balita'
     ];

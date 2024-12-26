@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Peserta Balita - Petugas</title>
+    <title>Pemberian Susu Formula Balita - Petugas</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         body {
@@ -35,7 +34,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        
         .input-field {
             width: 100%;
             padding: 8px;
@@ -51,7 +49,6 @@
         }
 
         .card {
-            background: white;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -68,181 +65,133 @@
     </style>
 </head>
 
-<body x-data="appData()">
-
-    @if (session('success'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-        class="mb-4 fixed top-20 right-4 z-50 max-w-md shadow-lg glass-effect" role="alert">
-        <div class="flex items-center gap-2">
-            <span class="text-green-800 font-medium">{{ session('success') }}</span>
-            <button @click="show = false" class="ml-auto p-1 text-green-500 hover:bg-green-200">
-                <span class="sr-only">Close</span>
-                &times;
-            </button>
-        </div>
-    </div>
-    @endif
-
-    @if (session('error'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-            class="mb-4 rounded-lg border border-red-200 bg-red-100 p-4 fixed top-20 right-4 z-50 max-w-md shadow-lg"
-            role="alert">
-            <div class="flex items-center gap-2">
-                <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-medium text-red-800">{{ session('error') }}</span>
-                <button @click="show = false"
-                    class="ml-auto rounded-lg p-1.5 text-red-500 hover:bg-red-200 inline-flex h-8 w-8 items-center justify-center">
-                    <span class="sr-only">Close</span>
-                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    @endif
-
-    <div class="max-w-4xl mx-auto p-6">
-        <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
-            <div class="container mx-auto flex items-center">
-                <button onclick="window.location.href = '/fiturposyandu/petugas'" class="text-[#0077B5] mr-4">
-                    &larr; Back
-                </button>
-                <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
-                <div class="ml-auto text-[#0077B5] font-sans">Akun Petugas</div>
-            </div>
-        </nav>
-
-        <div class="flex justify-between items-center mb-6 mt-8">
-            <h1 class="text-2xl font-bold">Pendaftaran Peserta Posyandu</h1>
-            <button @click="showAddModal = true" class="button-primary">Daftar Peserta</button>
-        </div>
-
-        <div class="flex items-center mb-4">
-            <input type="text" placeholder="Cari peserta..." class="input-field" x-model="searchTerm">
-        </div>
-
-        
-        
-        <!-- Modal Tambah Peserta -->
-
-        <div x-show="showAddModal"
-        class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <form action="/pesertaposyandubalita" method="POST">
-                @csrf
-                @method('PUT')
-                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-                    <h2 class="text-xl font-bold mb-4">Tambah Peserta Posyandu Balita</h2>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama
-                        </label>
-                        <input type="text" name="nama_peserta_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('nama_peserta_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Tempat lahir
-                        </label>
-                        <input type="text" name="TempatLahir_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('TempatLahir_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Tanggal Lahir
-                        </label>
-                        <input type="date" name="TanggalLahir_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('TanggalLahir_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK
-                        </label>
-                        <input type="text" name="NIK_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('NIK_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama Orang Tua Balita
-                        </label>
-                        <input type="text" name="nama_orangtua_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('nama_orangtua_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK Orang Tua Balita
-                        </label>
-                        <input type="text" name="NIK_orangtua_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('NIK_orangtua_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Alamat
-                        </label>
-                        <input type="text" name="alamat_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('alamat_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nomor Whatsapp
-                        </label>
-                        <input type="number" name="wa_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('wa_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" @click="showAddModal = false"
-                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
-                            Batal
-                        </button>
-                        <button type="submit"
-                        class="button-primary">
-                            Simpan Perubahan
-                        </button>
-                    </div>
+<body>
+    <div x-data="appData()" class="max-w-4xl mx-auto p-6">
+            <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
+                <div class="container mx-auto flex items-center">
+                    <button onclick="window.location.href = '/fiturposyandu/petugas'" class="text-[#0077B5] mr-4">
+                        &larr; Back
+                    </button>
+                    <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
+                    <div class="ml-auto text-[#0077B5] font-sans">Akun Petugas</div>
                 </div>
-            </form>
-        </div>
+            </nav>
 
+            <div class="flex justify-center items-center mb-6 mt-8">
+                <h1 class="text-3xl text-center font-bold">Checklist Pemberian Susu</h1>
+            </div>
 
-   
+            <div class="flex items-center mb-4">
+                <input type="text" placeholder="Cari peserta..." class="input-field" id="searchInput">
+            </div>
 
+            @php
+            $sortedPeserta = $peserta->sortBy(function ($item) use ($jadwalId) {
+                $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
+
+                // Nilai prioritas: enum 'tidak' (0) -> prioritas tinggi
+                return isset($dataKesehatan) && $dataKesehatan->susu === 'tidak' ? 0 : 1;
+            });
+            @endphp
+
+        
+            <div id="pesertaList">
+                @foreach($sortedPeserta as $index => $item)
+                    @php
+                        $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
+                    @endphp
+
+                    @if(isset($dataKesehatan) && $dataKesehatan->susu === 'iya')
+                        <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
+                    @else
+                        <div class="card mb-6 p-4 rounded-lg bg-white flex justify-between items-center">
+                    @endif
+
+                        <!-- Konten Kiri -->
+                        <div>
+                            <h2 class="text-xl font-bold">{{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}</h2>
+                            <p class="text-sm text-gray-600">
+                                Status: 
+                                {{ isset($dataKesehatan) ? ($dataKesehatan->susu === 'iya' ? 'Sudah Diberikan' : 'Belum Diberikan') : '-' }}
+                            </p>
+                        </div>
+
+                        <!-- Tombol di Kanan -->
+                        @if(isset($dataKesehatan))
+                            <button 
+                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->susu }}')"
+                                class="inline-flex items-center px-4 py-2 button-primary">
+                                Input
+                            </button>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+
+            
+
+            <!-- Modal Edit -->
+            <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
+                <form :action="'/update-susu/' + editData.id" method="POST" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+            
+                    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md">
+                        <h2 class="text-xl font-bold mb-4">Checklist Pemberian</h2>
+                                  
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold text-gray-700">Status Susu</label>
+                            <select 
+                                name="susu" 
+                                x-model="editData.susu"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            >
+                                <option value="" disabled>Pilih Status</option>
+                                <option value="iya">Sudah Diberikan</option>
+                                <option value="tidak">Belum Diberikan</option>
+                            </select>
+                        </div>
+                                              
+                        <div class="flex justify-end">
+                            <button type="button" @click="showEditModal = false"
+                                class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Batal</button>
+                            <button type="submit" class="ml-2 px-4 py-2 button-primary">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        
+    </div>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const term = this.value.toLowerCase();
+            const pesertaCards = document.querySelectorAll('#pesertaList .card');
+            pesertaCards.forEach(card => {
+                const nama = card.querySelector('h2').textContent.toLowerCase();
+                card.style.display = nama.includes(term) ? 'block' : 'none';
+            });
+        });
+
+        function appData() {
+        return {
+            showEditModal: false,
+            editData: {
+                id: null,
+                susu: ''
+            },
+            openEditModal(id, susu) {
+                this.editData = {
+                    id: id,
+                    susu: susu,
+                };
+                this.showEditModal = true;
+            }
+        };
+        }
+
+    </script>
 </body>
 
 </html>
