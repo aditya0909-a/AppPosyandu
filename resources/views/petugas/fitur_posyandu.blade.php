@@ -261,7 +261,7 @@
                         },
                         {
                             title: 'Tes Kognitif',
-                            description: 'Kuisioner tes kemampuan kognitif lansia.',
+                            description: 'Kuisioner tes kemampuan kognitif dan gejala depresi lansia.',
                             image: '{{ asset('icons/idea.png') }}', // URL gambar
                             link: '/teskognitif/fiturposyandulansia/petugas',
                             key: 'teskognitif'

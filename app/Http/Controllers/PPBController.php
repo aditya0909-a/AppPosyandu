@@ -94,7 +94,7 @@ class PPBController extends Controller
         $PesertaPosyanduBalita = PesertaPosyanduBalita::findOrFail($id);
         $data = DB::table('DataKesehatanBalita')
             ->where('peserta_id', $id)
-            ->select('created_at', 'obat_cacing', 'susu', 'imunisasi', 'vitamin', 'keluhan_balita', 'penanganan_balita', 'bulan_ke', 'tinggi_balita', 'berat_balita', 'lingkar_kepala_balita')
+            ->select('created_at', 'obat_cacing', 'susu', 'imunisasi', 'vitamin', 'bulan_ke', 'tinggi_balita', 'berat_balita', 'lingkar_kepala_balita')
             ->get();
 
         $obatCacingData = $data->filter(function ($item) {
@@ -133,19 +133,8 @@ class PPBController extends Controller
                 'jenis_imunisasi' => $item->imunisasi,
             ];
         });
-
-        $keluhanData = $data->filter(function ($item) {
-            return !is_null($item->keluhan_balita);
-        })->map(function ($item) {
-            return [
-                'tanggal' => Carbon::parse($item->created_at)->format('d-m-Y'),
-                'keluhan' => $item->keluhan_balita,
-                'penanganan' => $item->penanganan_balita,
-            ];
-        });
-
-
-        return view('admin.databalita', compact('PesertaPosyanduBalita', 'obatCacingData', 'susuData', 'vitaminData', 'imunisasiData', 'keluhanData', 'data'));
+        
+        return view('admin.databalita', compact('PesertaPosyanduBalita', 'obatCacingData', 'susuData', 'vitaminData', 'imunisasiData', 'data'));
     }
 
     public function getChartDataByPeserta($peserta_id)
@@ -223,7 +212,6 @@ class PPBController extends Controller
             ], 500);
         }
     }
-
     
     public function index()
     {
@@ -299,7 +287,7 @@ class PPBController extends Controller
             ], 422);
         }
     }
-
+    
     public function showpesertajadwal($viewName)
     {
         // Mengambil jadwal_id dari segmen ke-4 URL
@@ -352,6 +340,19 @@ class PPBController extends Controller
     {
         return $this->showpesertajadwal('petugas.posyandubalita.fitur_imunisasi');
     }
+
+    public function getPesertaByJadwal($jadwalId)
+{
+    // Mengambil data peserta balita berdasarkan jadwal
+    $peserta = PesertaPosyanduBalita::with('dataKesehatan')
+        ->whereHas('dataKesehatan', function ($query) use ($jadwalId) {
+            $query->where('jadwal_id', $jadwalId);
+        })->get();
+
+    // Kembalikan data dalam format JSON
+    return response()->json($peserta);
+}
+
 
     public function updatepengukuran(Request $request, $id)
 {

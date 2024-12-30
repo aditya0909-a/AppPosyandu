@@ -316,17 +316,150 @@ public function updatepemeriksaan(Request $request, $id)
     $dataKesehatan = DataKesehatanLansia::findOrFail($id);
 
     // Update data kesehatan
-    $dataKesehatan->tensi_lansia = $validated['tensi_lansia'];
-    $dataKesehatan->guladarah_lansia = $validated['guladarah_lansia'];
-    $dataKesehatan->kolesterol_lansia = $validated['kolesterol_lansia'];
-    $dataKesehatan->keluhan_lansia = $validated['keluhan_lansia'];
-    $dataKesehatan->obat_lansia = $validated['obat_lansia'];
+    
+    $dataKesehatan->tensi_lansia = $validated['tensi_lansia'] ?? $dataKesehatan->tensi_lansia;
+    $dataKesehatan->guladarah_lansia = $validated['guladarah_lansia'] ?? $dataKesehatan->guladarah_lansia;
+    $dataKesehatan->kolesterol_lansia = $validated['kolesterol_lansia'] ?? $dataKesehatan->kolesterol_lansia;
+    $dataKesehatan->keluhan_lansia = $validated['keluhan_lansia'] ?? $dataKesehatan->keluhan_lansia;
+    $dataKesehatan->obat_lansia = $validated['obat_lansia'] ?? $dataKesehatan->obat_lansia;
+
 
 
     $dataKesehatan->save();
 
     return redirect()->back()->with('success', 'Data kesehatan berhasil diperbarui.');
 }
+
+public function showpesertajadwalkuisioner($viewName)
+    {
+
+        // Mengambil jadwal_id dari segmen ke-3 URL
+        $jadwalId = request()->segment(3);
+
+        // Mengambil jadwal_id dari segmen ke-2 URL
+        $Id = request()->segment(2);
+
+        $dataKesehatan = DataKesehatanLansia::findOrFail($Id);
+
+
+        // Kirimkan data jadwal dan peserta ke view yang ditentukan
+        return view($viewName, [
+            'dataKesehatan' => $dataKesehatan,
+            'jadwalId' => $jadwalId,
+            'Id' => $Id,
+        ]);
+    }
+
+    public function kuisionerkognitif()
+    {
+        return $this->showpesertajadwalkuisioner('petugas.posyandulansia.kuisionerkognitif');
+    }
+
+    public function kuisionerdengar()
+    {
+        return $this->showpesertajadwalkuisioner('petugas.posyandulansia.kuisionerdengar');
+    }
+
+    public function kuisionerlihat()
+    {
+        return $this->showpesertajadwalkuisioner('petugas.posyandulansia.kuisionerlihat');
+    }
+
+    public function kuisionermobilisasi()
+    {
+        return $this->showpesertajadwalkuisioner('petugas.posyandulansia.kuisionermobilisasi');
+    }
+
+   
+    public function updatekuisionerkognitif(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'kognitif1' => 'nullable|boolean',
+            'kognitif2' => 'nullable|boolean',
+            'depresi1' => 'required|boolean',
+            'depresi2' => 'required|boolean',
+            'jadwalId' => 'required|integer', // Validasi jadwalId
+        ]);
+    
+        // Ambil data kesehatan berdasarkan ID
+        $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+    
+        // Update data kesehatan
+        $dataKesehatan->kognitif1 = $validated['kognitif1'] ?? 0;
+        $dataKesehatan->kognitif2 = $validated['kognitif2'] ?? 0;
+        $dataKesehatan->depresi1 = $validated['depresi1'];
+        $dataKesehatan->depresi2 = $validated['depresi2'];
+        $dataKesehatan->submitkognitif = true;
+    
+        $dataKesehatan->save();
+    
+        return redirect('/teskognitif/fiturposyandulansia/petugas/' . $validated['jadwalId']);
+
+    }
+
+    public function updatekuisionerdengar(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'dengar' => 'nullable|boolean',
+            'jadwalId' => 'required|integer', // Validasi jadwalId
+        ]);
+    
+        // Ambil data kesehatan berdasarkan ID
+        $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+    
+        // Update data kesehatan
+        $dataKesehatan->dengar = $validated['dengar'] ?? 0;
+        $dataKesehatan->submitdengar = true;
+    
+        $dataKesehatan->save();
+    
+        return redirect('/tesdengar/fiturposyandulansia/petugas/' . $validated['jadwalId']);
+
+    }
+
+    public function updatekuisionerlihat(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'lihat1' => 'nullable|boolean',
+            'lihat2' => 'nullable|boolean',
+            'jadwalId' => 'required|integer', // Validasi jadwalId
+        ]);
+    
+        // Ambil data kesehatan berdasarkan ID
+        $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+    
+        // Update data kesehatan
+        $dataKesehatan->lihat1 = $validated['lihat1'] ?? 0;
+        $dataKesehatan->lihat2 = $validated['lihat2'] ?? 0;
+        $dataKesehatan->submitlihat = true;
+    
+        $dataKesehatan->save();
+    
+        return redirect('/teslihat/fiturposyandulansia/petugas/' . $validated['jadwalId']);
+
+    }
+
+    public function updatekuisionermobilisasi(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'mobilisasi' => 'nullable|boolean',
+            'jadwalId' => 'required|integer', // Validasi jadwalId
+        ]);
+    
+        // Ambil data kesehatan berdasarkan ID
+        $dataKesehatan = DataKesehatanLansia::findOrFail($id);
+    
+        // Update data kesehatan
+        $dataKesehatan->mobilisasi = $validated['mobilisasi1'] ?? 0;
+        $dataKesehatan->submitmobilisasi = true;
+    
+        $dataKesehatan->save();
+    
+        return redirect('/tesmobilisasi/fiturposyandulansia/petugas/' . $validated['jadwalId']);
+
+    }
+    
+
 
     
 }

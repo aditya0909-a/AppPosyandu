@@ -51,6 +51,8 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
        
     Route::get('/pendaftaran/fiturposyandubalita/petugas/{jadwalId}', [PPBcontroller::class, 'pendaftaran']);
 
+    Route::get('/api/peserta/{jadwalId}', [PPBcontroller::class, 'getPesertaByJadwal'])->name('peserta.json');
+
     Route::post('/pesertabarubalita', [PPBController::class, 'register']);
 
     Route::get('/api/datapesertabalita', [PPBcontroller::class, 'index']);
@@ -111,12 +113,28 @@ Route::middleware(['auth', 'role:petugas'])->group(function () {
     Route::put('/update-pemeriksaan/{id}', [PPLcontroller::class, 'updatepemeriksaan']);
 
     Route::get('/tesdengar/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'tesdengar']);
+
+    Route::get('/kuisioner_dengar/{id}/{jadwal_id}', [PPLcontroller::class, 'kuisionerdengar']);
+
+    Route::put('/update-kuisionerdengar/{id}', [PPLController::class, 'updatekuisionerdengar']);
     
     Route::get('/teskognitif/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'teskognitif']);
 
+    Route::get('/kuisioner_kognitif/{id}/{jadwal_id}', [PPLcontroller::class, 'kuisionerkognitif']);
+
+    Route::put('/update-kuisionerkognitif/{id}', [PPLController::class, 'updatekuisionerkognitif']);
+
     Route::get('/teslihat/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'teslihat']);
 
+    Route::get('/kuisioner_lihat/{id}/{jadwal_id}', [PPLcontroller::class, 'kuisionerlihat']);
+
+    Route::put('/update-kuisionerlihat/{id}', [PPLController::class, 'updatekuisionerlihat']);
+
     Route::get('/tesmobilisasi/fiturposyandulansia/petugas/{jadwalId}', [PPLcontroller::class, 'tesmobilisasi']);
+
+    Route::get('/kuisioner_mobilisasi/{id}/{jadwal_id}', [PPLcontroller::class, 'kuisionermobilisasi']);
+
+    Route::put('/update-kuisionermobilisasi/{id}', [PPLController::class, 'updatekuisionermobilisasi']);
 
     Route::get('/fiturjadwal/petugas', [JadwalController::class, 'jadwalPetugas'])->name('jadwal.petugas');
 
@@ -164,7 +182,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/admin.databalita/{id}', [PPBController::class, 'DataKesehatan']);
 
-    Route::get('/api/chart-data/{id}', [PPBcontroller::class, 'getChartDataByPeserta']);
+    
+
+    Route::get('/api/chart-data/{pesertaId}', [PPBcontroller::class, 'getChartDataByPeserta']);
     
     Route::get('/fiturdatalansia/admin', function () {
         return view('admin.fitur_datalansia', [

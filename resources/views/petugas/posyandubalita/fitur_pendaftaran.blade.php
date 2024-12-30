@@ -110,6 +110,8 @@
                 </li>
             </ul>
 
+            
+            
             <!-- Modal Peserta Baru -->
 
         <div x-show="showAddModal"
@@ -117,7 +119,7 @@
             <form action="/pesertabarubalita" method="POST">
                 @csrf
                 <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-                    <h2 class="text-xl font-bold mb-4">Peserta Baru Posyandu Balita</h2>
+                    <h2 class="text-xl font-bold mb-4">Peserta Baru Posyandu balita</h2>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
@@ -163,10 +165,9 @@
                         @enderror
                     </div>
 
-
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama Orang Tua Balita
+                            Nama Orang Tua
                         </label>
                         <input type="text" name="nama_orangtua_balita" required
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -177,7 +178,7 @@
 
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK Orang Tua Balita
+                            NIK
                         </label>
                         <input type="text" name="NIK_orangtua_balita" required
                             class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -222,40 +223,41 @@
             </form>
         </div>
 
+        <div class="mb-6 mt-8">
+            <h2 class="text-xl mb-4">Daftar Hadir Peserta</h2>
             
-            <div class="mb-6 mt-8">
-                <h2 class="text-xl mb-4">Daftar Hadir Peserta</h2>
-                
-                @dd($peserta);
-                @if($peserta->isEmpty())
-                    <p>Tidak ada peserta untuk jadwal ini.</p>
-                @else
-                    <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-                        <thead class="bg-blue-100">
-                            <tr>
-                                <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">Nama Peserta</th>
-                                <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"></th>
+            
+            @if($peserta->isEmpty())
+                <p>Tidak ada peserta untuk jadwal ini.</p>
+            @else
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                    <thead class="bg-blue-100">
+                        <tr>
+                            <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">Nama Peserta</th>
+                            <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($peserta as $index => $item)
+                            <tr class="hover:bg-blue-50">
+                                <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                    {{  $item->nama_peserta_balita }}
+                                </td>
+                                <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                    <button 
+                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none"
+                                        @click="removeParticipant({{ json_encode($item) }}, {{ $index }})">
+                                        Hapus
+                                    </button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($peserta as $index => $item)
-                                <tr class="hover:bg-blue-50">
-                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                        {{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}
-                                    </td>
-                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                        <button 
-                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none"
-                                            @click="removeParticipant({{ json_encode($item) }}, {{ $index }})">
-                                            Hapus
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </div>
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+        </div>
+
+        
            
     
     <!-- Script  -->
@@ -304,6 +306,7 @@
                     }, 300);
                 },
     
+                                
                 // Kirim data peserta
                 submitData(item) {
                     this.showResults = false; // Sembunyikan hasil pencarian
@@ -364,6 +367,8 @@
                 init() {
                     this.fetchDummyData();
                 }
+
+                
             };
         }
     

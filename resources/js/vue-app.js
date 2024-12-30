@@ -1,6 +1,6 @@
-import { createApp } from 'vue';
+//import { createApp } from 'vue';
 
-const app = createApp({});
+//const app = createApp({});
 
 // Tambahkan komponen atau logika lainnya di sini
-app.mount('#app');
+//app.mount('#app');

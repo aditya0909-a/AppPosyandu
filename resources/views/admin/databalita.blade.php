@@ -107,7 +107,7 @@
         </div>
     </nav>
 
-    <body class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
+    <div class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
         <div x-data="{ showGrowthChart: false }">
             
             <div x-data="{ open: false }" class="max-w-4xl mx-auto mt-8 card">
@@ -140,20 +140,40 @@
                     </div>
                 </div>
             </div>
-            <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduBalita->id }})">
+           
 
+            <script src="https://code.highcharts.com/highcharts.js"></script>
+            <script src="https://code.highcharts.com/modules/series-label.js"></script>
+            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+            
+            <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduBalita->id }})">
                 <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Pertumbuhan</h3>
-                <div class="flex flex-wrap justify-between gap-2 mt-4">
+
+                <!-- Error Alert -->
+                <div x-show="error"
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
+                    role="alert">
+                    <span x-text="error" class="block sm:inline"></span>
+                </div>
+
+                <!-- Loading State -->
+                <div x-show="isLoading" class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                </div>
+
+                <!-- Chart Buttons -->
+                <div x-show="!isLoading && !error" class="flex flex-wrap justify-between gap-2 mt-4">
                     <button @click="showChart('tinggiBadan')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
                         Tinggi Badan
                     </button>
                     <button @click="showChart('beratBadan')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
                         Berat Badan
                     </button>
                     <button @click="showChart('lingkarKepala')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
                         Lingkar Kepala
                     </button>
                 </div>
@@ -161,29 +181,51 @@
                 <!-- Modal Diagram -->
                 <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
                     class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
-                        <h3 class="text-xl font-bold mb-4" x-text="chartTitle"></h3>
-                        <button @click="closeChart" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                            &times;
-                        </button>
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative" @click.stop>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold" x-text="chartTitle"></h3>
+                            <button @click="closeChart"
+                                class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        </div>
 
-                        <div class="flex justify-between mb-4">
-                            <button @click="prevPage()" class="button-primary px-3 py-1" :disabled="currentPage === 0">
+                        <!-- Chart Stats -->
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div class="bg-gray-50 p-2 rounded">
+                                <span class="font-semibold">Nilai Terendah:</span>
+                                <span x-text="getCurrentStats().min"></span>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded">
+                                <span class="font-semibold">Nilai Tertinggi:</span>
+                                <span x-text="getCurrentStats().max"></span>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="flex justify-between items-center mb-4">
+                            <button @click="prevPage()"
+                                class="button-primary px-3 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="currentPage === 0">
                                 Sebelumnya
                             </button>
-                            <button @click="nextPage()" class="button-primary px-3 py-1"
+                            <span class="text-sm">
+                                Halaman <span x-text="currentPage + 1"></span> dari <span x-text="totalPages"></span>
+                            </span>
+                            <button @click="nextPage()"
+                                class="button-primary px-3 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
                                 :disabled="(currentPage + 1) * itemsPerPage >= maxMonths">
                                 Berikutnya
                             </button>
                         </div>
 
                         <div id="growthChart" style="width: 100%; height: 300px;"></div>
+
+                        <!-- Last Updated -->
+                        <div class="text-right text-sm text-gray-500 mt-2">
+                            Terakhir diperbarui: <span x-text="formatLastUpdated()"></span>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-            <script src="https://code.highcharts.com/highcharts.js"></script>
 
             <script>
                 document.addEventListener('alpine:init', () => {
@@ -197,34 +239,43 @@
                         chartData: {},
                         maxMonths: 0,
                         pesertaId: null,
+                        error: null,
+                        isLoading: false,
 
                         async fetchGrowthData(pesertaId) {
                             if (!pesertaId) {
-                                console.error('Peserta ID tidak valid!');
+                                this.error = 'ID Peserta tidak valid!';
                                 return;
                             }
+
+                            this.isLoading = true;
+                            this.error = null;
                             this.pesertaId = pesertaId;
 
                             try {
-                                const response = await fetch(`/api/chart-data/${pesertaId}`);
+                                const response = await fetch(/api/chart-data/${pesertaId});
+                                const data = await response.json();
+
                                 if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                    throw new Error(data.error || 'Terjadi kesalahan saat memuat data');
                                 }
-                                this.chartData = await response.json();
-                                this.maxMonths = Math.max(
-                                    this.chartData.tinggiBadan?.data.length || 0,
-                                    this.chartData.beratBadan?.data.length || 0,
-                                    this.chartData.lingkarKepala?.data.length || 0
-                                );
-                                console.log('Data berhasil dimuat:', this.chartData);
+
+                                this.chartData = data;
+                                this.maxMonths = data.metadata.totalMonths;
+                                this.error = null;
+
                             } catch (error) {
-                                console.error('Gagal memuat data grafik:', error);
+                                this.error = error.message || 'Gagal memuat data grafik';
+                                console.error('Error:', error);
+                            } finally {
+                                this.isLoading = false;
                             }
                         },
 
                         showChart(type) {
                             this.currentChart = type;
                             this.chartTitle = this.getChartTitle(type);
+                            this.currentPage = 0; // Reset to first page
                             this.showGrowthChart = true;
                             this.$nextTick(() => this.initChart());
                         },
@@ -235,46 +286,163 @@
                             const end = start + this.itemsPerPage;
                             const chartConfig = this.chartData[this.currentChart];
 
-                            if (!chartConfig) {
-                                console.error('Data grafik tidak tersedia.');
+                            // Validasi jika konfigurasi atau data tidak tersedia
+                            if (!chartConfig || !chartConfig.data || !chartConfig.data.length) {
+                                this.error = 'Data grafik tidak tersedia';
                                 return;
                             }
 
-                            this.chartInstance = Highcharts.chart(chartEl, {
+                            // Transformasi data menjadi format yang sesuai dengan Highcharts
+                            const formattedData = chartConfig.data
+                                .slice(start, end)
+                                .map((value, index) => ({
+                                    x: index + 1, // Bulan ke- (dimulai dari 1)
+                                    y: value !== null ? parseFloat(value) || 0 :
+                                    0, // Ganti null menjadi 0
+                                    bulan_ke: index + 1 // Menyimpan info bulan ke-
+                                }));
+
+                            // Konfigurasi Highcharts
+                            const options = {
                                 chart: {
                                     type: 'line',
-                                    height: 300
+                                    height: 300,
+                                    style: {
+                                        fontFamily: 'inherit'
+                                    },
+                                    zoomType: 'xy' // Mengaktifkan zoom pada grafik
                                 },
                                 title: {
                                     text: chartConfig.label
                                 },
                                 xAxis: {
-                                    categories: this.generateLabels(start, end),
                                     title: {
                                         text: 'Usia (Bulan)'
+                                    },
+                                    labels: {
+                                        formatter: function() {
+                                            return Bulan ${this.value};
+                                        }
                                     }
                                 },
                                 yAxis: {
                                     title: {
-                                        text: 'Ukuran'
+                                        text: chartConfig.label
+                                    },
+                                    min: Math.min(...chartConfig.data.filter(d => d !== null)) ||
+                                        0, // Nilai minimum
+                                    max: Math.max(...chartConfig.data.filter(d => d !== null)) ||
+                                        100 // Nilai maksimum (default)
+                                },
+                                tooltip: {
+                                    formatter: function() {
+                                        const point = this.point;
+                                        return `<b>Bulan ke-${point.bulan_ke}</b><br/>
+                        ${this.series.name}: <b>${point.y}</b>`;
+                                    },
+                                    style: {
+                                        padding: '10px'
                                     }
                                 },
                                 series: [{
                                     name: chartConfig.label,
-                                    data: chartConfig.data.slice(start, end)
-                                }]
-                            });
-                        },
+                                    data: formattedData,
+                                    lineWidth: 2,
+                                    marker: {
+                                        enabled: true,
+                                        radius: 6,
+                                        symbol: 'circle',
+                                        states: {
+                                            hover: {
+                                                enabled: true,
+                                                radius: 8
+                                            }
+                                        }
+                                    },
+                                    states: {
+                                        hover: {
+                                            lineWidth: 3
+                                        }
+                                    },
+                                    point: {
+                                        events: {
+                                            // Event klik untuk menampilkan informasi detail
+                                            click: function() {
+                                                const point = this;
+                                                Swal.fire({
+                                                    title: Detail Bulan ke-${point.bulan_ke},
+                                                    html: `
+                                <div class="text-left">
+                                    <p class="mb-2"><strong>Bulan:</strong> ${point.bulan_ke}</p>
+                                    <p class="mb-2"><strong>Nilai:</strong> ${point.y}</p>
+                                    <p class="mb-2"><strong>Status:</strong> ${this.series.name}</p>
+                                </div>
+                            `,
+                                                    icon: 'info',
+                                                    confirmButtonText: 'Tutup'
+                                                });
+                                            }
+                                        }
+                                    }
+                                }],
+                                plotOptions: {
+                                    line: {
+                                        connectNulls: true, // Sambungkan garis meskipun ada nilai null
+                                        animation: {
+                                            duration: 1000
+                                        },
+                                        cursor: 'pointer',
+                                        dataLabels: {
+                                            enabled: true,
+                                            formatter: function() {
+                                                return this.y;
+                                            }
+                                        }
+                                    }
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                legend: {
+                                    enabled: false
+                                }
+                            };
 
+                            // Inisialisasi grafik menggunakan Highcharts
+                            this.chartInstance = Highcharts.chart(chartEl, options);
+                        },
                         updateChart() {
+                            if (!this.chartInstance || !this.chartData[this.currentChart]) return;
+
                             const start = this.currentPage * this.itemsPerPage;
                             const end = start + this.itemsPerPage;
                             const chartConfig = this.chartData[this.currentChart];
 
-                            if (this.chartInstance) {
-                                this.chartInstance.xAxis[0].setCategories(this.generateLabels(start, end));
-                                this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
-                            }
+                            this.chartInstance.xAxis[0].setCategories(this.generateLabels(start, end));
+                            this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
+                        },
+
+                        get totalPages() {
+                            return Math.ceil(this.maxMonths / this.itemsPerPage);
+                        },
+
+                        getCurrentStats() {
+                            const chartConfig = this.chartData[this.currentChart] || {};
+                            return {
+                                min: chartConfig.min?.toFixed(1) || '0',
+                                max: chartConfig.max?.toFixed(1) || '0'
+                            };
+                        },
+
+                        formatLastUpdated() {
+                            if (!this.chartData.metadata?.lastUpdated) return '-';
+                            return new Date(this.chartData.metadata.lastUpdated).toLocaleDateString('id-ID', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            });
                         },
 
                         nextPage() {
@@ -302,28 +470,27 @@
                         generateLabels(start, end) {
                             return Array.from({
                                 length: end - start
-                            }, (_, i) => `Bulan ${start + i + 1}`);
+                            }, (_, i) => Bulan ${start + i + 1});
                         },
 
                         getChartTitle(type) {
-                            switch (type) {
-                                case 'tinggiBadan':
-                                    return 'Diagram Tinggi Badan';
-                                case 'beratBadan':
-                                    return 'Diagram Berat Badan';
-                                case 'lingkarKepala':
-                                    return 'Diagram Lingkar Kepala';
-                                default:
-                                    return 'Diagram Pertumbuhan';
-                            }
+                            const titles = {
+                                tinggiBadan: 'Diagram Tinggi Badan',
+                                beratBadan: 'Diagram Berat Badan',
+                                lingkarKepala: 'Diagram Lingkar Kepala'
+                            };
+                            return titles[type] || 'Diagram Pertumbuhan';
                         },
 
                         init(pesertaId) {
-                            this.fetchGrowthData(pesertaId);
+                            if (pesertaId) {
+                                this.fetchGrowthData(pesertaId);
+                            }
                         }
                     }));
                 });
             </script>
+
 
 
             <!-- Tabel Imunisasi -->
@@ -427,32 +594,6 @@
             </div>
 
 
-            <!-- Tabel Keluhan -->
-            <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800">Tabel Keluhan</h3>
-                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
-                    <thead class="bg-[#008eb5] text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
-                            <th class="py-3 px-4 text-left font-medium">Keluhan</th>
-                            <th class="py-3 px-4 text-left font-medium">Penanganan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @forelse ($keluhanData as $item)
-                            <tr>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keluhan'] }}</td>
-                                <td>{{ $item['penanganan'] }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2">Data tidak ditemukan untuk pemberian bantuan susu.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-    </body>
+            
 
 </html>

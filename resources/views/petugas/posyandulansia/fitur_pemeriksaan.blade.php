@@ -133,8 +133,6 @@
                     </div>
                 @endforeach
             </div>
-        
-            
 
             <!-- Modal Edit Pengguna -->
             <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
@@ -188,7 +186,7 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="block text-sm font-bold text-gray-700">Keluhan</label>
+                            <label class="block text-sm font-bold text-gray-700">Diagnosis</label>
                             <div class="flex items-center">
                                 <input 
                                     type="text" 

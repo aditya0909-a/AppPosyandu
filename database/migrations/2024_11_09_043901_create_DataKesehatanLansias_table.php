@@ -28,19 +28,27 @@ return new class extends Migration
             $table->float('berat_lansia')->default(0);
             $table->float('lingkar_lengan_lansia')->default(0);
             $table->float('lingkar_perut_lansia')->default(0);
-            $table->enum('kognitif_lokasi', ['bisa', 'tidak'])->default('bisa');
-            $table->enum('kognitif_waktu', ['bisa', 'tidak'])->default('bisa');
-            $table->enum('kognitif_kecemasan', ['cemas', 'tidak'])->default('tidak');
-            $table->enum('dengar_bisik', ['kurang baik', 'cukup_baik', 'baik'])->default('baik');
-            $table->enum('dengar_langsung', ['kurang baik', 'cukup_baik', 'baik'])->default('baik');
-            $table->enum('lihat', ['kurang baik', 'cukup_baik', 'baik'])->default('baik');
-            $table->enum('mobilisasi', ['kurang baik', 'cukup_baik', 'baik'])->default('baik');
-            $table->enum('PMT', ['iya', 'tidak'])->default('tidak');
+            $table->boolean('submitkognitif')->default(false); // Kolom boolean teskognitif
+            $table->boolean('kognitif1')->default(false); // Kolom boolean teskognitif
+            $table->boolean('kognitif2')->default(false); // Kolom boolean teskognitif
+            $table->boolean('mobilisasi')->default(false); // Kolom boolean tesmobilisasi
+            $table->boolean('submitmobilisasi')->default(false); // Kolom boolean tesmobilisasi
+            $table->boolean('malnutrisi1')->default(false); // Kolom boolean tesmalnutrisi
+            $table->boolean('malnutrisi2')->default(false); // Kolom boolean tesmalnutrisi
+            $table->boolean('malnutrisi3')->default(false); // Kolom boolean tesmalnutrisi
+            $table->boolean('lihat1')->default(false); // Kolom boolean teslihat
+            $table->boolean('lihat2')->default(false); // Kolom boolean teslihat
+            $table->boolean('submitlihat')->default(false); // Kolom boolean teslihat
+            $table->boolean('dengar')->default(false); // Kolom boolean tesdengar
+            $table->boolean('submitdengar')->default(false); // Kolom boolean tesdengar
+            $table->boolean('depresi1')->default(false); // Kolom boolean tesdepresi
+            $table->boolean('depresi2')->default(false); // Kolom boolean tesdepresi
             $table->float('tensi_lansia')->default(0);
             $table->float('guladarah_lansia')->default(0);
             $table->float('kolesterol_lansia')->default(0);
             $table->string('keluhan_lansia')->default('');
             $table->string('obat_lansia')->default('');
+            $table->boolean('PMT')->default(false);
         });
     }
 
