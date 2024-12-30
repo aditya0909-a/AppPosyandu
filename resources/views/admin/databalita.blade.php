@@ -109,14 +109,14 @@
 
     <div class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
         <div x-data="{ showGrowthChart: false }">
-            
+
             <div x-data="{ open: false }" class="max-w-4xl mx-auto mt-8 card">
                 <!-- Card Header -->
                 <div class="card-header">
                     <h2 class="text-2xl font-semibold ">Data Peserta</h2>
                     <h2 class="text-2xl font-semibold">Posyandu Balita</h2>
                 </div>
-        
+
                 <!-- Card Body -->
                 <div class="p-6">
                     <!-- Keterangan Kegiatan -->
@@ -140,13 +140,13 @@
                     </div>
                 </div>
             </div>
-           
+
 
             <script src="https://code.highcharts.com/highcharts.js"></script>
             <script src="https://code.highcharts.com/modules/series-label.js"></script>
             <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
-            
+
             <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduBalita->id }})">
                 <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Pertumbuhan</h3>
 
@@ -250,7 +250,6 @@
 
                             this.isLoading = true;
                             this.error = null;
-                            this.pesertaId = pesertaId;
 
                             try {
                                 const response = await fetch(/api/chart-data/${pesertaId});
@@ -260,9 +259,12 @@
                                     throw new Error(data.error || 'Terjadi kesalahan saat memuat data');
                                 }
 
+                                if (!data || !data.metadata) {
+                                    throw new Error('Format data tidak valid');
+                                }
+
                                 this.chartData = data;
                                 this.maxMonths = data.metadata.totalMonths;
-                                this.error = null;
 
                             } catch (error) {
                                 this.error = error.message || 'Gagal memuat data grafik';
@@ -319,6 +321,7 @@
                                     title: {
                                         text: 'Usia (Bulan)'
                                     },
+                                    // BENAR
                                     labels: {
                                         formatter: function() {
                                             return Bulan ${this.value};
@@ -371,6 +374,8 @@
                                                 const point = this;
                                                 Swal.fire({
                                                     title: Detail Bulan ke-${point.bulan_ke},
+
+
                                                     html: `
                                 <div class="text-left">
                                     <p class="mb-2"><strong>Bulan:</strong> ${point.bulan_ke}</p>
@@ -472,7 +477,6 @@
                                 length: end - start
                             }, (_, i) => Bulan ${start + i + 1});
                         },
-
                         getChartTitle(type) {
                             const titles = {
                                 tinggiBadan: 'Diagram Tinggi Badan',
@@ -592,8 +596,8 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
-
-            
+</body>
 
 </html>
