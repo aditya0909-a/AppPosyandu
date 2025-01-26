@@ -104,7 +104,7 @@
     <div class="max-w-4xl mx-auto p-6">
       <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
           <div class="container mx-auto flex items-center">
-              <button onclick="window.location.href = '/dashboard/petugas'" class="text-[#0077B5] mr-4">
+              <button onclick="window.location.href = '/dashboard/petugas/{{ $userId }}'" class="text-[#0077B5] mr-4">
                   &larr; Back
               </button>
               <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -129,7 +129,7 @@
                 'bg-white': normalizeDate(jadwal.date) >= normalizeDate(new Date()) // Putih jika belum
             }">
             <div class="flex justify-between items-center">
-                <a :href="'/DataPenjadwalan_admin/' + jadwal.id">
+                <a>
                     <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
                 </a>
 

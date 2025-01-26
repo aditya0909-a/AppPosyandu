@@ -10,30 +10,8 @@ class Jadwal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'location',
-        'date',
-        'imunisasi',
-        'obatcacing',
-        'susu',
-        'teskognitif',
-        'tesdengar',
-        'teslihat',
-        'tesmobilisasi',
-        'keluhan',
-    ];
-
-    protected $casts = [
-        'date' => 'date',
-        'imunisasi' => 'boolean',
-        'obatcacing' => 'boolean',
-        'susu' => 'boolean',
-        'vitamin' => 'boolean',
-        'teskognitif' => 'boolean',
-        'tesdengar' => 'boolean',
-        'teslihat' => 'boolean',
-        'tesmobilisasi' => 'boolean',
-        'keluhan' => 'boolean',
+        'name', 'location', 'date', 'imunisasi', 'obatcacing', 'susu',
+        'pemeriksaan', 'teskognitif', 'tesdengar', 'teslihat', 'tesmobilisasi',
     ];
 
     // Relasi many-to-many dengan peserta balita

@@ -40,7 +40,7 @@
   <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       
       <!-- Data Peserta -->
-      <a href="#" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+      <a href="{{ url('/pesertalansia.datalansia/' . $peserta->id) }}" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
         <img src="{{ asset('icons/grandparents.png') }}" alt="Data Peserta" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Data Peserta</h2>
         <p class="text-sm opacity-75">Informasi dan data kesehatan lansia</p>
@@ -48,7 +48,7 @@
 
 
        <!-- Jadwal -->
-       <a href="/fiturjadwal/pesertalansia" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
+       <a href="/fiturjadwal/pesertalansia/{{ $userId }}" class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
         <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-16 h-16 mx-auto mb-4">
         <h2 class="text-xl font-bold">Jadwal</h2>
         <p class="text-sm opacity-75">Informasi dan jadwal kegiatan posyandu lansia</p>

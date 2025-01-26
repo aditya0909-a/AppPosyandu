@@ -110,7 +110,7 @@
     <div>
         <nav class="fixed top-0 left-0 right-0 z-10 p-4 shadow-md navbar">
             <div class="container flex items-center mx-auto">
-                <button onclick="window.location.href = '/dashboard/petugas'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href = '/dashboard/petugas/{{ $userId }}'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -193,105 +193,98 @@
                             title: 'Pendaftaran',
                             description: 'Pendaftaran peserta kegiatan posyandu balita.',
                             image: '{{ asset('icons/register.png') }}', // URL gambar
-                            link: '/pendaftaran/fiturposyandubalita/petugas',
+                            link: '/pendaftaran/fiturposyandubalita/{{ $userId }}',
                             key: 'pendaftaran_balita'
                         },
                         {
                             title: 'Penimbangan',
                             description: 'Input data berat badan balita.',
                             image: '{{ asset('icons/weight.png') }}', // URL gambar
-                            link: '/penimbangan/fiturposyandubalita/petugas',
+                            link: '/penimbangan/fiturposyandubalita/{{ $userId }}',
                             key: 'penimbangan_balita'
                         },
                         {
                             title: 'Pengukuran',
                             description: 'Input data tinggi badan dan lingkar kepala balita.',
                             image: '{{ asset('icons/height.png') }}', // URL gambar
-                            link: '/pengukuran/fiturposyandubalita/petugas',
+                            link: '/pengukuran/fiturposyandubalita/{{ $userId }}',
                             key: 'pengukuran_balita'
-                        },
-                        {
-                            title: 'Vitamin',
-                            description: 'Checklist pemberian vitamin.',
-                            image: '{{ asset('icons/capsule.png') }}', // URL gambar
-                            link: '/vitamin/fiturposyandubalita/petugas',
-                            key: 'vitamin'
                         },
                         {
                             title: 'Susu',
                             description: 'Checklist pemberian susu.',
                             image: '{{ asset('icons/milk.png') }}', // URL gambar
-                            link: '/susu/fiturposyandubalita/petugas',
+                            link: '/susu/fiturposyandubalita/{{ $userId }}',
                             key: 'susu'
                         },
                         {
                             title: 'Imunisasi',
                             description: 'Checklist pemberian imunisasi.',
                             image: '{{ asset('icons/injection.png') }}', // URL gambar
-                            link: '/imunisasi/fiturposyandubalita/petugas',
+                            link: '/imunisasi/fiturposyandubalita/{{ $userId }}',
                             key: 'imunisasi'
                         },
                         {
                             title: 'Pemberian Obat Cacing',
                             description: 'Checklist pemberian obat cacing.',
-                            image: '{{ asset('icons/medicine.png') }}', // URL gambar
-                            link: '/obatcacing/fiturposyandubalita/petugas',
+                            image: '{{ asset('icons/obatcacing.png') }}', // URL gambar
+                            link: '/obatcacing/fiturposyandubalita/{{ $userId }}',
                             key: 'obatcacing'
                         },
                         {
                             title: 'Pendaftaran',
                             description: 'Pendaftaran peserta kegiatan posyandu lansia.',
                             image: '{{ asset('icons/register.png') }}', // URL gambar
-                            link: '/pendaftaran/fiturposyandulansia/petugas',
+                            link: '/pendaftaran/fiturposyandulansia/{{ $userId }}',
                             key: 'pendaftaran_lansia'
                         },
                         {
                             title: 'Penimbangan',
                             description: 'Input data berat badan lansia.',
                             image: '{{ asset('icons/weight.png') }}', // URL gambar
-                            link: '/penimbangan/fiturposyandulansia/petugas',
+                            link: '/penimbangan/fiturposyandulansia/{{ $userId }}',
                             key: 'penimbangan_lansia'
                         },
                         {
                             title: 'Pengukuran',
                             description: 'Input data tinggi badan, lingkar perut dan lingkar lengan lansia.',
                             image: '{{ asset('icons/height.png') }}', // URL gambar
-                            link: '/pengukuran/fiturposyandulansia/petugas',
+                            link: '/pengukuran/fiturposyandulansia/{{ $userId }}',
                             key: 'pengukuran_lansia'
                         },
                         {
                             title: 'Tes Kognitif',
                             description: 'Kuisioner tes kemampuan kognitif dan gejala depresi lansia.',
                             image: '{{ asset('icons/idea.png') }}', // URL gambar
-                            link: '/teskognitif/fiturposyandulansia/petugas',
+                            link: '/teskognitif/fiturposyandulansia/{{ $userId }}',
                             key: 'teskognitif'
                         },
                         {
                             title: 'Tes Dengar',
                             description: 'Input data hasil tes dengar lansia',
                             image: '{{ asset('icons/ear.png') }}', // URL gambar
-                            link: '/tesdengar/fiturposyandulansia/petugas',
+                            link: '/tesdengar/fiturposyandulansia/{{ $userId }}',
                             key: 'tesdengar'
                         },
                         {
                             title: 'Tes Lihat',
                             description: 'Input data hasil tes lihat lansia',
                             image: '{{ asset('icons/biometric.png') }}', // URL gambar
-                            link: '/teslihat/fiturposyandulansia/petugas',
+                            link: '/teslihat/fiturposyandulansia/{{ $userId }}',
                             key: 'teslihat'
                         },
                         {
                             title: 'Tes Mobilisasi',
                             description: 'Input data hasil tes mobilisasi lansia',
                             image: '{{ asset('icons/mobilisasi.png') }}', // URL gambar
-                            link: '/tesmobilisasi/fiturposyandulansia/petugas',
+                            link: '/tesmobilisasi/fiturposyandulansia/{{ $userId }}',
                             key: 'tesmobilisasi'
                         },
                         {
                             title: 'Pemeriksaan Dokter',
                             description: 'Cek tensi, gula darah, kolestrol, dan keluhan lansia',
                             image: '{{ asset('icons/questionnaire.png') }}', // URL gambar
-                            link: '/pemeriksaan/fiturposyandulansia/petugas',
+                            link: '/pemeriksaan/fiturposyandulansia/{{ $userId }}',
                             key: 'pemeriksaan'
                         },
 
@@ -309,7 +302,6 @@
                             current.imunisasi = current.imunisasi ?? false; // Opsional
                             current.obatcacing = current.obatcacing ?? false; // Opsional
                             current.susu = current.susu ?? false; // Opsional
-                            current.vitamin = current.vitamin ?? false; // Opsional
                             current.pendaftaran_lansia = false; // Default false
                             current.penimbangan_lansia = false; // Default false
                             current.pengukuran_lansia = false; // Default false

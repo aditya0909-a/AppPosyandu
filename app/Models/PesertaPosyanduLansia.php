@@ -12,12 +12,18 @@ class PesertaPosyanduLansia extends Model
     protected $table = 'PesertaPosyanduLansia';
     protected $fillable = [
         'nama_peserta_lansia',
+        'user_id',
         'TempatLahir_lansia',
         'TanggalLahir_lansia',
         'NIK_lansia',
         'alamat_lansia',
         'wa_lansia'
     ];
+ 
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 
     // Relasi many-to-many dengan jadwal
     public function jadwals()

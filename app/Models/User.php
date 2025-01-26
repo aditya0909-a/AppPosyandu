@@ -37,6 +37,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
     /**
      * The attributes that should be cast.
      *
@@ -50,5 +51,17 @@ class User extends Authenticatable
     public function jadwals() {
         return $this->belongsToMany(Jadwal::class, 'petugas_jadwal');
     }
+
+    public function pesertaLansia()
+    {
+        return $this->hasOne(PesertaPosyanduLansia::class, 'user_id')->withDefault();
+    }
+    
+    public function pesertaBalita()
+    {
+        return $this->hasOne(PesertaPosyanduBalita::class, 'user_id')->withDefault();
+    }
+    
+
     
 }

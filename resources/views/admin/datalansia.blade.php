@@ -93,35 +93,29 @@
         }
     </style>
 </head>
-
 <body>
 
     <!-- Navbar -->
     <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
         <div class="container mx-auto flex items-center">
-            <button onclick="window.location.href = '/fiturdatalansia/admin'" class="text-[#0077B5] mr-4">
+            <button onclick="history.back()" class="text-[#0077B5] mr-4">
                 &larr; Back
-            </button>
+            </button>            
             <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
             <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
         </div>
     </nav>
 
-    <body class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
+    <div class=" p-5" style="background-color: #FFFFFF; padding-top: 100px;">
         <div x-data="{ showGrowthChart: false }">
-            
+
             <div x-data="{ open: false }" class="max-w-4xl mx-auto mt-8 card">
                 <!-- Card Header -->
                 <div class="card-header">
                     <h2 class="text-2xl font-semibold ">Data Peserta</h2>
                     <h2 class="text-2xl font-semibold">Posyandu Lansia</h2>
                 </div>
-        
-                $table->string('nama_peserta_lansia');
-            $table->string('TTL_lansia');
-            $table->string('NIK_lansia');
-            $table->string('alamat_lansia');
-            $table->string('wa_lansia');
+
                 <!-- Card Body -->
                 <div class="p-6">
                     <!-- Keterangan Kegiatan -->
@@ -129,174 +123,249 @@
                         <div class="text-lg text-black font-semibold">Nama Lengkap</div>
                         <span class="font-normal">{{ $PesertaPosyanduLansia->nama_peserta_lansia }}</span>
                         <div class="text-lg text-black font-semibold mt-2">Tempat Lahir</div>
-                        <span class="font-normal">{{ $PesertaPosyanduLansia->TempatLahir_Lansia }}</span>
+                        <span class="font-normal">{{ $PesertaPosyanduLansia->TempatLahir_lansia }}</span>
                         <div class="text-lg text-black font-semibold mt-2">Tanggal Lahir</div>
-                        <span class="font-normal">{{ $PesertaPosyanduLansia->TanggalLahir_Lansia }}</span>
+                        <span class="font-normal">{{ $PesertaPosyanduLansia->TanggalLahir_lansia }}</span>
                         <div class="text-lg text-black font-semibold mt-2">NIK Lansia</div>
-                        <span class="font-normal">{{ $PesertaPosyanduLansia->NIK_Lansia }}</span>
-                        <div class="text-lg text-black font-semibold mt-2">Nama Orang Tua</div>
-                        <span class="font-normal">{{ $PesertaPosyanduLansia->nama_orangtua_balita }}</span>
-                        <div class="text-lg text-black font-semibold mt-2">NIK Orang Tua</div>
-                        <span class="font-normal">{{ $PesertaPosyanduBalita->NIK_orangtua_balita }}</span>
-                        <div class="text-lg text-black font-semibold mt-2">Alamat Balita</div>
-                        <span class="font-normal">{{ $PesertaPosyanduBalita->alamat_balita }}</span>
+                        <span class="font-normal">{{ $PesertaPosyanduLansia->NIK_lansia }}</span>
+                        <div class="text-lg text-black font-semibold mt-2">Alamat Lansia</div>
+                        <span class="font-normal">{{ $PesertaPosyanduLansia->alamat_lansia }}</span>
                         <div class="text-lg text-black font-semibold mt-2">Nomor WhatsApp</div>
-                        <span class="font-normal">{{ $PesertaPosyanduBalita->wa_balita }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduBalita->id }})">
-
-                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Pertumbuhan</h3>
-                <div class="flex flex-wrap justify-between gap-2 mt-4">
-                    <button @click="showChart('tinggiBadan')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                        Tinggi Badan
-                    </button>
-                    <button @click="showChart('beratBadan')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                        Berat Badan
-                    </button>
-                    <button @click="showChart('lingkarKepala')"
-                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                        Lingkar Kepala
-                    </button>
-                </div>
-
-                <!-- Modal Diagram -->
-                <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
-                    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
-                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
-                        <h3 class="text-xl font-bold mb-4" x-text="chartTitle"></h3>
-                        <button @click="closeChart" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                            &times;
-                        </button>
-
-                        <div class="flex justify-between mb-4">
-                            <button @click="prevPage()" class="button-primary px-3 py-1" :disabled="currentPage === 0">
-                                Sebelumnya
-                            </button>
-                            <button @click="nextPage()" class="button-primary px-3 py-1"
-                                :disabled="(currentPage + 1) * itemsPerPage >= maxMonths">
-                                Berikutnya
-                            </button>
-                        </div>
-
-                        <div id="growthChart" style="width: 100%; height: 300px;"></div>
+                        <span class="font-normal">{{ $PesertaPosyanduLansia->wa_lansia }}</span>
                     </div>
                 </div>
             </div>
 
 
             <script src="https://code.highcharts.com/highcharts.js"></script>
+            <script src="https://code.highcharts.com/modules/series-label.js"></script>
+            <script src="https://code.highcharts.com/modules/exporting.js"></script>
+            <script src="https://code.highcharts.com/modules/export-data.js"></script>
+            <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+
+            <div x-data="chartHandler" x-init="init({{ $PesertaPosyanduLansia->id }})">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Perubahan Lansia</h3>
+
+                <!-- Error Alert -->
+                <div x-show="error"
+                    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
+                    role="alert">
+                    <span x-text="error" class="block sm:inline"></span>
+                </div>
+
+                <!-- Loading State -->
+                <div x-show="isLoading" class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                </div>
+
+                <!-- Chart Buttons -->
+                <div x-show="!isLoading && !error" class="flex flex-wrap justify-between gap-2 mt-4">
+                    <button @click="showChart('tinggiBadan')"
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
+                        Tinggi Badan
+                    </button>
+                    <button @click="showChart('beratBadan')"
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
+                        Berat Badan
+                    </button>
+                    <button @click="showChart('lingkarLengan')"
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
+                        Lingkar Lengan
+                    </button>
+                    <button @click="showChart('lingkarPerut')"
+                        class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm hover:opacity-90 transition-opacity">
+                        Lingkar Perut
+                    </button>
+                </div>
+
+                <!-- Modal Diagram -->
+                <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
+                    class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
+                    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative" @click.stop>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold" x-text="chartTitle"></h3>
+                            <button @click="closeChart"
+                                class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                        </div>
+
+                        <!-- Chart Stats -->
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div class="bg-gray-50 p-2 rounded">
+                                <span class="font-semibold">Nilai Terendah:</span>
+                                <span x-text="getCurrentStats().min"></span>
+                            </div>
+                            <div class="bg-gray-50 p-2 rounded">
+                                <span class="font-semibold">Nilai Tertinggi:</span>
+                                <span x-text="getCurrentStats().max"></span>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                    <div class="flex justify-between items-center mb-4">
+                            <button @click="prevPage()"
+                                class="button-primary px-3 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="currentPage === 0">
+                                Sebelumnya
+                            </button>
+                            <span class="text-sm">
+                                Halaman <span x-text="currentPage + 1"></span> dari <span x-text="totalPages"></span>
+                            </span>
+                            <button @click="nextPage()"
+                                class="button-primary px-3 py-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="(currentPage + 1) * itemsPerPage >= maxMonths">
+                                Berikutnya
+                            </button>
+                        </div>
+
+                        <div id="growthChart" style="width: 100%; height: 300px;"></div>
+
+                        <!-- Last Updated -->
+                        <div class="text-right text-sm text-gray-500 mt-2">
+                            Terakhir diperbarui: <span x-text="formatLastUpdated()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <script>
                 document.addEventListener('alpine:init', () => {
                     Alpine.data('chartHandler', () => ({
+                        // State Management
                         showGrowthChart: false,
                         currentChart: null,
                         chartTitle: '',
                         chartInstance: null,
                         currentPage: 0,
                         itemsPerPage: 6,
-                        chartData: {},
-                        maxMonths: 0,
+                        chartData: {
+                            labels: [],
+                            tinggiBadan: { data: [] },
+                            beratBadan: { data: [] },
+                            lingkarLengan: { data: [] },
+                            lingkarPerut: { data: [] },
+                        },
                         pesertaId: null,
-
+                        error: null,
+                        isLoading: false,
+            
+                        // Fetch Data from API
                         async fetchGrowthData(pesertaId) {
                             if (!pesertaId) {
-                                console.error('Peserta ID tidak valid!');
+                                this.error = 'ID Peserta tidak valid!';
                                 return;
                             }
-                            this.pesertaId = pesertaId;
-
+            
+                            this.isLoading = true;
+                            this.error = null;
+            
                             try {
-                                const response = await fetch(`/api/chart-data/${pesertaId}`);
+                                const response = await fetch(`/api/chart-data-lansia/${pesertaId}`);
+                                const data = await response.json();
+            
                                 if (!response.ok) {
-                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                    throw new Error(data.error || 'Terjadi kesalahan saat memuat data');
                                 }
-                                this.chartData = await response.json();
-                                this.maxMonths = Math.max(
-                                    this.chartData.tinggiBadan?.data.length || 0,
-                                    this.chartData.beratBadan?.data.length || 0,
-                                    this.chartData.lingkarKepala?.data.length || 0
-                                );
-                                console.log('Data berhasil dimuat:', this.chartData);
+            
+                                // Validate Data Structure
+                                if (!data.labels || !Array.isArray(data.labels) ||
+                                    !data.tinggiBadan || !Array.isArray(data.tinggiBadan.data) ||
+                                    !data.beratBadan || !Array.isArray(data.beratBadan.data)) {
+                                    throw new Error('Format data tidak valid');
+                                }
+            
+                                this.chartData = data;
+                                console.log('Data fetched:', data); // Debugging
+            
                             } catch (error) {
-                                console.error('Gagal memuat data grafik:', error);
+                                this.error = error.message || 'Gagal memuat data grafik';
+                                console.error('Error:', error);
+                            } finally {
+                                this.isLoading = false;
                             }
                         },
-
+            
+                        // Show Chart Modal
                         showChart(type) {
                             this.currentChart = type;
                             this.chartTitle = this.getChartTitle(type);
+                            this.currentPage = 0; // Reset to first page
                             this.showGrowthChart = true;
                             this.$nextTick(() => this.initChart());
                         },
-
+            
+                        // Initialize Chart
                         initChart() {
                             const chartEl = document.getElementById('growthChart');
-                            const start = this.currentPage * this.itemsPerPage;
-                            const end = start + this.itemsPerPage;
-                            const chartConfig = this.chartData[this.currentChart];
-
-                            if (!chartConfig) {
-                                console.error('Data grafik tidak tersedia.');
+                            if (!chartEl) {
+                                this.error = 'Elemen grafik tidak ditemukan';
                                 return;
                             }
-
-                            this.chartInstance = Highcharts.chart(chartEl, {
-                                chart: {
-                                    type: 'line',
-                                    height: 300
-                                },
-                                title: {
-                                    text: chartConfig.label
-                                },
-                                xAxis: {
-                                    categories: this.generateLabels(start, end),
-                                    title: {
-                                        text: 'Usia (Bulan)'
-                                    }
-                                },
-                                yAxis: {
-                                    title: {
-                                        text: 'Ukuran'
-                                    }
-                                },
-                                series: [{
-                                    name: chartConfig.label,
-                                    data: chartConfig.data.slice(start, end)
-                                }]
-                            });
+            
+                            const chartConfig = this.chartData[this.currentChart];
+                            if (!chartConfig || !chartConfig.data || !chartConfig.data.length) {
+                                this.error = 'Data grafik tidak tersedia';
+                                return;
+                            }
+            
+                            try {
+                                const options = {
+                                    chart: { type: 'line', height: 300 },
+                                    title: { text: chartConfig.label },
+                                    xAxis: {
+                                        categories: this.chartData.labels.slice(0, this.itemsPerPage),
+                                        title: { text: 'Bulan-Tahun' },
+                                    },
+                                    yAxis: {
+                                        title: { text: chartConfig.label },
+                                        min: Math.min(...chartConfig.data.filter(d => d !== null)) || 0,
+                                        max: Math.max(...chartConfig.data.filter(d => d !== null)) || 100,
+                                    },
+                                    tooltip: {
+                                        formatter: function () {
+                                            return `<b>${this.x}</b><br/>${this.series.name}: <b>${this.y}</b>`;
+                                        },
+                                    },
+                                    series: [{
+                                        name: chartConfig.label,
+                                        data: chartConfig.data.slice(0, this.itemsPerPage),
+                                    }],
+                                    credits: { enabled: false },
+                                };
+            
+                                this.chartInstance = Highcharts.chart(chartEl, options);
+                            } catch (error) {
+                                console.error('Error initializing chart:', error);
+                                this.error = 'Gagal memuat grafik';
+                            }
                         },
-
+            
+                        // Update Chart Pagination
                         updateChart() {
+                            if (!this.chartInstance || !this.chartData[this.currentChart]) return;
+            
                             const start = this.currentPage * this.itemsPerPage;
                             const end = start + this.itemsPerPage;
                             const chartConfig = this.chartData[this.currentChart];
-
-                            if (this.chartInstance) {
-                                this.chartInstance.xAxis[0].setCategories(this.generateLabels(start, end));
-                                this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
-                            }
+            
+                            this.chartInstance.xAxis[0].setCategories(this.chartData.labels.slice(start, end));
+                            this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
                         },
-
+            
                         nextPage() {
-                            if ((this.currentPage + 1) * this.itemsPerPage < this.maxMonths) {
+                            if ((this.currentPage + 1) * this.itemsPerPage < this.chartData.labels.length) {
                                 this.currentPage++;
                                 this.updateChart();
                             }
                         },
-
+            
                         prevPage() {
                             if (this.currentPage > 0) {
                                 this.currentPage--;
                                 this.updateChart();
                             }
                         },
-
+            
                         closeChart() {
                             this.showGrowthChart = false;
                             if (this.chartInstance) {
@@ -304,223 +373,108 @@
                                 this.chartInstance = null;
                             }
                         },
-
-                        generateLabels(start, end) {
-                            return Array.from({
-                                length: end - start
-                            }, (_, i) => `Bulan ${start + i + 1}`);
-                        },
-
+            
+                        // Helper Functions
                         getChartTitle(type) {
-                            switch (type) {
-                                case 'tinggiBadan':
-                                    return 'Diagram Tinggi Badan';
-                                case 'beratBadan':
-                                    return 'Diagram Berat Badan';
-                                case 'lingkarKepala':
-                                    return 'Diagram Lingkar Kepala';
-                                default:
-                                    return 'Diagram Pertumbuhan';
+                            const titles = {
+                                tinggiBadan: 'Diagram Tinggi Badan',
+                                beratBadan: 'Diagram Berat Badan',
+                                lingkarLengan: 'Diagram Lingkar Lengan',
+                                lingkarPerut: 'Diagram Lingkar Perut',
+                            };
+                            return titles[type] || 'Diagram Pertumbuhan';
+                        },
+            
+                        getCurrentStats() {
+                            const chartConfig = this.chartData[this.currentChart];
+                            if (!chartConfig || !chartConfig.data || chartConfig.data.length === 0) {
+                                return { min: 0, max: 0 };
+                            }
+                            const validData = chartConfig.data.filter(d => d !== null && d !== undefined);
+                            return {
+                                min: validData.length ? Math.min(...validData) : 0,
+                                max: validData.length ? Math.max(...validData) : 0,
+                            };
+                        },
+            
+                        get totalPages() {
+                            return Math.ceil(this.chartData.labels.length / this.itemsPerPage);
+                        },
+            
+                        formatLastUpdated() {
+                            const now = new Date();
+                            return now.toLocaleDateString('id-ID', {
+                                day: '2-digit',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                            });
+                        },
+            
+                        // Initialize Component
+                        init(pesertaId) {
+                            if (pesertaId) {
+                                this.fetchGrowthData(pesertaId);
                             }
                         },
-
-                        init(pesertaId) {
-                            this.fetchGrowthData(pesertaId);
-                        }
                     }));
                 });
             </script>
+            
+                
 
-
-            {{-- <div x-data="chartHandler">
-            <h3 class="text-2xl font-semibold text-gray-800 mt-8">Lihat Diagram Pertumbuhan</h3>
-            <div class="flex flex-wrap justify-between gap-2 mt-4">
-                <button @click="showChart('tinggiBadan')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                    Tinggi Badan
-                </button>
-                <button @click="showChart('beratBadan')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                    Berat Badan
-                </button>
-                <button @click="showChart('lingkarKepala')" class="button-primary rounded-lg flex-1 text-center px-4 py-2 text-sm">
-                    Lingkar Kepala
-                </button>
-            </div>
-        
-            <!-- Modal Diagram -->
-            <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
-                class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
-                <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg relative">
-                    <h3 class="text-xl font-bold mb-4" x-text="chartTitle"></h3>
-                    <button @click="closeChart" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                        &times;
-                    </button>
-        
-                    <div class="flex justify-between mb-4">
-                        <button @click="prevPage()" class="button-primary px-3 py-1" :disabled="currentPage === 0">
-                            Sebelumnya
-                        </button>
-                        <button @click="nextPage()" class="button-primary px-3 py-1"
-                            :disabled="(currentPage + 1) * itemsPerPage >= maxMonths">
-                            Berikutnya
-                        </button>
-                    </div>
-        
-                    <div id="growthChart" style="width: 100%; height: 300px;"></div>
-                </div>
-            </div>
-        </div>
-        
-        <script src="https://code.highcharts.com/highcharts.js"></script>
-        
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('chartHandler', () => ({
-                    showGrowthChart: false, // State untuk menampilkan modal grafik
-                    currentChart: null, // Menyimpan tipe grafik saat ini
-                    chartTitle: '', // Judul grafik
-                    chartInstance: null, // Instance Highcharts untuk kontrol grafik
-                    currentPage: 0, // Halaman data saat ini untuk pagination
-                    itemsPerPage: 6, // Jumlah data per halaman
-                    chartData: {}, // Data untuk grafik, diisi dengan data dummy
-        
-                    // Data dummy untuk grafik
-                    initializeDummyData() {
-                        this.chartData = {
-                            tinggiBadan: {
-                                label: 'Tinggi Badan (cm)',
-                                data: [48, 50, 52, 54, 56, 58, 60, 62, 64, 66, 68, 70]
-                            },
-                            beratBadan: {
-                                label: 'Berat Badan (kg)',
-                                data: [3.2, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5]
-                            },
-                            lingkarKepala: {
-                                label: 'Lingkar Kepala (cm)',
-                                data: [32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43]
-                            }
-                        };
-                    },
-        
-                    // Fungsi untuk menampilkan grafik berdasarkan tipe
-                    showChart(type) {
-                        console.log(`Chart ${type} dipanggil`);
-                        this.currentChart = type;
-                        this.chartTitle = this.getChartTitle(type);
-                        this.showGrowthChart = true;
-        
-                        this.$nextTick(() => this.initChart());
-                    },
-        
-                    closeChart() {
-                        this.showGrowthChart = false;
-                        if (this.chartInstance) {
-                            this.chartInstance.destroy(); // Hapus instance Highcharts
-                            this.chartInstance = null;
-                        }
-                    },
-        
-                    nextPage() {
-                        const totalData = this.chartData[this.currentChart]?.data.length || 0;
-                        if ((this.currentPage + 1) * this.itemsPerPage < totalData) {
-                            this.currentPage++;
-                            this.updateChart();
-                        }
-                    },
-        
-                    prevPage() {
-                        if (this.currentPage > 0) {
-                            this.currentPage--;
-                            this.updateChart();
-                        }
-                    },
-        
-                    async initChart() {
-                        const chartEl = document.getElementById('growthChart');
-                        const start = this.currentPage * this.itemsPerPage;
-                        const end = start + this.itemsPerPage;
-                        const chartConfig = this.chartData[this.currentChart];
-        
-                        // Pastikan data ada sebelum inisialisasi grafik
-                        if (!chartConfig) {
-                            console.error('Chart data is not available');
-                            return;
-                        }
-        
-                        // Inisialisasi Highcharts
-                        this.chartInstance = Highcharts.chart(chartEl, {
-                            chart: { type: 'line', height: 300 },
-                            title: { text: chartConfig.label },
-                            xAxis: {
-                                categories: this.generateLabels(start, end),
-                                title: { text: 'Usia (Bulan)' }
-                            },
-                            yAxis: {
-                                title: { text: 'Ukuran' }
-                            },
-                            series: [
-                                {
-                                    name: chartConfig.label,
-                                    data: chartConfig.data.slice(start, end)
-                                }
-                            ]
-                        });
-                    },
-        
-                    updateChart() {
-                        const start = this.currentPage * this.itemsPerPage;
-                        const end = start + this.itemsPerPage;
-                        const chartConfig = this.chartData[this.currentChart];
-        
-                        if (this.chartInstance) {
-                            this.chartInstance.xAxis[0].setCategories(this.generateLabels(start, end));
-                            this.chartInstance.series[0].setData(chartConfig.data.slice(start, end));
-                        }
-                    },
-        
-                    generateLabels(start, end) {
-                        return Array.from({ length: end - start }, (_, i) => `Bulan ${start + i + 1}`);
-                    },
-        
-                    getChartTitle(type) {
-                        switch (type) {
-                            case 'tinggiBadan':
-                                return 'Diagram Tinggi Badan';
-                            case 'beratBadan':
-                                return 'Diagram Berat Badan';
-                            case 'lingkarKepala':
-                                return 'Diagram Lingkar Kepala';
-                            default:
-                                return 'Diagram Pertumbuhan';
-                        }
-                    },
-        
-                    // Inisialisasi data dummy ketika komponen dimuat
-                    init() {
-                        this.initializeDummyData();
-                    }
-                }));
-            });
-        </script> --}}
-
-
-
-            <!-- Tabel Imunisasi -->
+            <!-- Kondisi BMI -->
             <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tabel Imunisasi</h3>
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Kondisi BMI Lansia</h3>
                 <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
                     <thead class="bg-[#008eb5] text-white">
                         <tr>
-                            <th class="py-3 px-4 text-left font-medium">Jenis Imunisasi</th>
-                            <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
-                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                            <th class="py-3 px-4 text-left font-medium">Nilai BMI</th>
+                            <th class="py-3 px-4 text-left font-medium">Kategori</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @forelse ($imunisasiData as $item)
+                        <tr>
+                            <td>{{ $bmi ?? 'Data tidak valid' }}</td>
+                            <td>{{ $category ?? 'Data tidak valid' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rentang BMI -->
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Rentang Nilai BMI:</strong></p>
+                <div class="flex justify-between">
+                    <ul class="list-disc pl-5">
+                        <li><strong>Kurus</strong>: < 18.5</li>
+                        <li><strong>Normal</strong>: 18.5 - 24.9</li>
+                    </ul>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Overweight</strong>: 25 - 29.9</li>
+                        <li><strong>Obesitas</strong>: ≥ 30</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tabel Tes Gula Darah dan Tensi -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Gula Darah dan Tensi</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Gula Darah</th>
+                            <th class="py-3 px-4 text-left font-medium">Tensi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($GCUData as $item)
                             <tr>
-                                <td>{{ $item['jenis_imunisasi'] }}</td>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keterangan_imunisasi'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['guladarah'] }} mg/dL</td>
+                                <td>{{ $item['tensi'] }} mmHg</td>
                             </tr>
                         @empty
                             <tr>
@@ -531,83 +485,198 @@
                 </table>
             </div>
 
-            <!-- Tabel Pemberian Obat Cacing -->
+            <!-- Tabel Tes Asam Urat dan Kolesterol -->
             <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800">Tabel Pemberian Obat Cacing</h3>
-                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
-                    <thead class="bg-[#008eb5] text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
-                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @forelse ($obatCacingData as $item)
-                            <tr>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keterangan_obat_cacing'] }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2">Data tidak ditemukan untuk pemberian obat cacing.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Tabel Pemberian Bantuan Susu -->
-            <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800">Tabel Pemberian Bantuan Susu</h3>
-                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
-                    <thead class="bg-[#008eb5] text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
-                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @forelse ($susuData as $item)
-                            <tr>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keterangan_susu'] }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2">Data tidak ditemukan untuk pemberian bantuan susu.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-
-            <!-- Tabel Keluhan -->
-            <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800">Tabel Keluhan</h3>
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Kolesterol dan Asam Urat</h3>
                 <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
                     <thead class="bg-[#008eb5] text-white">
                         <tr>
                             <th class="py-3 px-4 text-left font-medium">Tanggal</th>
-                            <th class="py-3 px-4 text-left font-medium">Keluhan</th>
-                            <th class="py-3 px-4 text-left font-medium">Penanganan</th>
+                            <th class="py-3 px-4 text-left font-medium">Kolesterol</th>
+                            <th class="py-3 px-4 text-left font-medium">Asam Urat</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
-                        @forelse ($keluhanData as $item)
+                        @forelse ($GCUData as $item)
                             <tr>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keluhan'] }}</td>
-                                <td>{{ $item['penanganan'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['kolesterol'] }} mg/dL</td>
+                                <td>{{ $item['asamurat'] }} mg/dL</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="2">Data tidak ditemukan untuk pemberian bantuan susu.</td>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
-    </body>
+
+            <!-- Tabel Tes Kognitif -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tes Kognitif</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($KognitifData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_kognitif'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabel Tes Kognitif -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tes Mobilisasi</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($MobilisasiData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_mobilisasi'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabel Tes Malnutrisi -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Indikasi Malnutrisi</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($MalnutrisiData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_malnutrisi'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Indikasi Malnutrisi -->
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Indikasi Malnutrisi:</strong></p>
+                <div class="flex justify-between">
+                    <ul class="list-disc pl-5">
+                        <li>Berat badan berkurang lebih dari 3 kilo dalam 3 bulan terakhir</li>
+                        <li>Hilangnya nafsu makan</li>
+                        <li>Lingkar lengan atas kurang dari 21 cm</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tabel Tes Penglihatan -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tes Lihat</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($LihatData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_lihat'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabel Tes Pendengaran  -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Tes Dengar</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($DengarData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_dengar'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tabel Tes Depresi -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Indikasi Depresi</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Tanggal</th>
+                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        @forelse ($DepresiData as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
+                                <td>{{ $item['keterangan_depresi'] }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3">Data tidak ditemukan untuk imunisasi.</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+
+
+           
+</body>
 
 </html>

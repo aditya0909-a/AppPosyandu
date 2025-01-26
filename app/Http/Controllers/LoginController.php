@@ -9,37 +9,37 @@ use Illuminate\Support\Facades\Redirect;
 class LoginController extends Controller
 {
     public function login(Request $request)
-    {
-        // dd($request);
-        $credentials = $request->validate([
-            'id_user' => 'required',
-            'password' => 'required'
-        ]);
+{
+    $credentials = $request->validate([
+        'id_user' => 'required',
+        'password' => 'required'
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            if ($user->role == 'pesertabalita') {
-                $request->session()->regenerate();
-                return Redirect::intended('/dashboard/pesertabalita');
-            }
-            if ($user->role == 'pesertalansia') {
-                $request->session()->regenerate();
-                return Redirect::intended('/dashboard/pesertalansia');
-            }
-            if ($user->role == 'petugas') {
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+        $userId = $user->id;  // Ambil user ID
 
-                $request->session()->regenerate();
-                return Redirect::intended('/dashboard/petugas');
-            }
-            if ($user->role == 'admin') {
+        // Regenerasi session setelah login berhasil
+        $request->session()->regenerate();
 
-                $request->session()->regenerate();
-                return Redirect::intended('/dashboard/admin');
-            }
+        // Redirect berdasarkan role dan tambahkan user ID ke URL
+        switch ($user->role) {
+            case 'pesertabalita':
+                return redirect("/dashboard/pesertabalita/{$userId}");
+            case 'pesertalansia':
+                return redirect("/dashboard/pesertalansia/{$userId}");
+            case 'petugas':
+                return redirect("/dashboard/petugas/{$userId}");
+            case 'admin':
+                return redirect("/dashboard/admin/{$userId}");
+            default:
+                return back()->with('loginError', 'Role pengguna tidak dikenali.');
         }
-
-        return back()->with('loginError', 'Id Pengguna atau Password salah.');
     }
+
+    return back()->with('loginError', 'Id Pengguna atau Password salah.');
+}
+
 
     
     public function logout(Request $request)

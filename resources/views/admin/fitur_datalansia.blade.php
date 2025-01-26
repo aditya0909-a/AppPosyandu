@@ -110,10 +110,10 @@
         </div>
     @endif
     <!-- Container -->
-    <div class="max-w-4xl mx-auto p-6">
+    <div x-data="appData()" class="max-w-4xl mx-auto p-6">
         <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href = '/dashboard/admin/{{ $userId }}'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -130,167 +130,196 @@
             <input type="text" placeholder="Cari peserta..." class="input-field" x-model="searchTerm">
         </div>
 
-         <!-- Filtered PesertaPosyanduLansia List -->
-        <template x-for="PesertaPosyanduLansia in filteredPesertaPosyanduLansias" :key="PesertaPosyanduLansia.id">
-        <div class="card mb-6">
-            <div class="flex justify-between items-center">
-                <a :href="'/DataPesertaPosyanduLansia_admin/' + PesertaPosyanduLansia.id">
-                    <h2 class="text-xl font-bold" x-text="PesertaPosyanduLansia.nama_peserta_lansia"></h2>
-                </a>
-                <button
-                @click="openEditModal(PesertaPosyanduLansia.id, PesertaPosyanduLansia.nama_peserta_lansia, PesertaPosyanduLansia.TTL_lansia, PesertaPosyanduLansia.NIK_lansia, PesertaPosyanduLansia.alamat_lansia, PesertaPosyanduLansia.wa_lansia)"
-                class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Edit
-                </button>
-            </div>
-            <div class="text-sm text-gray-600">TTL: <span x-text="PesertaPosyanduLansia.TTL_lansia"></span></div>
-            <div class="text-sm text-gray-600">NIK: <span x-text="PesertaPosyanduLansia.NIK_lansia"></span></div>
-        </div>
-         </template>
+            <!-- Filtered PesertaPosyanduLansia List -->
+            <template x-for="item in filteredPesertaPosyanduLansias" :key="item.id">
+                <div class="card mb-6">
+                    <div class="flex justify-between items-center">
+                        <a :href="`/admin.datalansia/${item.id}`">
+                            <h2 class="text-xl font-bold" x-text="item.nama_peserta_lansia"></h2>
+                        </a>
+                        <button 
+                            @click="openEditModal(
+                                item.id,
+                                item.nama_peserta_lansia,
+                                item.TempatLahir_lansia,
+                                item.TanggalLahir_lansia,
+                                item.NIK_lansia,
+                                item.alamat_lansia,
+                                item.wa_lansia
+                            )"
+                            class="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                        </button>
+                    </div>
+                    <div class="text-sm text-gray-600" x-text="`Tanggal Lahir: ${new Date(item.TanggalLahir_lansia).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`"></div>
+                    <div class="text-sm text-gray-600" x-text="`NIK: ${item.NIK_lansia}`"></div>
+                </div>
+            </template>
+
     
 
-        <!-- Modal Edit Pengguna -->
-        <div x-show="showEditModal"
-            class="modal-bg fixed inset-0 flex items-center justify-center">
-            <form :action="'/pesertaposyandulansia/' + editPesertaPosyanduLansia.id" method="POST" class="space-y-4">
-                @csrf
-                @method('PUT')
-                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-                    <h2 class="text-xl font-bold mb-4">Edit Peserta Posyandu Lansia</h2>
+            <!-- Modal Edit Pengguna -->
+            <div x-show="showEditModal"
+                class="modal-bg fixed inset-0 flex items-center justify-center">
+                <form :action="'/pesertaposyandulansia/' + editPesertaPosyanduLansia.id" method="POST" class="space-y-4">
+                    @csrf
+                    @method('PUT')
+                    <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+                        <h2 class="text-xl font-bold mb-4">Edit Peserta Posyandu Lansia</h2>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama
-                        </label>
-                        <input type="text" x-model="editPesertaPosyanduLansia.nama_peserta_lansia"
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('nama_peserta_lansia')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Nama
+                            </label>
+                            <input type="text" x-model="editPesertaPosyanduLansia.nama_peserta_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('nama_peserta_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            TTL
-                        </label>
-                        <input type="text" name="TTL_lansia" x-model="editPesertaPosyanduLansia.TTL_lansia"
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('TTL_lansia')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Tempat Lahir
+                            </label>
+                            <input type="text" name="TempatLahir_lansia" x-model="editPesertaPosyanduLansia.TempatLahir_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('TempatLahir_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Tanggal Lahir
+                            </label>
+                            <input type="date" name="TanggalLahir_lansia" x-model="editPesertaPosyanduLansia.TanggalLahir_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('TanggalLahir_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK
-                        </label>
-                        <input type="text" name="NIK_lansia" x-model="editPesertaPosyanduLansia.NIK_lansia"
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('NIK_lansia')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                NIK
+                            </label>
+                            <input type="text" name="NIK_lansia" x-model="editPesertaPosyanduLansia.NIK_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('NIK_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Alamat
-                        </label>
-                        <input type="text" name="alamat_lansia" x-model="editPesertaPosyanduLansia.alamat_lansia"
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('alamat_lansia')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Alamat
+                            </label>
+                            <input type="text" name="alamat_lansia" x-model="editPesertaPosyanduLansia.alamat_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('alamat_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nomor Whatsapp
-                        </label>
-                        <input type="number" name="wa_lansia" x-model="editPesertaPosyanduLansia.wa_lansia"
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('wa_lansia')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Nomor Whatsapp
+                            </label>
+                            <input type="number" name="wa_lansia" x-model="editPesertaPosyanduLansia.wa_lansia"
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('wa_lansia')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" @click="showEditModal = false"
-                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
-                            Batal
-                        </button>
-                        <button type="submit"
-                            class="button-primary">
-                            Simpan Perubahan
-                        </button>
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" @click="showEditModal = false"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                                Batal
+                            </button>
+                            <button type="submit"
+                                class="button-primary">
+                                Simpan Perubahan
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
 
       
-<!-- Modal Tambah Peserta -->
-        <div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <form action="/pesertaposyandulansia" method="post" class="space-y-4">
-                @csrf
-                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-                    <h2 class="text-xl font-bold mb-4">Tambah Peserta Posyandu Lansia</h2>
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Nama</label>
-                        <input id="nama_peserta_lansia" type="text" name="nama_peserta_lansia" required
-                            class="w-full p-2 border rounded">
-                        @error('nama_peserta_lansia')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">TTL</label>
-                        <input id="TTL_lansia" type="text" name="TTL_lansia" required
-                            class="w-full p-2 border rounded">
-                        @error('TTL_lansia')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">NIK</label>
-                        <input id="NIK_lansia" type="number" name="NIK_lansia" required
-                            class="w-full p-2 border rounded">
-                        @error('NIK_lansia')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+            <!-- Modal Tambah Peserta -->
+            <div x-show="showAddModal" class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <form action="/pesertaposyandulansia" method="post" class="space-y-4">
+                    @csrf
+                    <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+                        <h2 class="text-xl font-bold mb-4">Tambah Peserta Posyandu Lansia</h2>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Nama</label>
+                            <input id="nama_peserta_lansia" type="text" name="nama_peserta_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('nama_peserta_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Tempat Lahir</label>
+                            <input id="TempatLahir_lansia" type="text" name="TempatLahir_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('TempatLahir_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Tanggal Lahir</label>
+                            <input id="TanggalLahir_lansia" type="date" name="TanggalLahir_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('TanggalLahir_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">NIK</label>
+                            <input id="NIK_lansia" type="number" name="NIK_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('NIK_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
 
 
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Alamat</label>
-                        <input id="alamat_lansia" type="text" name="alamat_lansia" required
-                            class="w-full p-2 border rounded">
-                        @error('alamat_lansia')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Alamat</label>
+                            <input id="alamat_lansia" type="text" name="alamat_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('alamat_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="mb-2">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">Nomor Whatsapp</label>
-                        <input id="wa_lansia" type="number" name="wa_lansia" required
-                            class="w-full p-2 border rounded">
-                        @error('wa_lansia')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                        <div class="mb-2">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">Nomor Whatsapp</label>
+                            <input id="wa_lansia" type="number" name="wa_lansia" required
+                                class="w-full p-2 border rounded">
+                            @error('wa_lansia')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
 
-                    <div class="flex justify-end">
-                        <button @click="showAddModal = false"
-                            class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
-                        <button type="submit" class="button-primary">Tambah</button>
+                        <div class="flex justify-end">
+                            <button @click="showAddModal = false"
+                                class="bg-gray-400 text-white px-4 py-2 rounded mr-2">Batal</button>
+                            <button type="submit" class="button-primary">Tambah</button>
 
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     
 
@@ -305,20 +334,24 @@
                 editPesertaPosyanduLansia: {
                     id: null,
                     nama_peserta_lansia: '',
-                    TTL_lansia: '',
+                    TempatLahir_lansia: '',
+                    TanggalLahir_lansia: '',
                     NIK_lansia: '',
                     alamat_lansia: '',
                     wa_lansia: ''
                 },
-                openEditModal(id, nama_peserta_lansia, TTL_lansia, NIK_lansia, alamat_lansia, wa_lansia) {
-                    this.editPesertaPosyanduLansia = {id, nama_peserta_lansia, TTL_lansia, NIK_lansia, alamat_lansia, wa_lansia };
+                openEditModal(id, nama_peserta_lansia,TempatLahir_lansia, TanggalLahir_lansia, NIK_lansia, alamat_lansia, wa_lansia) {
+                    this.editPesertaPosyanduLansia = {id, nama_peserta_lansia,TempatLahir_lansia, TanggalLahir_lansia, NIK_lansia, alamat_lansia, wa_lansia };
                     this.showEditModal = true;
                 },
+            
                 get filteredPesertaPosyanduLansias() {
-                    if (this.searchTerm === '') {
+                    if (!this.searchTerm) {
                         return this.PesertaPosyanduLansias;
                     }
-                    return this.PesertaPosyanduLansias.filter(PesertaPosyanduLansia => PesertaPosyanduLansia.nama_peserta_lansia.toLowerCase().includes(this.searchTerm.toLowerCase()));
+                    return this.PesertaPosyanduLansias.filter(item => 
+                        item.nama_peserta_lansia.toLowerCase().includes(this.searchTerm.toLowerCase())
+                    );
                 }
             };
         }

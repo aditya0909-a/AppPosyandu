@@ -60,7 +60,7 @@
     <div class="max-w-4xl mx-auto p-6">
         <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <button onclick="window.location.href='/tesdengar/fiturposyandulansia/petugas/{{ $jadwalId }}'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href='/tesdengar/fiturposyandulansia/{{ $userId }}/{{ $jadwalId }}'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -99,13 +99,8 @@
                         <input type="checkbox" name="mobilisasi" value="1" > <strong>Peserta tidak dapat melakukan</strong>
                     </label>
                 </div>
-                <div class="mb-4" >
-                    <label>
-                        <input type="checkbox" name="mobilisasi" value="0" > <strong>Peserta mampu melakukan</strong>
-                    </label>
-                </div>
                 
-                <div class="flex justify-end">
+                <div class="flex justify-end mt-4">
                     <button type="submit" class="px-4 py-2 button-primary">Simpan</button>
                 </div>
             </form>

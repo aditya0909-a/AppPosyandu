@@ -12,6 +12,8 @@
 
     <!-- Alpine.js -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <!-- Styles -->
     <style>
@@ -55,13 +57,10 @@
             font-size: 1.2rem;
         }
 
-        .participant-list {
-            margin-top: 16px;
-            padding: 16px;
-            background-color: #FFFFFF;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        #data-table tbody td {
+        padding-left: 16px; /* Atur nilai padding sesuai kebutuhan */
         }
+
     </style>
 </head>
 
@@ -73,7 +72,7 @@
         <!-- Navigasi -->
         <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
             <div class="container mx-auto flex items-center">
-                <button onclick="window.location.href = '/fiturposyandu/petugas'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href = '/fiturposyandu/petugas/{{ $userId }}'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -93,7 +92,7 @@
 
             <!-- Input Pencarian -->
             <input type="text" placeholder="Cari peserta..." class="search-input" x-model="searchTerm" 
-                   @input.debounce="fetchData" 
+                   @input.debounce="fetchDataPencarian" 
                    @focus="showResults = true" 
                    @blur="hideResults()" />
 
@@ -114,181 +113,164 @@
             
             <!-- Modal Peserta Baru -->
 
-        <div x-show="showAddModal"
-        class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <form action="/pesertabarubalita" method="POST">
-                @csrf
-                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
-                    <h2 class="text-xl font-bold mb-4">Peserta Baru Posyandu balita</h2>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama
-                        </label>
-                        <input type="text" name="nama_peserta_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('nama_peserta_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
+            <div x-show="showAddModal"
+            class="modal-bg fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                <form action="/pesertabarubalita" method="POST">
+                    @csrf
+                    <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+                        <h2 class="text-xl font-bold mb-4">Tambah Peserta Posyandu Balita</h2>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Nama
+                            </label>
+                            <input type="text" name="nama_peserta_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('nama_peserta_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Tempat lahir
+                            </label>
+                            <input type="text" name="TempatLahir_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('TempatLahir_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Tanggal Lahir
+                            </label>
+                            <input type="date" name="TanggalLahir_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('TanggalLahir_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                NIK
+                            </label>
+                            <input type="text" name="NIK_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('NIK_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Nama Orang Tua Balita
+                            </label>
+                            <input type="text" name="nama_orangtua_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('nama_orangtua_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                NIK Orang Tua Balita
+                            </label>
+                            <input type="text" name="NIK_orangtua_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('NIK_orangtua_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Alamat
+                            </label>
+                            <input type="text" name="alamat_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('alamat_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2">
+                                Nomor Whatsapp
+                            </label>
+                            <input type="text" name="wa_balita" required
+                                class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            @error('wa_balita')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+    
+                        <div class="flex justify-end space-x-2">
+                            <button type="button" @click="showAddModal = false"
+                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+                                Batal
+                            </button>
+                            <button type="submit"
+                            class="button-primary">
+                                Simpan
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Tempat lahir
-                        </label>
-                        <input type="text" name="TempatLahir_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('TempatLahir_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Tanggal Lahir
-                        </label>
-                        <input type="date" name="TanggalLahir_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('TanggalLahir_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK
-                        </label>
-                        <input type="text" name="NIK_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('NIK_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nama Orang Tua
-                        </label>
-                        <input type="text" name="nama_orangtua_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('nama_orangtua_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            NIK
-                        </label>
-                        <input type="text" name="NIK_orangtua_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('NIK_orangtua_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Alamat
-                        </label>
-                        <input type="text" name="alamat_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('alamat_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2">
-                            Nomor Whatsapp
-                        </label>
-                        <input type="number" name="wa_balita" required
-                            class="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('wa_balita')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" @click="showAddModal = false"
-                            class="px-4 py-2 button-primary">
-                            Batal
-                        </button>
-                        <button type="submit"
-                        class="button-primary">
-                            Simpan
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
 
         <div class="mb-6 mt-8">
             <h2 class="text-xl mb-4">Daftar Hadir Peserta</h2>
-            
-            
-            @if($peserta->isEmpty())
-                <p>Tidak ada peserta untuk jadwal ini.</p>
-            @else
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md" id="data-table">
                     <thead class="bg-blue-100">
                         <tr>
                             <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700">Nama Peserta</th>
                             <th class="border-b border-gray-300 px-4 py-2 text-left text-sm font-medium text-gray-700"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @foreach($peserta as $index => $item)
-                            <tr class="hover:bg-blue-50">
-                                <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                    {{  $item->nama_peserta_balita }}
-                                </td>
-                                <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                    <button 
-                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none"
-                                        @click="removeParticipant({{ json_encode($item) }}, {{ $index }})">
-                                        Hapus
-                                    </button>
-                                </td>
-                            </tr>
-                        @endforeach
+                    <tbody >
+                       
                     </tbody>
                 </table>
-            @endif
         </div>
-
-        
-           
+          
     
     <!-- Script  -->
     <script>
-
-            function appData() {
+        function appData() {
             return {
                 searchTerm: "",
                 results: [],
-                participants: [],
+                peserta: [],
+                pesertajadwal: [],
                 loading: false,
                 showResults: false,
                 showAddModal: false,
                 notification: "",
-    
-                // Data Dummy
-                dummyData: [], // Data akan diambil dari server
-    
-                // Fetch data dari server saat komponen dimuat
-                fetchDummyData() {
+                jadwalId: "{{ request()->segment(4) }}",  // Ambil jadwalId dari URL
+                
+                // Dipanggil saat komponen dimuat
+                init() {
+                    this.fetchDataPeserta(); // Ambil data peserta balita saat inisialisasi
+                    this.fetchDataPesertaByJadwal(this.jadwalId); // Ambil data peserta berdasarkan jadwal 
+                },
+
+                fetchDataPeserta() {
                     axios.get('/api/datapesertabalita') // Endpoint Laravel
                         .then(response => {
-                            this.dummyData = response.data; // Simpan data ke dummyData
+                            this.peserta = response.data; // Simpan data ke dummyData
                         })
                         .catch(error => {
                             console.error("Error fetching data:", error);
                         });
                 },
-                    
+
                 // Pencarian data
-                fetchData() {
+                fetchDataPencarian() {
                     if (this.searchTerm.trim() === "") {
                         this.results = [];
                         this.showResults = false;
@@ -298,7 +280,7 @@
     
                     // Simulasi pencarian dengan delay 300ms
                     setTimeout(() => {
-                        this.results = this.dummyData.filter(item =>
+                        this.results = this.peserta.filter(item =>
                             item.nama_peserta_balita.toLowerCase().includes(this.searchTerm.toLowerCase())
                         );
                         this.loading = false;
@@ -306,7 +288,59 @@
                     }, 300);
                 },
     
-                                
+                // Mengambil data peserta berdasarkan jadwal
+                fetchDataPesertaByJadwal(jadwalId) {
+                    axios.get(`/pesertabalita/${jadwalId}`) // Endpoint Laravel dengan jadwalId
+                        .then(response => {
+                            this.pesertajadwal = response.data; // Simpan data ke pesertajadwal
+                            this.updateTable(); // Memperbarui tampilan tabel setelah mendapatkan data
+                        })
+                        .catch(error => {
+                            console.error("Error fetching data by jadwal:", error);
+                        });
+                },
+    
+                updateTable() {
+                    const tableBody = document.getElementById('data-table').querySelector('tbody');
+                    tableBody.innerHTML = ''; // Kosongkan tabel sebelum menambahkan data baru
+            
+                    this.pesertajadwal.forEach((item) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${item.nama_peserta_balita}</td>
+                            <td>
+                                <button 
+                                    class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 focus:outline-none">
+                                    Hapus
+                                </button>
+                            </td>
+                        `;
+
+                        // Menambahkan event listener pada tombol untuk menjalankan removePeserta
+                        const removeButton = row.querySelector('button');
+                        removeButton.addEventListener('click', () => this.removepeserta(item));
+
+                        tableBody.appendChild(row);
+                    });
+                },
+
+                // Hapus peserta berdasarkan item
+                removepeserta(item) {
+                    axios.post('/pendaftaran/fiturposyandubalita/destroy', {
+                        _token: "{{ csrf_token() }}", // Token CSRF
+                        jadwal_id: "{{ request()->segment(4) }}", // Ambil jadwal ID dari segment URL
+                        peserta_id: item.id // ID peserta yang akan dihapus
+                    })
+                    .then(response => {
+                        this.fetchDataPesertaByJadwal(this.jadwalId); // Panggil fungsi fetchDataPesertaByJadwal
+                    })
+
+                    .catch(error => {
+                        console.error("Error:", error.response);
+                        this.notification = "Terjadi kesalahan saat menghapus data. Silakan coba lagi.";
+                    });
+                },
+    
                 // Kirim data peserta
                 submitData(item) {
                     this.showResults = false; // Sembunyikan hasil pencarian
@@ -319,60 +353,26 @@
                         peserta_id: item.id // ID peserta
                     })
                     .then(response => {
-                        // Tambahkan peserta ke daftar hadir
-                        
-                        this.results = [];
-                        this.searchTerm = "";
+                        this.fetchDataPesertaByJadwal(this.jadwalId); // Panggil fungsi fetchDataPesertaByJadwal
                     })
                     .catch(error => {
                         console.error('Error:', error);
                         alert('Terjadi kesalahan saat mendaftarkan peserta.');
                     });
                 },
-    
-                // Hapus peserta
-                
-                removeParticipant(participant, index) {
-                this.notification = ""; // Reset notifikasi
 
-                axios.post('/pendaftaran/fiturposyandubalita/destroy', {
-                    _token: "{{ csrf_token() }}", // Token CSRF
-                    jadwal_id: "{{ request()->segment(4) }}", // Ambil jadwal ID dari segment URL
-                    peserta_id: participant.id // ID peserta yang akan dihapus
-                })
-                .then(response => {
-                    if (response.data.success) {
-                        // Hapus peserta dari daftar hadir
-                        this.participants.splice(index, 1);
-                        this.notification = "Peserta berhasil dihapus.";
-                    } else {
-                        this.notification = "Gagal menghapus data. " + response.data.message;
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error.response);
-                    this.notification = "Terjadi kesalahan saat menghapus data. Silakan coba lagi.";
-                });
-                },
-
-    
-                // Sembunyikan hasil pencarian
                 hideResults() {
                     setTimeout(() => {
                         this.showResults = false;
                     }, 200);
                 },
-    
-                // Dipanggil saat komponen dimuat
-                init() {
-                    this.fetchDummyData();
-                }
 
-                
+    
+        
             };
         }
-    
     </script>
+    
     
 
 </body>

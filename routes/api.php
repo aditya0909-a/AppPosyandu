@@ -33,4 +33,6 @@ Route::get('/search', [PPBcontroller::class, 'search'])->name('api.search');
 Route::get('/jadwal-options', [JadwalController::class, 'getJadwalOptions']);
 
 
-Route::get('/chart-data/{peserta_id}', [PPBController::class, 'getChartDataByPeserta']);
+Route::get('/chart-data-balita/{peserta_id}', [PPBController::class, 'getChartDataByPeserta']);
+
+Route::get('/chart-data-lansia/{peserta_id}', [PPLController::class, 'getChartDataByPeserta']);

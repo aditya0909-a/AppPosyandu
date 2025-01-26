@@ -46,6 +46,7 @@ return new class extends Migration
             $table->float('tensi_lansia')->default(0);
             $table->float('guladarah_lansia')->default(0);
             $table->float('kolesterol_lansia')->default(0);
+            $table->float('asamurat_lansia')->default(0);
             $table->string('keluhan_lansia')->default('');
             $table->string('obat_lansia')->default('');
             $table->boolean('PMT')->default(false);

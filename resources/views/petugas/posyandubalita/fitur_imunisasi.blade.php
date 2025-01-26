@@ -21,17 +21,22 @@
         }
 
         .button-primary {
-            background: linear-gradient(135deg, #0077B5, #0099CC);
-            color: #FFFFFF;
-            padding: 8px 16px;
-            font-size: 1rem;
-            border-radius: 8px;
-            transition: transform 0.2s;
+        background: linear-gradient(135deg, #0077B5, #0099CC);
+        color: #FFFFFF;
+        padding: 8px 16px;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: transform 0.1s, box-shadow 0.1s; /* Percepat transisi */
         }
-
+        
         .button-primary:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .button-primary:active {
+            transform: scale(0.95); /* Sedikit mengecil saat ditekan */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam saat ditekan */
         }
 
         .input-field {
@@ -66,10 +71,10 @@
 </head>
 
 <body>
-    <div x-data="appData()" class="max-w-4xl mx-auto p-6">
+    <div x-data="appData()" x-init="init()" class="max-w-4xl mx-auto p-6">
             <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
                 <div class="container mx-auto flex items-center">
-                    <button onclick="window.location.href = '/fiturposyandu/petugas'" class="text-[#0077B5] mr-4">
+                    <button onclick="window.location.href = '/fiturposyandu/petugas/{{ $userId }}'" class="text-[#0077B5] mr-4">
                         &larr; Back
                     </button>
                     <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -77,60 +82,25 @@
                 </div>
             </nav>
 
-            <div class="flex justify-center items-center mb-6 mt-8">
+            <div class="flex justify-between items-center mb-6 mt-8">
                 <h1 class="text-3xl text-center font-bold">Imunisasi Balita</h1>
+                <button @click="fetchPesertaData()" class="button-primary">Refresh Data</button>
             </div>
 
             <div class="flex items-center mb-4">
-                <input type="text" placeholder="Cari peserta..." class="input-field" id="searchInput">
+                <input 
+                    type="text" 
+                    placeholder="Cari peserta..." 
+                    class="input-field" 
+                    id="searchInput"
+                    x-model="searchTerm"
+                    @input="updatePesertaList()"
+                >
             </div>
-
-            @php
-            $sortedPeserta = $peserta->sortBy(function ($item) use ($jadwalId) {
-                $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
-
-                // Jika imunisasi null, beri prioritas tinggi dengan mengembalikan 0
-                if (!isset($dataKesehatan) || is_null($dataKesehatan->imunisasi)) {
-                    return 0;
-                }
-
-                // Jika imunisasi ada, beri prioritas lebih rendah dengan mengembalikan 1
-                return 1;
-            });
-            @endphp
-
             
+                
             <div id="pesertaList">
-                @foreach($sortedPeserta as $index => $item)
-                    @php
-                        $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
-                    @endphp
-
-                    @if(isset($dataKesehatan) && !is_null($dataKesehatan->imunisasi))
-                        <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
-                    @else
-                        <div class="card mb-6 p-4 rounded-lg bg-white flex justify-between items-center">
-                    @endif
-                        
-                        <!-- Konten Kiri -->
-                        <div>
-                            <h2 class="text-xl font-bold">{{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}</h2>
-                            <p class="text-sm text-gray-600">
-                                Imunisasi: 
-                                {{ isset($dataKesehatan) && !is_null($dataKesehatan->imunisasi) ? $dataKesehatan->imunisasi : 'belum diberikan' }}
-                            </p>  
-                        </div>
-
-                        <!-- Tombol di Kanan -->
-                        @if(isset($dataKesehatan))
-                            <button 
-                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->imunisasi }}')"
-                                class="inline-flex items-center px-4 py-2 button-primary">
-                                Input
-                            </button>
-                        @endif
-                    </div>
-                @endforeach
+                <!-- Tempat untuk menampilkan data peserta -->
             </div>
            
 
@@ -168,34 +138,119 @@
         
     </div>
 
-    <script>
-        document.getElementById('searchInput').addEventListener('input', function () {
-            const term = this.value.toLowerCase();
-            const pesertaCards = document.querySelectorAll('#pesertaList .card');
-            pesertaCards.forEach(card => {
-                const nama = card.querySelector('h2').textContent.toLowerCase();
-                card.style.display = nama.includes(term) ? 'block' : 'none';
-            });
-        });
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
-        function appData() {
+<script>
+    // Fungsi untuk menampilkan modal edit peserta
+    function appData() {
         return {
             showEditModal: false,
             editData: {
                 id: null,
-                imunisasi: ''
+                imunisasi: '',
             },
-            openEditModal(id, berat) {
-                this.editData = {
-                    id: id,
-                    imunisasi: berat,
-                };
+            searchTerm: '', // Kata kunci pencarian
+            pesertaList: [], // Menyimpan daftar peserta yang diambil dari server
+            jadwalId: @json($jadwalId), // Jadwal ID dari backend
+            
+            // Membuka modal edit dan mengisi data peserta
+            openEditModal(id, imunisasi) {
+                this.editData = { id, imunisasi: imunisasi,};
                 this.showEditModal = true;
+            },
+
+            // Memfilter peserta berdasarkan kata kunci pencarian
+            filteredPeserta() {
+                return this.pesertaList.filter(item => 
+                    item.nama_peserta_balita.toLowerCase().includes(this.searchTerm.toLowerCase())
+                );
+            },
+
+            // Mengambil data peserta dari server
+            fetchPesertaData() {
+                axios.get(`/pesertabalita/${this.jadwalId}`)
+                    .then(response => {
+                        this.pesertaList = response.data; // Menyimpan data peserta
+                        this.updatePesertaList(); // Perbarui tampilan
+                    })
+                    .catch(error => {
+                        console.error("Error fetching data:", error);
+                    });
+            },
+
+            // Memperbarui daftar peserta di UI
+            updatePesertaList() {
+                const pesertaListDiv = document.getElementById('pesertaList');
+                pesertaListDiv.innerHTML = ''; // Bersihkan elemen sebelumnya
+
+                const sortedPeserta = this.filteredPeserta().sort((a, b) => {
+                const dataKesehatanA = a.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+                const dataKesehatanB = b.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+                
+                const timestampA = dataKesehatanA ? new Date(dataKesehatanA.created_at).getTime() : Infinity;
+                const timestampB = dataKesehatanB ? new Date(dataKesehatanB.created_at).getTime() : Infinity;
+                
+                const imunisasiA = dataKesehatanA ? dataKesehatanA.imunisasi : null;
+                const imunisasiB = dataKesehatanB ? dataKesehatanB.imunisasi : null;
+
+                // Jika imunisasiA = null, letakkan di atas
+                if (imunisasiA === null && imunisasiB !== null) return -1;
+                if (imunisasiB === null && imunisasiA !== null) return 1;
+
+                return timestampA - timestampB;
+
+                // Pertahankan urutan lainnya
+                return 0;
+                });
+
+
+                // Render elemen berdasarkan urutan
+                sortedPeserta.forEach(item => {
+                    const dataKesehatan = item.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+                    const card = document.createElement('div');
+                    card.classList.add('card', 'mb-6', 'p-4', 'rounded-lg');
+                    card.classList.add(dataKesehatan && dataKesehatan.imunisasi === null ? 'bg-white':'bg-gray-200' );
+
+                    // Konten Kiri
+                    const contentLeft = document.createElement('div');
+                    const title = document.createElement('h2');
+                    title.classList.add('text-xl', 'font-bold');
+                    title.textContent = item.nama_peserta_balita;
+                    contentLeft.appendChild(title);
+
+                    const imunisasiText = document.createElement('p');
+                    imunisasiText.classList.add('text-sm', 'text-gray-600', 'mb-2');
+                    imunisasiText.textContent = dataKesehatan && dataKesehatan.imunisasi === null
+                    ? 'Belum diberikan imunisasi'
+                    : `Sudah diberikan imunisasi ${dataKesehatan.imunisasi}`;
+                    contentLeft.appendChild(imunisasiText);
+                    card.appendChild(contentLeft);
+
+                    // Tombol di Kanan
+                    if (dataKesehatan) {
+                        const button = document.createElement('button');
+                        button.classList.add('inline-flex', 'items-center', 'px-4', 'py-2', 'button-primary');
+                        button.textContent = 'Input';
+                        button.addEventListener('click', () => {
+                            console.log("Button clicked:", dataKesehatan);
+                            this.openEditModal(dataKesehatan.id, dataKesehatan.imunisasi );
+                        });
+                        card.appendChild(button);
+                    }
+
+                    pesertaListDiv.appendChild(card);
+                });
+            },
+
+            // Inisialisasi data saat halaman dimuat
+            init() {
+                document.addEventListener("DOMContentLoaded", () => {
+                    this.fetchPesertaData(); // Ambil data peserta
+                });
             }
         };
-        }
-
-    </script>
+    }
+</script>
 </body>
 
 </html>

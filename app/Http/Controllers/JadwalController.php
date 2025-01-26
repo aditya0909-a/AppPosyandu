@@ -7,37 +7,13 @@ use App\Models\Jadwal; // Tambahkan ini
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 Carbon::setLocale('id');
+use Illuminate\Support\Facades\Log;
+
 
 
 class JadwalController extends Controller
 {
     
-    public function index()
-    {
-        $jadwals = Jadwal::latest('date')->get()->map(function ($jadwal) {
-            return [
-                'id' => $jadwal->id,
-                'name' => $jadwal->name,
-                'date' => $jadwal->date,
-                'location' => $jadwal->location,
-                'formatted_date' => $jadwal->date ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') : null,
-                'imunisasi' => $jadwal->imunisasi,       // Menambahkan properti boolean
-                'obatcacing' => $jadwal->obatcacing,    // Menambahkan properti boolean
-                'susu' => $jadwal->susu,                // Menambahkan properti boolean
-                'teskognitif' => $jadwal->teskognitif,  // Menambahkan properti boolean
-                'tesdengar' => $jadwal->tesdengar,      // Menambahkan properti boolean
-                'teslihat' => $jadwal->teslihat,        // Menambahkan properti boolean
-                'tesmobilisasi' => $jadwal->tesmobilisasi, // Menambahkan properti boolean
-                'pemeriksaan' => $jadwal->pemeriksaan,          // Menambahkan properti boolean
-            ];
-        });
-
-
-        return view('admin.fitur_penjadwalan', ['Jadwals' => $jadwals]);
-    }
-
-    
-   
 public function getJadwalOptions(Request $request)
 {
     // Mendapatkan tanggal hari ini dalam format 'Y-m-d'
@@ -56,7 +32,6 @@ public function getJadwalOptions(Request $request)
             'imunisasi',
             'obatcacing',
             'susu',
-            'vitamin',
             'teskognitif',
             'tesdengar',
             'teslihat',
@@ -74,7 +49,6 @@ public function getJadwalOptions(Request $request)
                 'imunisasi' => $jadwal->imunisasi,
                 'obatcacing' => $jadwal->obatcacing,
                 'susu' => $jadwal->susu,
-                'vitamin' => $jadwal->vitamin,
                 'teskognitif' => $jadwal->teskognitif,
                 'tesdengar' => $jadwal->tesdengar,
                 'teslihat' => $jadwal->teslihat,
@@ -91,11 +65,10 @@ public function store(Request $request)
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'location' => 'required|string|max:255',
-            'date' => 'required|date|after:today',
+            'date' => 'required|date',
             'imunisasi' => 'nullable|boolean',
             'obatcacing' => 'nullable|boolean',
             'susu' => 'nullable|boolean',
-            'vitamin' => 'nullable|boolean',
             'pemeriksaan' => 'nullable|boolean',
             'teskognitif' => 'nullable|boolean',
             'tesdengar' => 'nullable|boolean',
@@ -114,7 +87,6 @@ public function store(Request $request)
             'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
             'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
             'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
-            'vitamin.boolean' => 'Vitamin harus berupa pilihan ya atau tidak.',
             'pemeriksaan.boolean' => 'pemeriksaan harus berupa pilihan ya atau tidak.',
             'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
             'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
@@ -125,55 +97,73 @@ public function store(Request $request)
         Jadwal::create($validatedData);
 
 
-        return redirect('/fiturpenjadwalan/admin')->with('success', 'Jadwal berhasil ditambahkan');
+        return redirect()->back()->with('success', 'Jadwal berhasil ditambahkan');
     }
 
 
     public function update(Request $request, $id)
-    {
-        $validatedData = $request->validate([
-            'name' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'date' => 'required|date|after:today',
-            'imunisasi' => 'nullable|boolean',
-            'obatcacing' => 'nullable|boolean',
-            'susu' => 'nullable|boolean',
-            'vitamin' => 'nullable|boolean',
-            'pemeriksaan' => 'nullable|boolean',
-            'teskognitif' => 'nullable|boolean',
-            'tesdengar' => 'nullable|boolean',
-            'teslihat' => 'nullable|boolean',
-            'tesmobilisasi' => 'nullable|boolean',
-        ], [
-            'name.required' => 'Nama jadwal harus diisi.',
-            'name.string' => 'Nama jadwal harus berupa teks.',
-            'name.max' => 'Nama jadwal tidak boleh lebih dari 255 karakter.',
-            'location.required' => 'Lokasi harus diisi.',
-            'location.string' => 'Lokasi harus berupa teks.',
-            'location.max' => 'Lokasi tidak boleh lebih dari 255 karakter.',
-            'date.required' => 'Tanggal harus diisi.',
-            'date.date' => 'Tanggal harus berupa format tanggal yang valid.',
-            'date.after' => 'Tanggal harus lebih dari hari ini.',
-            'imunisasi.boolean' => 'Imunisasi harus berupa pilihan ya atau tidak.',
-            'obatcacing.boolean' => 'Obat cacing harus berupa pilihan ya atau tidak.',
-            'susu.boolean' => 'Susu harus berupa pilihan ya atau tidak.',
-            'vitamin.boolean' => 'Vitamin harus berupa pilihan ya atau tidak.',
-            'pemeriksaan.boolean' => 'pemeriksaan harus berupa pilihan ya atau tidak.',
-            'teskognitif.boolean' => 'Tes kognitif harus berupa pilihan ya atau tidak.',
-            'tesdengar.boolean' => 'Tes dengar harus berupa pilihan ya atau tidak.',
-            'teslihat.boolean' => 'Tes lihat harus berupa pilihan ya atau tidak.',
-            'tesmobilisasi.boolean' => 'Tes mobilisasi harus berupa pilihan ya atau tidak.',
-        ]);
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'location' => 'required|string|max:255',
+        'date' => 'required|date',
+        'imunisasi' => 'nullable|boolean',
+        'obatcacing' => 'nullable|boolean',
+        'susu' => 'nullable|boolean',
+        'pemeriksaan' => 'nullable|boolean',
+        'teskognitif' => 'nullable|boolean',
+        'tesdengar' => 'nullable|boolean',
+        'teslihat' => 'nullable|boolean',
+        'tesmobilisasi' => 'nullable|boolean',
+    ]);
 
-        $jadwal = Jadwal::findOrFail($id);
-        $jadwal->update($validatedData);
-
-        return redirect('/fiturpenjadwalan/admin')->with('success', 'Jadwal berhasil diubah.');
+    $jadwal = Jadwal::find($id);
+    
+    if (!$jadwal) {
+        Log::error("Jadwal dengan ID {$id} tidak ditemukan.");
+        return redirect()->back()->with('error', 'Jadwal tidak ditemukan.');
     }
+
+    // Update data
+    $isUpdated = $jadwal->update($validatedData);
+
+    if (!$isUpdated) {
+        Log::error("Gagal mengupdate jadwal dengan ID {$id}. Data yang diterima: " . json_encode($validatedData));
+        return redirect()->back()->with('error', 'Gagal mengupdate jadwal.');
+    }
+
+    Log::info("Jadwal dengan ID {$id} berhasil diubah.");
+    return redirect()->back()->with('success', 'Jadwal berhasil diubah.');
+}
 
     
 
-public function showJadwalWithPeserta($id)
+    public function jadwalbalita($id)
+    {
+        // Mengambil data jadwal berdasarkan ID
+        $jadwal = Jadwal::findOrFail($id);
+
+        // Format tanggal
+        $jadwal->formatted_date = $jadwal->date 
+            ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') 
+            : null;
+        $jadwal->imunisasi_status = $jadwal->imunisasi ? 'Imunisasi' : null;
+        $jadwal->obatcacing_status = $jadwal->obatcacing ? 'pemberian obat cacing' : null;
+        $jadwal->susu_status = $jadwal->susu ? 'pemberian susu' : null;
+
+        // Mengambil data peserta balita berdasarkan jadwal
+        $pesertaBalita = PesertaPosyanduBalita::whereHas('dataKesehatan', function ($query) use ($id) {
+            $query->where('jadwal_id', $id);
+        })->get();
+
+        // Kirimkan data jadwal dan peserta ke view
+        return view('admin.jadwalbalita', [
+            'jadwal' => $jadwal,
+            'pesertaBalita' => $pesertaBalita,
+        ]);
+    }
+
+    public function jadwallansia($id)
 {
     // Mengambil data jadwal berdasarkan ID
     $jadwal = Jadwal::findOrFail($id);
@@ -182,56 +172,26 @@ public function showJadwalWithPeserta($id)
     $jadwal->formatted_date = $jadwal->date 
         ? Carbon::parse($jadwal->date)->isoFormat('dddd, D MMMM YYYY') 
         : null;
-    $jadwal->imunisasi_status = $jadwal->imunisasi ? 'Imunisasi' : null;
-    $jadwal->obatcacing_status = $jadwal->obatcacing ? 'pemberian obat cacing' : null;
-    $jadwal->susu_status = $jadwal->susu ? 'pemberian susu' : null;
     $jadwal->pemeriksaan_status = $jadwal->pemeriksaan ? 'pemeriksaan kesehatan lansia' : null;
     $jadwal->teskognitif_status = $jadwal->teskognitif ? 'tes kognitif lansia' : null;
     $jadwal->teslihat_status = $jadwal->teslihat ? 'tes lihat lansia' : null;
     $jadwal->tesdengar_status = $jadwal->tesdengar ? 'tes kognitif lansia' : null;
-
-    // Mengambil data peserta balita berdasarkan jadwal
-    $pesertaBalita = PesertaPosyanduBalita::whereHas('dataKesehatan', function ($query) use ($id) {
-        $query->where('jadwal_id', $id);
-    })->get();
 
     // Mengambil data peserta lansia berdasarkan jadwal
     $pesertaLansia = PesertaPosyanduLansia::whereHas('dataKesehatan', function ($query) use ($id) {
         $query->where('jadwal_id', $id);
     })->get();
 
-    // Menggabungkan kedua data peserta (balita dan lansia)
-    $peserta = $pesertaBalita->merge($pesertaLansia);
-
     // Kirimkan data jadwal dan peserta ke view
-    return view('admin.jadwal', [
+    return view('admin.jadwallansia', [
         'jadwal' => $jadwal,
-        'peserta' => $peserta,
+        'pesertaLansia' => $pesertaLansia,
     ]);
 }
 
-    public function jadwalPetugas()
-    {
-        return $this->getJadwalView('petugas.fitur_jadwal');
-    }
-
-    // Menampilkan jadwal untuk peserta balita
-    public function jadwalPesertaBalita()
-    {
-        return $this->getJadwalView('pesertabalita.fitur_jadwal');
-    }
-
-    // Menampilkan jadwal untuk peserta lansia
-    public function jadwalPesertaLansia()
-    {
-        return $this->getJadwalView('pesertalansia.fitur_jadwal');
-    }
-
-    // Fungsi untuk mengambil jadwal dan mengirimkannya ke view
-    private function getJadwalView($viewName)
+    public function getViewAdmin($userId)
     {
         try {
-
             Carbon::setLocale('id');
             // Ambil semua data jadwal dari database
             $jadwals = Jadwal::all()->map(function ($jadwal) {
@@ -241,15 +201,142 @@ public function showJadwalWithPeserta($id)
                     'date' => $jadwal->date,
                     'formatted_date' => Carbon::parse($jadwal->date)->translatedFormat('d F Y'),
                     'location' => $jadwal->location,
+                    'imunisasi' => $jadwal->imunisasi,
+                    'obatcacing' => $jadwal->obatcacing,
+                    'susu' => $jadwal->susu,
+                    'teskognitif' => $jadwal->teskognitif,
+                    'tesdengar' => $jadwal->tesdengar,
+                    'teslihat' => $jadwal->teslihat,
+                    'tesmobilisasi' => $jadwal->tesmobilisasi,
+                    'pemeriksaan' => $jadwal->pemeriksaan,
                 ];
             });
 
-            // Kirim data jadwal ke view yang sesuai
-            return view($viewName, ['Jadwals' => $jadwals]);
+            // Kirim data jadwal ke view 'admin.fitur_penjadwalan', bersama userId
+            return view('admin.fitur_penjadwalan', [
+                'Jadwals' => $jadwals,
+                'userId' => $userId
+            ]);
         } catch (\Exception $e) {
             // Redirect jika terjadi error
             return redirect()->back()->with('error', 'Gagal mengambil data jadwal. Silakan coba lagi.');
         }
     }
+
+    public function getPesertaByJadwal($jadwalId)
+{
+    // Mengambil data peserta balita berdasarkan jadwal
+    $peserta = PesertaPosyanduBalita::with('dataKesehatan')
+        ->whereHas('dataKesehatan', function ($query) use ($jadwalId) {
+            $query->where('jadwal_id', $jadwalId);
+        })->get();
+
+    // Return data peserta dalam bentuk JSON
+    return response()->json($peserta);
+}
+
+    public function getViewPetugas($userId)
+    {
+        try {
+            Carbon::setLocale('id');
+            // Ambil semua data jadwal dari database
+            $jadwals = Jadwal::all()->map(function ($jadwal) {
+                return [
+                    'id' => $jadwal->id,
+                    'name' => $jadwal->name,
+                    'date' => $jadwal->date,
+                    'formatted_date' => Carbon::parse($jadwal->date)->translatedFormat('d F Y'),
+                    'location' => $jadwal->location,
+                    'imunisasi' => $jadwal->imunisasi,
+                    'obatcacing' => $jadwal->obatcacing,
+                    'susu' => $jadwal->susu,
+                    'teskognitif' => $jadwal->teskognitif,
+                    'tesdengar' => $jadwal->tesdengar,
+                    'teslihat' => $jadwal->teslihat,
+                    'tesmobilisasi' => $jadwal->tesmobilisasi,
+                    'pemeriksaan' => $jadwal->pemeriksaan,
+                ];
+            });
+
+            // Kirim data jadwal ke view 'admin.fitur_penjadwalan', bersama userId
+            return view('petugas.fitur_jadwal', [
+                'Jadwals' => $jadwals,
+                'userId' => $userId
+            ]);
+        } catch (\Exception $e) {
+            // Redirect jika terjadi error
+            return redirect()->back()->with('error', 'Gagal mengambil data jadwal. Silakan coba lagi.');
+        }
+    }
+
+    public function getViewPesertaBalita($userId)
+    {
+        try {
+            Carbon::setLocale('id');
+            // Ambil semua data jadwal dari database
+            $jadwals = Jadwal::all()->map(function ($jadwal) {
+                return [
+                    'id' => $jadwal->id,
+                    'name' => $jadwal->name,
+                    'date' => $jadwal->date,
+                    'formatted_date' => Carbon::parse($jadwal->date)->translatedFormat('d F Y'),
+                    'location' => $jadwal->location,
+                    'imunisasi' => $jadwal->imunisasi,
+                    'obatcacing' => $jadwal->obatcacing,
+                    'susu' => $jadwal->susu,
+                    'teskognitif' => $jadwal->teskognitif,
+                    'tesdengar' => $jadwal->tesdengar,
+                    'teslihat' => $jadwal->teslihat,
+                    'tesmobilisasi' => $jadwal->tesmobilisasi,
+                    'pemeriksaan' => $jadwal->pemeriksaan,
+                ];
+            });
+
+            // Kirim data jadwal ke view 'admin.fitur_penjadwalan', bersama userId
+            return view('pesertabalita.fitur_jadwal', [
+                'Jadwals' => $jadwals,
+                'userId' => $userId
+            ]);
+        } catch (\Exception $e) {
+            // Redirect jika terjadi error
+            return redirect()->back()->with('error', 'Gagal mengambil data jadwal. Silakan coba lagi.');
+        }
+    }
+
+    public function getViewPesertaLansia($userId)
+    {
+        try {
+            Carbon::setLocale('id');
+            // Ambil semua data jadwal dari database
+            $jadwals = Jadwal::all()->map(function ($jadwal) {
+                return [
+                    'id' => $jadwal->id,
+                    'name' => $jadwal->name,
+                    'date' => $jadwal->date,
+                    'formatted_date' => Carbon::parse($jadwal->date)->translatedFormat('d F Y'),
+                    'location' => $jadwal->location,
+                    'imunisasi' => $jadwal->imunisasi,
+                    'obatcacing' => $jadwal->obatcacing,
+                    'susu' => $jadwal->susu,
+                    'teskognitif' => $jadwal->teskognitif,
+                    'tesdengar' => $jadwal->tesdengar,
+                    'teslihat' => $jadwal->teslihat,
+                    'tesmobilisasi' => $jadwal->tesmobilisasi,
+                    'pemeriksaan' => $jadwal->pemeriksaan,
+                ];
+            });
+
+            // Kirim data jadwal ke view 'admin.fitur_penjadwalan', bersama userId
+            return view('pesertalansia.fitur_jadwal', [
+                'Jadwals' => $jadwals,
+                'userId' => $userId
+            ]);
+        } catch (\Exception $e) {
+            // Redirect jika terjadi error
+            return redirect()->back()->with('error', 'Gagal mengambil data jadwal. Silakan coba lagi.');
+        }
+    }
+
+
     
 }

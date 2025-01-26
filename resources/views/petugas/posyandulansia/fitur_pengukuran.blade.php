@@ -21,19 +21,23 @@
         }
 
         .button-primary {
-            background: linear-gradient(135deg, #0077B5, #0099CC);
-            color: #FFFFFF;
-            padding: 8px 16px;
-            font-size: 1rem;
-            border-radius: 8px;
-            transition: transform 0.2s;
+        background: linear-gradient(135deg, #0077B5, #0099CC);
+        color: #FFFFFF;
+        padding: 8px 16px;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: transform 0.1s, box-shadow 0.1s; /* Percepat transisi */
         }
-
+        
         .button-primary:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
+        
+        .button-primary:active {
+            transform: scale(0.95); /* Sedikit mengecil saat ditekan */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Bayangan lebih dalam saat ditekan */
+        }
         .input-field {
             width: 100%;
             padding: 8px;
@@ -66,10 +70,10 @@
 </head>
 
 <body>
-    <div x-data="appData()" class="max-w-4xl mx-auto p-6">
+    <div x-data="appData()" x-init="init()" class="max-w-4xl mx-auto p-6">
             <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
                 <div class="container mx-auto flex items-center">
-                    <button onclick="window.location.href = '/fiturposyandu/petugas'" class="text-[#0077B5] mr-4">
+                    <button onclick="window.location.href = '/fiturposyandu/petugas/{{ $userId }}'" class="text-[#0077B5] mr-4">
                         &larr; Back
                     </button>
                     <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -77,67 +81,30 @@
                 </div>
             </nav>
 
-            <div class="flex justify-center items-center mb-6 mt-8">
+            <div class="flex justify-between items-center mb-6 mt-8">
                 <h1 class="text-3xl text-center font-bold">Pengukuran Lansia</h1>
+                <button @click="fetchPesertaData()" class="button-primary">Refresh Data</button>
             </div>
 
             <div class="flex items-center mb-4">
-                <input type="text" placeholder="Cari peserta..." class="input-field" id="searchInput">
+                <input 
+                    type="text" 
+                    placeholder="Cari peserta..." 
+                    class="input-field" 
+                    id="searchInput"
+                    x-model="searchTerm"
+                    @input="updatePesertaList()"
+                >
             </div>
-
-            @php
-            $sortedPeserta = $peserta->sortBy(function ($item) use ($jadwalId) {
-                $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
-        
-                // Nilai prioritas: data tidak lengkap (0) -> prioritas tinggi
-                return isset($dataKesehatan) && 
-                       ($dataKesehatan->tinggi_lansia > 0 && $dataKesehatan->lingkar_lengan_lansia > 0 && $dataKesehatan->lingkar_perut_lansia > 0) ? 1 : 0;
-            });
-            @endphp
-        
+                     
             <div id="pesertaList">
-                @foreach($sortedPeserta as $index => $item)
-                    @php
-                        $dataKesehatan = $item->dataKesehatan->firstWhere('jadwal_id', $jadwalId);
-                    @endphp
-            
-                    @if(isset($dataKesehatan) && 
-                        ($dataKesehatan->tinggi_lansia > 0 && $dataKesehatan->lingkar_lengan_lansia > 0 && $dataKesehatan->lingkar_perut_lansia > 0))
-                        <div class="card mb-6 p-4 rounded-lg bg-gray-200 flex justify-between items-center">
-                    @else
-                        <div class="card mb-6 p-4 rounded-lg bg-white flex justify-between items-center">
-                    @endif
-            
-                        <!-- Konten Kiri -->
-                        <div>
-                            <h2 class="text-xl font-bold">{{ $item->nama_peserta_lansia }}</h2>
-                            <p class="text-sm text-gray-600">
-                                Tinggi Badan: {{ isset($dataKesehatan) ? $dataKesehatan->tinggi_lansia : '-' }} cm
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                Lingkar Lengan: {{ isset($dataKesehatan) ? $dataKesehatan->lingkar_lengan_lansia : '-' }} cm
-                            </p>
-                            <p class="text-sm text-gray-600">
-                                Lingkar Perut: {{ isset($dataKesehatan) ? $dataKesehatan->lingkar_perut_lansia : '-' }} cm
-                            </p>
-                        </div>
-            
-                        <!-- Tombol di Kanan -->
-                        @if(isset($dataKesehatan))
-                            <button 
-                                @click="openEditModal({{ $dataKesehatan->id }}, '{{ $dataKesehatan->tinggi_lansia }}', '{{ $dataKesehatan->lingkar_lengan_lansia }}', '{{ $dataKesehatan->lingkar_perut_lansia }}')"
-                                class="inline-flex items-center px-4 py-2 button-primary">
-                                Input
-                            </button>
-                        @endif
-                    </div>
-                @endforeach
+                <!-- Tempat untuk menampilkan data peserta -->
             </div>
-        
-            
-
+                   
             <!-- Modal Edit Pengguna -->
-            <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center">
+            <div x-show="showEditModal" class="modal-bg fixed inset-0 flex items-center justify-center" 
+            x-init="console.log('Modal initialized. showEditModal:', showEditModal)"
+            x-bind:class="showEditModal ? 'opacity-100 visible' : 'opacity-0 hidden'">
                 <form :action="'/update-pengukuran-lansia/' + editData.id" method="POST" class="space-y-4">
                     @csrf
                     @method('PUT')
@@ -195,41 +162,162 @@
                     </div>
                 </form>
             </div>
-            
-        
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
     <script>
-        document.getElementById('searchInput').addEventListener('input', function () {
-            const term = this.value.toLowerCase();
-            const pesertaCards = document.querySelectorAll('#pesertaList .card');
-            pesertaCards.forEach(card => {
-                const nama = card.querySelector('h2').textContent.toLowerCase();
-                card.style.display = nama.includes(term) ? 'block' : 'none';
-            });
-        });
-
+        // Fungsi untuk menampilkan modal edit peserta
         function appData() {
-        return {
-            showEditModal: false,
-            editData: {
-                id: null,
-                tinggi_lansia: '',
-                lingkar_lengan_lansia: '',
-                lingkar_perut_lansia: ''
-            },
-            openEditModal(id, tinggi, lengan, perut) {
-                this.editData = {
-                    id: id,
-                    tinggi_lansia: tinggi,
-                    lingkar_lengan_lansia: lengan,
-                    lingkar_perut_lansia: perut,
-                };
-                this.showEditModal = true;
-            }
-        };
-        }
+            return {
+                showEditModal: false,
+                editData: {
+                    id: null,
+                    tinggi_lansia: '',
+                    lingkar_lengan_lansia: '',
+                    lingkar_perut_lansia: '',
+                },
+                searchTerm: '', // Kata kunci pencarian
+                pesertaList: [], // Menyimpan daftar peserta yang diambil dari server
+                jadwalId: @json($jadwalId), // Jadwal ID dari backend
+                
+                // Membuka modal edit dan mengisi data peserta
+                openEditModal(id, tinggi, lengan, perut) {
+                    this.editData = { 
+                        id: id,
+                        tinggi_lansia: tinggi,
+                        lingkar_lengan_lansia: lengan,
+                        lingkar_perut_lansia: perut, };
+                    this.showEditModal = true;
+                },
 
+                // Memfilter peserta berdasarkan kata kunci pencarian
+                filteredPeserta() {
+                    return this.pesertaList.filter(item => 
+                        item.nama_peserta_lansia.toLowerCase().includes(this.searchTerm.toLowerCase())
+                    );
+                },
+
+                // Mengambil data peserta dari server
+                fetchPesertaData() {
+                    axios.get(`/peserta/${this.jadwalId}`)
+                        .then(response => {
+                            this.pesertaList = response.data; // Menyimpan data peserta
+                            this.updatePesertaList(); // Perbarui tampilan
+                        })
+                        .catch(error => {
+                            console.error("Error fetching data:", error);
+                        });
+                },
+
+                // Memperbarui daftar peserta di UI
+                updatePesertaList() {
+                    const pesertaListDiv = document.getElementById('pesertaList');
+                    pesertaListDiv.innerHTML = ''; // Bersihkan elemen sebelumnya
+
+                    // Urutkan peserta: tinggi_lansia = 0 di atas
+                    const sortedPeserta = this.filteredPeserta().sort((a, b) => {
+                    const dataKesehatanA = a.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+                    const dataKesehatanB = b.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+
+                    const timestampA = dataKesehatanA ? new Date(dataKesehatanA.created_at).getTime() : Infinity;
+                    const timestampB = dataKesehatanB ? new Date(dataKesehatanB.created_at).getTime() : Infinity;
+
+                    const tinggiA = dataKesehatanA ? dataKesehatanA.tinggi_lansia : 0;
+                    const tinggiB = dataKesehatanB ? dataKesehatanB.tinggi_lansia : 0;
+
+                    const lingkarLenganA = dataKesehatanA ? dataKesehatanA.lingkar_lengan_lansia : 0;
+                    const lingkarLenganB = dataKesehatanB ? dataKesehatanB.lingkar_lengan_lansia : 0;
+
+                    const lingkarPerutA = dataKesehatanA ? dataKesehatanA.lingkar_perut_lansia : 0;
+                    const lingkarPerutB = dataKesehatanB ? dataKesehatanB.lingkar_perut_lansia : 0;
+
+                    // Prioritaskan jika salah satu dari ketiga atribut adalah 0
+                    const aHasZero = tinggiA === 0 || lingkarLenganA === 0 || lingkarPerutA === 0;
+                    const bHasZero = tinggiB === 0 || lingkarLenganB === 0 || lingkarPerutB === 0;
+
+                    if (aHasZero && !bHasZero) return -1; // A di atas jika A memiliki 0 dan B tidak
+                    if (!aHasZero && bHasZero) return 1;  // B di atas jika B memiliki 0 dan A tidak
+
+                    // Jika keduanya tidak memiliki 0, urutkan berdasarkan tinggi badan
+                    if (tinggiA === 0 && tinggiB !== 0) return -1; // Jika A 0, letakkan di atas
+                    if (tinggiB === 0 && tinggiA !== 0) return 1;  // Jika B 0, letakkan di atas
+
+                    // Jika tinggi sama, urutkan berdasarkan lingkar lengan
+                    if (tinggiA === tinggiB) {
+                        if (lingkarLenganA === 0 && lingkarLenganB !== 0) return -1; // A di atas jika 0
+                        if (lingkarLenganB === 0 && lingkarLenganA !== 0) return 1;  // B di atas jika 0
+                    }
+
+                    // Jika lingkar lengan juga sama, urutkan berdasarkan lingkar perut
+                    if (lingkarLenganA === lingkarLenganB) {
+                        if (lingkarPerutA === 0 && lingkarPerutB !== 0) return -1; // A di atas jika 0
+                        if (lingkarPerutB === 0 && lingkarPerutA !== 0) return 1;  // B di atas jika 0
+                    }
+
+                    return timestampA - timestampB;
+
+                    // Jika semua sama, pertahankan urutan
+                    return 0;
+                });
+
+
+                    // Render elemen berdasarkan urutan
+                    sortedPeserta.forEach(item => {
+                        const dataKesehatan = item.data_kesehatan.find(dk => dk.jadwal_id === parseInt(this.jadwalId));
+                        const card = document.createElement('div');
+                        card.classList.add('card', 'mb-6', 'p-4', 'rounded-lg');
+                        card.classList.add(dataKesehatan && dataKesehatan.tinggi_lansia && dataKesehatan.lingkar_lengan_lansia && dataKesehatan.lingkar_perut_lansia > 0 ? 'bg-gray-200' : 'bg-white');
+
+                        // Konten Kiri
+                        const contentLeft = document.createElement('div');
+                        const title = document.createElement('h2');
+                        title.classList.add('text-xl', 'font-bold');
+                        title.textContent = item.nama_peserta_lansia;
+                        contentLeft.appendChild(title);
+
+                        const Tekstinggi = document.createElement('p');
+                        Tekstinggi.classList.add('text-sm', 'text-gray-600');
+                        Tekstinggi.textContent = `Tinggi Badan: ${dataKesehatan ? dataKesehatan.tinggi_lansia : '-'}`;
+                        contentLeft.appendChild(Tekstinggi);
+                        card.appendChild(contentLeft);
+
+                        const Tekslingkarlengan = document.createElement('p');
+                        Tekslingkarlengan.classList.add('text-sm', 'text-gray-600');
+                        Tekslingkarlengan.textContent = `Lingkar Lengan: ${dataKesehatan ? dataKesehatan.lingkar_lengan_lansia : '-'}`;
+                        contentLeft.appendChild(Tekslingkarlengan);
+                        card.appendChild(contentLeft);
+
+                        const Tekslingkarperut = document.createElement('p');
+                        Tekslingkarperut.classList.add('text-sm', 'text-gray-600', 'mb-2');
+                        Tekslingkarperut.textContent = `Lingkar Perut: ${dataKesehatan ? dataKesehatan.lingkar_perut_lansia : '-'}`;
+                        contentLeft.appendChild(Tekslingkarperut);
+                        card.appendChild(contentLeft);
+
+                        // Tombol di Kanan
+                        if (dataKesehatan) {
+                            const button = document.createElement('button');
+                            button.classList.add('inline-flex', 'items-center', 'px-4', 'py-2', 'button-primary');
+                            button.textContent = 'Input';
+                            button.addEventListener('click', () => {
+                                console.log("Button clicked:", dataKesehatan);
+                                this.openEditModal(dataKesehatan.id, dataKesehatan.tinggi_lansia, dataKesehatan.lingkar_lengan_lansia, dataKesehatan.lingkar_perut_lansia);
+                            });
+                            card.appendChild(button);
+                        }
+
+                        pesertaListDiv.appendChild(card);
+                    });
+                },
+
+                // Inisialisasi data saat halaman dimuat
+                init() {
+                    document.addEventListener("DOMContentLoaded", () => {
+                        this.fetchPesertaData(); // Ambil data peserta
+                    });
+                }
+            };
+        }
     </script>
 </body>
 

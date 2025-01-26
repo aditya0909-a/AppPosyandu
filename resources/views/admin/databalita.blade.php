@@ -93,15 +93,14 @@
         }
     </style>
 </head>
-
 <body>
 
     <!-- Navbar -->
     <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
         <div class="container mx-auto flex items-center">
-            <button onclick="window.location.href = '/fiturdatabalita/admin'" class="text-[#0077B5] mr-4">
+            <button onclick="history.back()" class="text-[#0077B5] mr-4">
                 &larr; Back
-            </button>
+            </button>            
             <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
             <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
         </div>
@@ -178,6 +177,7 @@
                     </button>
                 </div>
 
+                
                 <!-- Modal Diagram -->
                 <div x-show="showGrowthChart" x-cloak @click.away="closeChart"
                     class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50" x-transition>
@@ -252,7 +252,7 @@
                             this.error = null;
 
                             try {
-                                const response = await fetch(/api/chart-data/${pesertaId});
+                                const response = await fetch(`/api/chart-data-balita/${pesertaId}`);
                                 const data = await response.json();
 
                                 if (!response.ok) {
@@ -321,10 +321,9 @@
                                     title: {
                                         text: 'Usia (Bulan)'
                                     },
-                                    // BENAR
                                     labels: {
                                         formatter: function() {
-                                            return Bulan ${this.value};
+                                            return `Bulan ${this.value}`;
                                         }
                                     }
                                 },
@@ -373,9 +372,7 @@
                                             click: function() {
                                                 const point = this;
                                                 Swal.fire({
-                                                    title: Detail Bulan ke-${point.bulan_ke},
-
-
+                                                    title: `Detail Bulan ke-${point.bulan_ke}`,
                                                     html: `
                                 <div class="text-left">
                                     <p class="mb-2"><strong>Bulan:</strong> ${point.bulan_ke}</p>
@@ -475,7 +472,7 @@
                         generateLabels(start, end) {
                             return Array.from({
                                 length: end - start
-                            }, (_, i) => Bulan ${start + i + 1});
+                            }, (_, i) => `Bulan ${start + i + 1}`);
                         },
                         getChartTitle(type) {
                             const titles = {
@@ -491,9 +488,46 @@
                                 this.fetchGrowthData(pesertaId);
                             }
                         }
+
+
                     }));
                 });
             </script>
+
+
+            <!-- Kondisi BMI -->
+            <div class="mb-6">
+                <h3 class="text-2xl font-semibold text-gray-800 mt-8">Kondisi BMI Balita</h3>
+                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
+                    <thead class="bg-[#008eb5] text-white">
+                        <tr>
+                            <th class="py-3 px-4 text-left font-medium">Nilai BMI</th>
+                            <th class="py-3 px-4 text-left font-medium">Kategori</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td>{{ $bmi ?? 'Data tidak valid' }}</td>
+                            <td>{{ $category ?? 'Data tidak valid' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rentang BMI -->
+            <div class="mt-4 text-sm text-gray-600">
+                <p><strong>Rentang Nilai BMI:</strong></p>
+                <div class="flex justify-between">
+                    <ul class="list-disc pl-5">
+                        <li><strong>Kurus</strong>: < 18.5</li>
+                        <li><strong>Normal</strong>: 18.5 - 24.9</li>
+                    </ul>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Overweight</strong>: 25 - 29.9</li>
+                        <li><strong>Obesitas</strong>: ≥ 30</li>
+                    </ul>
+                </div>
+            </div>
 
 
 
@@ -511,7 +545,7 @@
                         @forelse ($imunisasiData as $item)
                             <tr>
                                 <td>{{ $item['jenis_imunisasi'] }}</td>
-                                <td>{{ $item['tanggal'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
                             </tr>
                         @empty
                             <tr>
@@ -535,37 +569,12 @@
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($obatCacingData as $item)
                             <tr>
-                                <td>{{ $item['tanggal'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
                                 <td>{{ $item['keterangan_obat_cacing'] }}</td>
                             </tr>
                         @empty
                             <tr>
                                 <td colspan="2">Data tidak ditemukan untuk pemberian obat cacing.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Tabel Pemberian Vitamin -->
-            <div class="mb-6">
-                <h3 class="text-2xl font-semibold text-gray-800">Tabel Pemberian Vitamin</h3>
-                <table class="w-full mt-4 bg-white shadow rounded-lg overflow-hidden text-gray-900 text-base">
-                    <thead class="bg-[#008eb5] text-white">
-                        <tr>
-                            <th class="py-3 px-4 text-left font-medium">Tanggal Pemberian</th>
-                            <th class="py-3 px-4 text-left font-medium">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        @forelse ($vitaminData as $item)
-                            <tr>
-                                <td>{{ $item['tanggal'] }}</td>
-                                <td>{{ $item['keterangan_vitamin'] }}</td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="2">Data tidak ditemukan untuk pemberian Vitamin.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -585,7 +594,7 @@
                     <tbody class="divide-y divide-gray-200">
                         @forelse ($susuData as $item)
                             <tr>
-                                <td>{{ $item['tanggal'] }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item['tanggal'])->locale('id')->format('Y/m/d') }}</td>
                                 <td>{{ $item['keterangan_susu'] }}</td>
                             </tr>
                         @empty
@@ -596,8 +605,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
 </body>
 
 </html>

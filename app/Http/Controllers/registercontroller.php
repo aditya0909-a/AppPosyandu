@@ -26,7 +26,7 @@ class RegisterController extends Controller
 
 
         // Redirect ke halaman yang diinginkan setelah pendaftaran, misalnya dashboard admin
-        return redirect('/admin.fitur_kelolaakun')->with('success', 'Akun berhasil dibuat.');
+        return redirect()->back()->with('success', 'Akun berhasil dibuat.');
     }
 
     public function update(Request $request, $id)

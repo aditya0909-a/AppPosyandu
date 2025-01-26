@@ -20,7 +20,6 @@ class DataKesehatanBalita extends Model
         'imunisasi',
         'obat_cacing',
         'susu',
-        'vitamin',
         'keluhan_balita',
         'penanganan_balita'
     ];

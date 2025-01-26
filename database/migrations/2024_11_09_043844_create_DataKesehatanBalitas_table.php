@@ -28,10 +28,9 @@ return new class extends Migration
             $table->float('tinggi_balita')->default(0);
             $table->float('berat_balita')->default(0);
             $table->float('lingkar_kepala_balita')->default(0);
-            $table->string('imunisasi')->nullable()->default(''); // imunisasi terbatas pada pilihan tertentu
+            $table->string('imunisasi')->nullable(); // imunisasi terbatas pada pilihan tertentu
             $table->enum('obat_cacing', ['tidak', 'iya'])->default('tidak'); // pemberihan obat cacing terbatas pada pilihan tertentu
             $table->enum('susu', ['tidak', 'iya'])->default('tidak'); // pemberihan susu terbatas pada pilihan tertentu
-            $table->enum('vitamin', ['tidak', 'iya'])->default('tidak'); // pemberihan vitamin terbatas pada pilihan tertentu
             $table->timestamps();
         });
     }

@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('PesertaPosyanduBalita', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('nama_peserta_balita');
             $table->string('TempatLahir_balita');
             $table->date('TanggalLahir_balita');
-            $table->string('NIK_balita')->unique();
+            $table->string('NIK_balita');
             $table->string('nama_orangtua_balita');
             $table->string('NIK_orangtua_balita');
             $table->string('alamat_balita');
@@ -30,6 +31,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('PesertaPosyanduBalita', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
         Schema::dropIfExists('PesertaPosyanduBalita');
     }
 };

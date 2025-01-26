@@ -36,6 +36,7 @@ class DataKesehatanLansia extends Model
         'tensi_lansia',
         'guladarah_lansia',
         'kolesterol_lansia',
+        'asamurat_lansia',
         'keluhan_lansia',
         'obat_lansia'
     ];

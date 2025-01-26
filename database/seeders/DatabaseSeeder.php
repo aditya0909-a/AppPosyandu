@@ -42,14 +42,22 @@ class DatabaseSeeder extends Seeder
         ]);
 
         \App\Models\User::create([
-            'name' => 'alvin',
-            'id_user' => 'alvin123',
+            'name' => 'bagas',
+            'id_user' => 'bagas1234',
             'password' => '$2y$12$ukfMOJ9t8RNSYDYW4deH/uGhBAZbuPg5yCyghm/Ku35oY8KFTHd3a',
             'role' => 'pesertalansia',
         ]);
 
+        \App\Models\User::create([
+            'name' => 'alvin',
+            'id_user' => 'alvin123',
+            'password' => '$2y$12$ukfMOJ9t8RNSYDYW4deH/uGhBAZbuPg5yCyghm/Ku35oY8KFTHd3a',
+            'role' => 'pesertabalita',
+        ]);
+
         \App\Models\PesertaPosyanduBalita::create([
             'nama_peserta_balita' => 'alvin',
+            'user_id' => 5,
             'TempatLahir_balita'=> 'Lamongan',
             'TanggalLahir_balita' => '2004-07-26',
             'NIK_balita'=> '1234567890223',
@@ -62,6 +70,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\PesertaPosyanduBalita::create([
             'nama_peserta_balita' => 'Bagas',
+            'user_id' => 3,
             'TempatLahir_balita'=> 'Lamongan',
             'TanggalLahir_balita' => '2004-07-23',
             'NIK_balita'=> '1234567890523',
@@ -72,7 +81,7 @@ class DatabaseSeeder extends Seeder
            
         ]);
 
-        \App\Models\jadwal::create([
+        \App\Models\Jadwal::create([
             'name' => 'Posyandu Balita',
             'location' => 'Bingin',
             'date' => '2024-12-03',
@@ -86,7 +95,7 @@ class DatabaseSeeder extends Seeder
             'pemeriksaan' => false,
         ]);
 
-        \App\Models\jadwal::create([
+        \App\Models\Jadwal::create([
             'name' => 'Posyandu Balita',
             'location' => 'Desa',
             'date' => '2024-12-06',
@@ -100,14 +109,27 @@ class DatabaseSeeder extends Seeder
             'pemeriksaan' => false,
         ]);
 
-        \App\Models\jadwal::create([
+        \App\Models\Jadwal::create([
             'name' => 'Posyandu Lansia',
             'location' => 'Dajan Pangkung',
             'date' => '2024-12-07',
             'imunisasi' => false,
             'obatcacing' => false,
             'susu' => false,
-            'vitamin' => false,
+            'teskognitif' => true,
+            'tesdengar' => true,
+            'teslihat' => true,
+            'tesmobilisasi' => true,
+            'pemeriksaan' => true,
+        ]);
+
+        \App\Models\Jadwal::create([
+            'name' => 'Posyandu Lansia',
+            'location' => 'Dajan Pangkung',
+            'date' => '2024-01-03',
+            'imunisasi' => false,
+            'obatcacing' => false,
+            'susu' => false,
             'teskognitif' => true,
             'tesdengar' => true,
             'teslihat' => true,
@@ -119,43 +141,45 @@ class DatabaseSeeder extends Seeder
         \App\Models\DataKesehatanBalita::create([
             'peserta_id' => 1,
             'jadwal_id' => 1,
+            'bulan_ke' => 1,
             'tinggi_balita' => 90,
             'berat_balita'=> 5,
             'lingkar_kepala_balita'=> 22,
             'imunisasi'=> 'DPT',
             'obat_cacing'=> 'iya', 
-            'susu'=> 'iya',
-            'vitamin'=> 'iya',   
+            'susu'=> 'iya',  
            
         ]);
 
         \App\Models\DataKesehatanBalita::create([
             'peserta_id' => 1,
             'jadwal_id' => 2,
+            'bulan_ke' => 2,
             'tinggi_balita' => 95,
             'berat_balita'=> 8,
             'lingkar_kepala_balita'=> 25,
             'imunisasi'=> 'BCG',
-            'vitamin'=> 'tidak',
            
         ]);
 
         \App\Models\DataKesehatanBalita::create([
             'peserta_id' => 2,
             'jadwal_id' => 1,
+            'bulan_ke' => 1,
             'tinggi_balita' => 90,
             'berat_balita'=> 5,
             'lingkar_kepala_balita'=> 22,
             'imunisasi'=> 'BCG',
             'obat_cacing'=> 'iya', 
             'susu'=> 'iya',
-            'vitamin'=> 'iya', 
+ 
            
         ]);
 
         \App\Models\DataKesehatanBalita::create([
             'peserta_id' => 2,
             'jadwal_id' => 2,
+            'bulan_ke' => 2,
             'tinggi_balita' => 95,
             'berat_balita'=> 8,
             'lingkar_kepala_balita'=> 25,
@@ -165,6 +189,7 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\PesertaPosyanduLansia::create([
             'nama_peserta_lansia' => 'Bagas',
+            'user_id' => 4,
             'TempatLahir_lansia'=> 'Lamongan',
             'TanggalLahir_lansia' => '2004-07-23',
             'NIK_lansia'=> '1234567890523', 
@@ -172,6 +197,8 @@ class DatabaseSeeder extends Seeder
             'wa_lansia' => '081534527577',
            
         ]);
+
+
 
         \App\Models\DataKesehatanLansia::create([
             'peserta_id' => 1,
@@ -183,7 +210,25 @@ class DatabaseSeeder extends Seeder
             'PMT'=> true,
             'tensi_lansia'=> 100,
             'guladarah_lansia'=> 100,
-            'kolesterol_lansia'=> 150,     
+            'kolesterol_lansia'=> 150,
+            'asamurat_lansia'=> 150,     
+            'keluhan_lansia'=> 'hipertensi', 
+            'obat_lansia'=> 'diuretik', 
+           
+        ]);
+
+        \App\Models\DataKesehatanLansia::create([
+            'peserta_id' => 1,
+            'jadwal_id' => 4,
+            'tinggi_lansia' => 160,
+            'berat_lansia'=> 66,
+            'lingkar_lengan_lansia'=> 15,
+            'lingkar_perut_lansia'=> 40,
+            'PMT'=> true,
+            'tensi_lansia'=> 100,
+            'guladarah_lansia'=> 100,
+            'kolesterol_lansia'=> 150,
+            'asamurat_lansia'=> 150,     
             'keluhan_lansia'=> 'hipertensi', 
             'obat_lansia'=> 'diuretik', 
            
@@ -216,7 +261,13 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\PesertaJadwalLansia::create([
             'peserta_id' => 1,
-            'jadwal_id'=> 1,
+            'jadwal_id'=> 3,
+           
+        ]);
+
+        \App\Models\PesertaJadwalLansia::create([
+            'peserta_id' => 1,
+            'jadwal_id'=> 4,
            
         ]);
 

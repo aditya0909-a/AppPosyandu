@@ -42,7 +42,7 @@
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
             <!-- Data Peserta -->
-            <a href="#"
+            <a href="{{ url('/pesertabalita.databalita/' . $peserta->id) }}"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/baby.png') }}" alt="Data Peserta" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Data Peserta</h2>
@@ -51,7 +51,7 @@
 
 
             <!-- Jadwal -->
-            <a href="/fiturjadwal/pesertabalita"
+            <a href="/fiturjadwal/pesertabalita/{{ $userId }}"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Jadwal</h2>

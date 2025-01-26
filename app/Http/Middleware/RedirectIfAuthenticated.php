@@ -18,24 +18,27 @@ class RedirectIfAuthenticated
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            // Redirect based on user's role attribute
+            // Ambil role dan user ID dari pengguna yang login
             $role = Auth::user()->role;
+            $userId = Auth::user()->id;
 
+            // Redirect berdasarkan role dan tambahkan user ID ke dalam URL
             switch ($role) {
                 case 'admin':
-                    return redirect('/dashboard/admin');
+                    return redirect("/dashboard/admin/{$userId}");
                 case 'petugas':
-                    return redirect('/dashboard/petugas');
+                    return redirect("/dashboard/petugas/{$userId}");
                 case 'pesertabalita':
-                    return redirect('/dashboard/pesertabalita');
+                    return redirect("/dashboard/pesertabalita/{$userId}");
                 case 'pesertalansia':
-                    return redirect('/dashboard/pesertalansia');
+                    return redirect("/dashboard/pesertalansia/{$userId}");
                 default:
-                    // Jika role tidak sesuai, bisa diarahkan ke halaman tertentu atau logout
+                    // Jika role tidak valid
                     return redirect('/logout');
             }
         }
 
         return $next($request);
     }
+
 }

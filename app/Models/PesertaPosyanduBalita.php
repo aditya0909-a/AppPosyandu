@@ -12,6 +12,7 @@ class PesertaPosyanduBalita extends Model
     protected $table = 'PesertaPosyanduBalita';
     protected $fillable = [
         'nama_peserta_balita',
+        'user_id',
         'TempatLahir_balita',
         'TanggalLahir_balita',
         'NIK_balita',
@@ -21,6 +22,11 @@ class PesertaPosyanduBalita extends Model
         'wa_balita'
     ];
 
+    public function user()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+    
     // Relasi many-to-many dengan Jadwal
     public function jadwals()
     {

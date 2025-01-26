@@ -8,7 +8,6 @@
     <title>Posyandu Kegiatan</title>
     {{-- Import Library External: TailwindCSS & AlpineJS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
     <style>
         /* Custom Styling */
         body {
@@ -51,9 +50,9 @@
 <div class="max-w-4xl mx-auto p-6">
     <nav class="navbar fixed top-0 left-0 right-0 z-10 p-4 shadow-md">
         <div class="container mx-auto flex items-center">
-            <button onclick="window.location.href = '/fiturpenjadwalan/admin'" class="text-[#0077B5] mr-4">
+            <button onclick="history.back()" class="text-[#0077B5] mr-4">
                 &larr; Back
-            </button>
+            </button> 
             <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
             <div class="ml-auto text-[#0077B5] font-sans">Akun Admin</div>
         </div>
@@ -111,49 +110,61 @@
             </div>
 
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-4">Unduh Data Kegiatan</h2>
-                
-                @if($peserta->isEmpty())
-                    <p>Tidak ada Data Kegiatan.</p>
+                <h2 class="text-xl font-semibold mb-4  md:text-left">Unduh Data Kegiatan</h2>
+            
+                @if($pesertaLansia->isEmpty())
+                    <p class=" text-gray-500">Tidak ada Data Kegiatan.</p>
                 @else
-                <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
-                    <thead class="bg-blue-100">
-                    </thead>
-                    <tbody>
-                        @php
-                            // Daftar kegiatan dengan boolean sebagai kunci dan tautan
-                            $dataKegiatan = [
-                                'Daftar Hadir Peserta' => ['active' => true, 'link' => url('/daftar-hadir')],
-                                'Data Pengukuran' => ['active' => true, 'link' => url('/data-pengukuran')],
-                                'Data Imunisasi' => ['active' => $jadwal->imunisasi, 'link' => url('/data-imunisasi')],
-                                'Data Pemberian Obat Cacing' => ['active' => $jadwal->obatcacing, 'link' => url('/data-obat-cacing')],
-                                'Data Pemberian Susu' => ['active' => $jadwal->susu, 'link' => url('/data-susu')],
-                                'Data pemeriksaan Kesehatan Lansia' => ['active' => $jadwal->pemeriksaan, 'link' => url('/data-pemeriksaan')],
-                                'Data Tes Kognitif Lansia' => ['active' => $jadwal->teskognitif, 'link' => url('/data-tes-kognitif')],
-                                'Data Tes Penglihatan Lansia' => ['active' => $jadwal->teslihat, 'link' => url('/data-tes-penglihatan')],
-                                'Data Tes Pendengaran Lansia' => ['active' => $jadwal->tesdengar, 'link' => url('/data-tes-pendengaran')],
-                            ];
-                        @endphp
-                
-                        @foreach($dataKegiatan as $kegiatan => $data)
-                            @if($data['active'])
-                                <tr class="hover:bg-blue-50">
-                                    <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                        <a href="{{ $data['link'] }}" class="text-blue-500 hover:underline">{{ $kegiatan }}</a>
-                                    </td>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
+                            <thead class="bg-blue-100">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-medium text-gray-600">Nama Data</th>
+                                    <th class="px-4 py-2 text-center text-sm font-medium text-gray-600">Aksi</th>
                                 </tr>
-                            @endif
-                        @endforeach
-                    </tbody>
-                </table>
-                               
+                            </thead>
+                            <tbody>
+                                @php
+                                    // Daftar kegiatan dengan boolean sebagai kunci dan tautan
+                                    $dataKegiatan = [
+                                        'Daftar Hadir Peserta' => ['active' => true, 'pdf' => url('/exportdaftarlansia/pdf/' . $jadwal->id), 'excel' => url('/exportdaftarlansia/excel/' . $jadwal->id)],
+                                        'Data Pengukuran' => ['active' => true, 'pdf' => url('/exportpengukuranlansia/pdf/' . $jadwal->id), 'excel' => url('/exportpengukuranlansia/excel/' . $jadwal->id)],
+                                        'Data Pemeriksaan Kesehatan Lansia' => ['active' => $jadwal->pemeriksaan, 'pdf' => url('/exportpemeriksaanlansia/pdf/' . $jadwal->id), 'excel' => url('/exportpemeriksaanlansia/excel/' . $jadwal->id)],
+                                        'Data Screening Sederhana Lansia' => ['active' => $jadwal->teskognitif, 'pdf' => url('/exportSKILAS/pdf/' . $jadwal->id), 'excel' => url('/exportSKILAS/excel/' . $jadwal->id)],
+                                    ];
+                                @endphp
+            
+                                @foreach($dataKegiatan as $kegiatan => $data)
+                                    @if($data['active'])
+                                        <tr class="hover:bg-blue-50">
+                                            <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
+                                                {{ $kegiatan }}
+                                            </td>
+                                            <td class="border-b border-gray-300 px-4 py-2 text-center text-sm">
+                                                <div class="flex justify-center gap-2">
+                                                    <a href="{{ $data['pdf'] }}" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-all duration-200 text-xs">
+                                                        PDF
+                                                    </a>
+                                                    <a href="{{ $data['excel'] }}" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition-all duration-200 text-xs">
+                                                        Excel
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 @endif
             </div>
+           
+            
 
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-4">Daftar Peserta</h2>
                 
-                @if($peserta->isEmpty())
+                @if($pesertaLansia->isEmpty())
                     <p>Tidak ada peserta untuk jadwal ini.</p>
                 @else
                     <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md">
@@ -164,11 +175,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($peserta as $index => $item)
+                            @foreach($pesertaLansia as $index => $item)
                                 <tr class="hover:bg-blue-50">
                                     <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">{{ $index + 1 }}</td>
                                     <td class="border-b border-gray-300 px-4 py-2 text-sm text-gray-700">
-                                        {{ $item->nama_peserta_balita ?? $item->nama_peserta_lansia }}
+                                        {{ $item->nama_peserta_lansia }}
                                     </td>                                   
                                 </tr>
                             @endforeach
@@ -180,7 +191,7 @@
 
  </div>
  </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    
 
 </body>
 

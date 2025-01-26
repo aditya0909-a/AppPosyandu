@@ -41,7 +41,7 @@
     <h1 class="text-2xl font-bold text-center mb-8">Pilih Menu</h1>
     <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Posyandu -->
-            <a href="/fiturposyandu/petugas"
+            <a href="/fiturposyandu/petugas/{{ $userId }}"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/posyandu.png') }}" alt="Posyandu" class="w-16 h-16 mx-auto mb-4"> 
                 <h2 class="text-xl font-bold">Posyandu</h2>
@@ -49,7 +49,7 @@
             </a>
 
             <!-- Jadwal -->
-            <a href="/fiturjadwal/petugas"
+            <a href="/fiturjadwal/petugas/{{ $userId }}"
                 class="block button-primary text-white rounded-lg shadow-lg p-6 text-center transform hover:scale-105 transition-transform">
                 <img src="{{ asset('icons/schedule.png') }}" alt="Jadwal" class="w-16 h-16 mx-auto mb-4">
                 <h2 class="text-xl font-bold">Jadwal</h2>

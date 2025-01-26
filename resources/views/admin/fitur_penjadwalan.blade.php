@@ -69,67 +69,13 @@
 
 </head>
 
-<body x-data="appData()">
-    @if ($errors->any())
-        <div class="p-4 mb-4 text-red-700 bg-red-100 rounded">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 9000)"
-            class="fixed z-50 max-w-md p-4 mb-4 bg-green-100 border border-green-200 rounded-lg shadow-lg top-20 right-4"
-            role="alert">
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-medium text-green-800">{{ session('success') }}</span>
-                <button @click="show = false"
-                    class="ml-auto rounded-lg p-1.5 text-green-500 hover:bg-green-200 inline-flex h-8 w-8 items-center justify-center">
-                    <span class="sr-only">Close</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    @endif
-
-
-    @if (session('error'))
-        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)"
-            class="fixed z-50 max-w-md p-4 mb-4 bg-red-100 border border-red-200 rounded-lg shadow-lg top-20 right-4"
-            role="alert">
-            <div class="flex items-center gap-2">
-                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span class="text-sm font-medium text-red-800">{{ session('error') }}</span>
-                <button @click="show = false"
-                    class="ml-auto rounded-lg p-1.5 text-red-500 hover:bg-red-200 inline-flex h-8 w-8 items-center justify-center">
-                    <span class="sr-only">Close</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    @endif
-
+<body>
+    
     <!-- Container -->
-    <div class="max-w-4xl p-6 mx-auto">
+    <div x-data="appData()" class="max-w-4xl p-6 mx-auto">
         <nav class="fixed top-0 left-0 right-0 z-10 p-4 shadow-md navbar">
             <div class="container flex items-center mx-auto">
-                <button onclick="window.location.href = '/dashboard/admin'" class="text-[#0077B5] mr-4">
+                <button onclick="window.location.href = '/dashboard/admin/{{ $userId }}'" class="text-[#0077B5] mr-4">
                     &larr; Back
                 </button>
                 <a href="#" class="text-2xl font-bold text-[#0077B5]">Posyandu</a>
@@ -143,49 +89,68 @@
         </div>
 
         <div class="flex items-center mb-4">
-            <input type="text" placeholder="Cari jadwal..." class="input-field" x-model="searchTerm">
+            <input type="text" id="searchInput" placeholder="Cari Jadwal" class="input-field">
         </div>
 
+            @php
+                // Mengambil waktu saat ini
+                $today = \Carbon\Carbon::now()->startOfDay();
 
-        <!-- Filtered Jadwal List -->
-        <template x-for="jadwal in filteredJadwals" :key="jadwal.id">
-            <div class="p-4 mb-6 rounded-lg card"
-                :class="{
-                    'bg-gray-200': normalizeDate(jadwal.date) < normalizeDate(new Date()), // Abu-abu jika sudah lewat
-                    'bg-white': normalizeDate(jadwal.date) >= normalizeDate(new Date()) // Putih jika belum
-                }">
-                <div class="flex items-center justify-between">
-                    <a :href="'/admin/jadwal/' + jadwal.id">
-                        <h2 class="text-xl font-bold" x-text="jadwal.name"></h2>
-                    </a>
-                    <button
-                        @click="openEditModal(
-                        jadwal.id, 
-                        jadwal.name, 
-                        jadwal.location, 
-                        jadwal.date, 
-                        jadwal.imunisasi, 
-                        jadwal.obatcacing, 
-                        jadwal.susu, 
-                        jadwal.pemeriksaan, 
-                        jadwal.teskognitif, 
-                        jadwal.tesdengar, 
-                        jadwal.teslihat, 
-                        jadwal.tesmobilisasi
-                    )"
-                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Edit
-                    </button>
+                // Mengurutkan jadwal
+                $sortedJadwals = collect($Jadwals)->sortBy(function($jadwal) use ($today) {
+                    return \Carbon\Carbon::parse($jadwal['date'])->isPast() ? 1 : 0; // Memprioritaskan yang tidak lewat
+                })->values(); // Mengembalikan collection dengan index yang direset
+            @endphp
+
+            @foreach ($sortedJadwals as $jadwal)
+                <div class="p-4 mb-6 rounded-lg card 
+                    {{ \Carbon\Carbon::parse($jadwal['date'])->isPast() ? 'bg-gray-200' : 'bg-white' }}">
+                    <div class="flex items-center justify-between">
+                        <!-- Link ke detail jadwal -->
+                        @if ($jadwal['name'] === 'Posyandu Balita')
+                            <a href="{{ url('/admin/jadwalbalita/' . $jadwal['id']) }}">
+                                <h2 class="text-xl font-bold">{{ $jadwal['name'] }}</h2>
+                            </a>
+                        @elseif ($jadwal['name'] === 'Posyandu Lansia')
+                            <a href="{{ url('/admin/jadwallansia/' . $jadwal['id']) }}">
+                                <h2 class="text-xl font-bold">{{ $jadwal['name'] }}</h2>
+                            </a>
+                        @endif
+                        <!-- Tombol Edit -->
+                        <button 
+                            @click="
+                                openEditModal(
+                                    {{ $jadwal['id'] }},
+                                    '{{ $jadwal['name'] }}',
+                                    '{{ $jadwal['location'] }}',
+                                    '{{ $jadwal['date'] }}',
+                                    {{ $jadwal['imunisasi'] ? 'true' : 'false' }},
+                                    {{ $jadwal['obatcacing'] ? 'true' : 'false' }},
+                                    {{ $jadwal['susu'] ? 'true' : 'false' }},
+                                    {{ $jadwal['teskognitif'] ? 'true' : 'false' }},
+                                    {{ $jadwal['tesdengar'] ? 'true' : 'false' }},
+                                    {{ $jadwal['teslihat'] ? 'true' : 'false' }},
+                                    {{ $jadwal['tesmobilisasi'] ? 'true' : 'false' }},
+                                    {{ $jadwal['pemeriksaan'] ? 'true' : 'false' }}
+                                )
+                            "
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                        </button>
+                    </div>
+
+                    <!-- Informasi Tambahan -->
+                    <div class="text-sm text-gray-600">
+                        Tanggal: {{ \Carbon\Carbon::parse($jadwal['date'])->locale('id')->isoFormat('D MMMM YYYY') }}
+                    </div>
+                    <h3 class="text-sm text-gray-600">Lokasi: {{ $jadwal['location'] }}</h3>
                 </div>
-                <div class="text-sm text-gray-600">Tanggal: <span x-text="jadwal.formatted_date"></span></div>
-                <div class="text-sm text-gray-600">Lokasi: <span x-text="jadwal.location"></span></div>
-            </div>
-        </template>
-
+            @endforeach
+     
 
         <!-- Modal Tambah Jadwal -->
         <div x-show="showAddModal"
@@ -214,9 +179,9 @@
                     <div class="mb-2">
                         <label class="block mb-2 text-sm font-bold text-gray-700">Lokasi Jadwal</label>
                         <select id="location" name="location" class="w-full p-2 border rounded">
-                            <template x-for="location in locations" :key="location">
-                                <option :value="location" x-text="location"></option>
-                            </template>
+                                <option value="Bingin">Bingin</option>
+                                <option value="Desa">Desa</option>
+                                <option value="Dajan Pangkung">Dajan Pangkung</option>
                         </select>
                         @error('location')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
@@ -295,206 +260,179 @@
             <form :action="'/jadwal/update/' + editJadwal.id" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
-                <div
-                    class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
+                <div class="bg-white relative w-full max-w-xs sm:max-w-sm mx-4 p-4 sm:p-6 rounded-lg shadow-lg overflow-y-auto max-h-[500px]">
                     <h2 class="mb-4 text-xl font-bold">Edit Jadwal Posyandu</h2>
 
                     <!-- Nama Posyandu -->
                     <div class="mb-2">
                         <label for="name" class="block mb-2 text-sm font-bold text-gray-700">Nama Posyandu</label>
-                        <select id="name" name="name" class="w-full p-2 border rounded"
-                            x-model="editJadwal.name">
+                        <select id="name" name="name" class="w-full p-2 border rounded" x-model="editJadwal.name">
                             <option value="Posyandu Balita">Posyandu Balita</option>
                             <option value="Posyandu Lansia">Posyandu Lansia</option>
                         </select>
                         @error('name')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Lokasi -->
                     <div class="mb-2">
                         <label for="location" class="block mb-2 text-sm font-bold text-gray-700">Lokasi Jadwal</label>
-                        <select id="location" name="location" class="w-full p-2 border rounded"
-                            x-model="editJadwal.location">
+                        <select id="location" name="location" class="w-full p-2 border rounded" x-model="editJadwal.location">
                             <option value="Bingin">Bingin</option>
                             <option value="Desa">Desa</option>
                             <option value="Dajan Pangkung">Dajan Pangkung</option>
                         </select>
                         @error('location')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <!-- Tanggal Jadwal -->
                     <div class="mb-2">
-                        <label for="date" class="block mb-2 text-sm font-bold text-gray-700">Tanggal
-                            Jadwal</label>
-                        <input id="date" type="datetime-local" name="date" x-model="editJadwal.date"
-                            required class="w-full p-2 border rounded">
+                        <label for="date" class="block mb-2 text-sm font-bold text-gray-700">Tanggal Jadwal</label>
+                        <input id="date" type="date" name="date" x-model="editJadwal.date" required class="w-full p-2 border rounded">
                         @error('date')
-                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Checkbox untuk Posyandu Balita -->
+                    <!-- Checkbox -->
                     <template x-if="editJadwal.name === 'Posyandu Balita'">
                         <div>
                             <div class="flex items-center mb-2">
-                                <input id="imunisasi" type="checkbox" name="imunisasi"
-                                    x-model="editJadwal.imunisasi" :value="1" :unchecked-value="0"
-                                    class="mr-2">
+                                <input id="imunisasi" type="checkbox" name="imunisasi" x-model="editJadwal.imunisasi" class="mr-2">
                                 <label for="imunisasi">Imunisasi</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="obatcacing" type="checkbox" name="obatcacing"
-                                    x-model="editJadwal.obatcacing" :value="1" :unchecked-value="0"
-                                    class="mr-2">
+                                <input id="obatcacing" type="checkbox" name="obatcacing" x-model="editJadwal.obatcacing" class="mr-2">
                                 <label for="obatcacing">Obat Cacing</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="susu" type="checkbox" name="susu" x-model="editJadwal.susu"
-                                    :value="1" :unchecked-value="0" class="mr-2">
+                                <input id="susu" type="checkbox" name="susu" x-model="editJadwal.susu" class="mr-2">
                                 <label for="susu">Susu</label>
-                            </div>
-                            <div class="flex items-center mb-2">
-                                <input id="pemeriksaan" type="checkbox" name="pemeriksaan" x-model="editJadwal.pemeriksaan"
-                                    :value="1" :unchecked-value="0" class="mr-2">
-                                <label for="pemeriksaan">pemeriksaan</label>
                             </div>
                         </div>
                     </template>
-
-                    <!-- Checkbox untuk Posyandu Lansia -->
                     <template x-if="editJadwal.name === 'Posyandu Lansia'">
                         <div>
                             <div class="flex items-center mb-2">
-                                <input id="teskognitif" type="checkbox" name="teskognitif"
-                                    x-model="editJadwal.teskognitif" :value="1" :unchecked-value="0"
-                                    class="mr-2">
+                                <input id="teskognitif" type="checkbox" name="teskognitif" x-model="editJadwal.teskognitif" class="mr-2">
                                 <label for="teskognitif">Tes Kognitif</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="tesdengar" type="checkbox" name="tesdengar"
-                                    x-model="editJadwal.tesdengar" :value="1" :unchecked-value="0"
-                                    class="mr-2">
+                                <input id="tesdengar" type="checkbox" name="tesdengar" x-model="editJadwal.tesdengar" class="mr-2">
                                 <label for="tesdengar">Tes Dengar</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="teslihat" type="checkbox" name="teslihat" x-model="editJadwal.teslihat"
-                                    :value="1" :unchecked-value="0" class="mr-2">
+                                <input id="teslihat" type="checkbox" name="teslihat" x-model="editJadwal.teslihat" class="mr-2">
                                 <label for="teslihat">Tes Lihat</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="tesmobilisasi" type="checkbox" name="tesmobilisasi"
-                                    x-model="editJadwal.tesmobilisasi" :value="1" :unchecked-value="0"
-                                    class="mr-2">
+                                <input id="tesmobilisasi" type="checkbox" name="tesmobilisasi" x-model="editJadwal.tesmobilisasi" class="mr-2">
                                 <label for="tesmobilisasi">Tes Mobilisasi</label>
                             </div>
                             <div class="flex items-center mb-2">
-                                <input id="pemeriksaan" type="checkbox" name="pemeriksaan" x-model="editJadwal.pemeriksaan"
-                                    :value="1" :unchecked-value="0" class="mr-2">
-                                <label for="pemeriksaan">pemeriksaan</label>
+                                <input id="pemeriksaan" type="checkbox" name="pemeriksaan" x-model="editJadwal.pemeriksaan" class="mr-2">
+                                <label for="pemeriksaan">Pemeriksaan</label>
                             </div>
                         </div>
                     </template>
 
-
                     <!-- Tombol Aksi -->
                     <div class="flex justify-end space-x-2">
-                        <button type="button" @click="showEditModal = false"
-                            class="px-4 py-2 text-gray-700 transition-colors bg-gray-300 rounded hover:bg-gray-400">
-                            Batal
-                        </button>
-                        <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
-                            Simpan Perubahan
-                        </button>
+                        <button type="button" @click="showEditModal = false" class="px-4 py-2 text-gray-700 transition-colors bg-gray-300 rounded hover:bg-gray-400">Batal</button>
+                        <button type="submit" class="button-primary">Simpan Perubahan</button>
                     </div>
                 </div>
             </form>
         </div>
-
     </div>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Event listener untuk pencarian
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    var searchTerm = this.value.toLowerCase();
+                    var cards = document.querySelectorAll('.card'); // Mengambil semua card
+    
+                    cards.forEach(function (card) {
+                        var name = card.querySelector('h2').textContent.toLowerCase(); // Menyaring berdasarkan nama
+                        var location = card.querySelector('h3').textContent.toLowerCase(); // Menyaring berdasarkan lokasi
+                        
+                        // Tampilkan card jika nama atau lokasi mengandung kata kunci pencarian
+                        if (name.includes(searchTerm) || location.includes(searchTerm)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    
         function appData() {
             return {
-
+                // State Control
                 showAddModal: false,
                 showEditModal: false,
                 searchTerm: '',
-                posyanduType: '', // Untuk mengontrol pilihan jenis Posyandu (Balita/Lansia)
-                locations: ['Bingin', 'Desa', 'Dajan Pangkung'], // Lokasi tersedia
-                Jadwals: @json($Jadwals), // Data jadwal dari backend
-
+                posyanduType: '',
+                locations: ['Bingin', 'Desa', 'Dajan Pangkung'],
+    
+                // Data dari Backend
+                Jadwals: @json($Jadwals),
+    
+                // Data untuk Edit Jadwal
                 editJadwal: {
                     id: null,
-                    name: null,
+                    name: '',
                     date: '',
                     location: '',
                     imunisasi: false,
                     obatcacing: false,
                     susu: false,
-                    pemeriksaan: false,
                     teskognitif: false,
                     tesdengar: false,
                     teslihat: false,
                     tesmobilisasi: false,
+                    pemeriksaan: false,
                 },
-
-
-                // Normalize Date to Remove Time
-                normalizeDate(date) {
-                    const d = new Date(date);
-                    return new Date(d.getFullYear(), d.getMonth(), d.getDate());
-                },
-
-
-                openEditModal(
-                    id, name, location, date, imunisasi, obatcacing, susu, pemeriksaan, teskognitif, tesdengar,
-                    teslihat, tesmobilisasi
-                ) {
+    
+                // Modal Management
+                openEditModal(id, name, location, date, imunisasi, obatcacing, susu, teskognitif, tesdengar, teslihat, tesmobilisasi, pemeriksaan) {
                     this.editJadwal = {
                         id,
                         name,
                         location,
-                        date: new Date(date).toISOString().slice(0, 16), // Format untuk input type="datetime-local"
-                        imunisasi: imunisasi, // Konversi ke boolean
-                        obatcacing: obatcacing,
-                        susu: susu,
-                        pemeriksaan: pemeriksaan,
-                        teskognitif: teskognitif,
-                        tesdengar: tesdengar,
-                        teslihat: teslihat,
-                        tesmobilisasi: tesmobilisasi,
+                        date,
+                        imunisasi,
+                        obatcacing,
+                        susu,
+                        teskognitif,
+                        tesdengar,
+                        teslihat,
+                        tesmobilisasi,
+                        pemeriksaan,
                     };
-
-                    // Tampilkan modal
                     this.showEditModal = true;
                 },
-
-
-
-
-                // Update jadwal
-                updateJadwal() {
-                    // Make sure to send the updated jadwal data to the server via an AJAX request
+                closeModal() {
                     this.showEditModal = false;
-                    alert("Jadwal berhasil diperbarui!");
+                    this.showAddModal = false;
                 },
-
-                // Fungsi membuka modal tambah jadwal
                 openAddModal() {
                     this.resetAddModal();
                     this.showAddModal = true;
                 },
-
-                // Reset data modal tambah jadwal
                 resetAddModal() {
                     this.posyanduType = '';
                     this.showAddModal = false;
                 },
-
-                // Simpan data dari modal tambah jadwal
+    
+                // Simpan Data Baru
                 saveJadwal(event) {
                     event.preventDefault();
                     console.log("Jadwal baru disimpan:", {
@@ -502,32 +440,9 @@
                     });
                     this.resetAddModal();
                 },
-                
-                get filteredJadwals() {
-                    const today = new Date();
-
-                    // Sort jadwals so that future dates come first
-                    return this.Jadwals
-                        .filter(jadwal => jadwal.name.toLowerCase().includes(this.searchTerm.toLowerCase()))
-                        .sort((a, b) => {
-                            const dateA = new Date(a.date);
-                            const dateB = new Date(b.date);
-
-                            // Pastikan tanggal sudah normal, tanpa waktu
-                            const normalizedDateA = new Date(dateA.getFullYear(), dateA.getMonth(), dateA
-                        .getDate());
-                            const normalizedDateB = new Date(dateB.getFullYear(), dateB.getMonth(), dateB
-                        .getDate());
-
-                            // Letakkan tanggal yang lebih baru di depan
-                            return normalizedDateA >= normalizedDateB ? -1 : 1;
-                        });
-                }
-
-
-
             };
         }
+        
     </script>
 
 
